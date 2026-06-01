@@ -7,7 +7,9 @@
 > RuoYi 负责稳定的业务底座，Art Design Pro 负责现代化的交互与视觉体验。
 
 ## 项目预览
-
+## 演示地址 https://art.beta.kim/
+#用户名：admin
+#密码：admin123
 ### 登录页
 
 ![Art Design Pro RuoYi 登录页](docs/images/login-orange.png)
