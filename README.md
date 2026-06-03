@@ -21,6 +21,7 @@
 - 在线演示：[https://art.beta.kim/](https://art.beta.kim/)
 - 版本发布：[v1.0.0](https://github.com/Searchld/art-design-pro-ruoyi/releases/tag/v1.0.0)
 - 实施说明：[docs/ruoyi-art-plan.md](docs/ruoyi-art-plan.md)
+- 部署说明：[docs/deployment.md](docs/deployment.md)
 - 路线图：[ROADMAP.md](ROADMAP.md)
 - 常见问题：[FAQ.md](FAQ.md)
 - 参与贡献：[CONTRIBUTING.md](CONTRIBUTING.md)
@@ -397,7 +398,7 @@ http://localhost:3006
 - 不重复实现 RuoYi RBAC、JWT、数据权限和菜单权限。
 - Element Plus 仅用于 Art 未覆盖的基础组件。
 
-详细适配说明见：[docs/ruoyi-art-plan.md](docs/ruoyi-art-plan.md)。
+详细适配说明见：[docs/ruoyi-art-plan.md](docs/ruoyi-art-plan.md)。部署说明见：[docs/deployment.md](docs/deployment.md)。
 
 参与项目开发前请阅读：[CONTRIBUTING.md](CONTRIBUTING.md)。
 路线规划见：[ROADMAP.md](ROADMAP.md)。常见问题见：[FAQ.md](FAQ.md)。
