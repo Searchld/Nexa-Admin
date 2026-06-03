@@ -16,6 +16,16 @@
 
 仓库地址：[Searchld/art-design-pro-ruoyi](https://github.com/Searchld/art-design-pro-ruoyi)
 
+## 快速入口
+
+- 在线演示：[https://art.beta.kim/](https://art.beta.kim/)
+- 版本发布：[v1.0.0](https://github.com/Searchld/art-design-pro-ruoyi/releases/tag/v1.0.0)
+- 实施说明：[docs/ruoyi-art-plan.md](docs/ruoyi-art-plan.md)
+- 路线图：[ROADMAP.md](ROADMAP.md)
+- 常见问题：[FAQ.md](FAQ.md)
+- 参与贡献：[CONTRIBUTING.md](CONTRIBUTING.md)
+- 微信交流群：[加入微信交流群](#加入微信交流群)
+
 ## 项目预览
 
 演示地址：[https://art.beta.kim/](https://art.beta.kim/)
@@ -390,6 +400,7 @@ http://localhost:3006
 详细适配说明见：[docs/ruoyi-art-plan.md](docs/ruoyi-art-plan.md)。
 
 参与项目开发前请阅读：[CONTRIBUTING.md](CONTRIBUTING.md)。
+路线规划见：[ROADMAP.md](ROADMAP.md)。常见问题见：[FAQ.md](FAQ.md)。
 
 ## 致谢
 
