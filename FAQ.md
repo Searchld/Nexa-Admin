@@ -2,7 +2,7 @@
 
 ## 这个项目和 RuoYi-Vue 原版有什么区别？
 
-本项目保留 RuoYi 后端能力，使用 Art Design Pro / artpro-ui 替换传统前端体验。权限、菜单、字典、日志、文件上传、定时任务和代码生成仍然复用 RuoYi 体系。
+Nexa Admin 保留 RuoYi 后端能力，使用 Vue 3 与 Art 风格组件体系替换传统前端体验。权限、菜单、字典、日志、文件上传、定时任务和代码生成仍然复用 RuoYi 体系。
 
 ## 是否重写了 RuoYi 权限系统？
 

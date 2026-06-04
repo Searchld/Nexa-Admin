@@ -1,4 +1,4 @@
-# Art Design Pro RuoYi
+# Nexa Admin
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.0.3-6DB33F.svg)](https://spring.io/projects/spring-boot)
@@ -6,20 +6,20 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6.svg)](https://www.typescriptlang.org/)
 [![Demo](https://img.shields.io/badge/demo-online-orange.svg)](https://art.beta.kim/)
 
-![Art Design Pro RuoYi](docs/images/social-preview.png)
+![Nexa Admin](docs/images/social-preview.png)
 
-基于 **RuoYi-Vue 后端** 与 **Art Design Pro 前端** 整合的现代化后台管理系统。
+面向企业后台场景的现代化管理控制台。
 
-本项目保留 RuoYi 成熟的权限体系、系统管理、系统监控与代码生成能力，使用 Art Design Pro / artpro-ui 替换传统前端界面。目标不是重写 RuoYi，而是在兼容原有接口和 RBAC 模型的基础上，提供更现代的 Vue 3 管理后台体验。
+Nexa Admin 保留成熟的权限体系、系统管理、系统监控与代码生成能力，使用 Vue 3、TypeScript、Vite 与 Art 风格组件体系提供更现代的管理后台体验。
 
-> RuoYi 负责稳定的业务底座，Art Design Pro 负责现代化的交互与视觉体验。
+> 产品名统一为 Nexa Admin，底层继续复用已有后端能力与前端封装，避免重写稳定业务逻辑。
 
-仓库地址：[Searchld/art-design-pro-ruoyi](https://github.com/Searchld/art-design-pro-ruoyi)
+仓库地址：[Searchld/nexa-admin](https://github.com/Searchld/nexa-admin)
 
 ## 快速入口
 
 - 在线演示：[https://art.beta.kim/](https://art.beta.kim/)
-- 版本发布：[v1.0.0](https://github.com/Searchld/art-design-pro-ruoyi/releases/tag/v1.0.0)
+- 版本发布：[v1.0.0](https://github.com/Searchld/nexa-admin/releases/tag/v1.0.0)
 - 实施说明：[docs/ruoyi-art-plan.md](docs/ruoyi-art-plan.md)
 - 部署说明：[docs/deployment.md](docs/deployment.md)
 - 路线图：[ROADMAP.md](ROADMAP.md)
@@ -38,7 +38,7 @@
 
 ### 最新功能动图
 
-![Art Design Pro RuoYi 演示动图](docs/videos/artpro-ruoyi-demo.gif)
+![Nexa Admin 演示动图](docs/videos/artpro-ruoyi-demo.gif)
 
 ### 核心功能截图
 
@@ -63,11 +63,11 @@
 
 ### 登录页
 
-![Art Design Pro RuoYi 登录页](docs/images/login-orange.png)
+![Nexa Admin 登录页](docs/images/login-orange.png)
 
 ### 仪表盘
 
-![Art Design Pro RuoYi 工作台](docs/images/dashboard-console-blue.png)
+![Nexa Admin 工作台](docs/images/dashboard-console-blue.png)
 
 ### RuoYi 系统管理
 
@@ -107,7 +107,7 @@
 
 - 保留 RuoYi RBAC、JWT、菜单权限、按钮权限和数据权限。
 - 复用 RuoYi `/system/*`、`/monitor/*`、`/tool/*`、`/common/*` 接口。
-- 前端使用 Art Design Pro / artpro-ui，不采用传统 RuoYi-Vue 页面风格。
+- 前端使用 Vue 3、TypeScript、Vite 与 Art 风格封装，不采用传统 RuoYi-Vue 页面风格。
 - 使用后端动态菜单模式，路由由 `GET /getRouters` 返回并转换为 Art 路由结构。
 - 支持 `v-auth` 与 `hasAuth()` 按钮权限控制。
 - 支持图片验证码与 Art 滑块验证码切换。
@@ -120,7 +120,7 @@
 
 ## 为什么选择本项目
 
-| 能力 | 传统 RuoYi-Vue | 仅替换界面的整合项目 | Art Design Pro RuoYi |
+| 能力 | 传统 RuoYi-Vue | 仅替换界面的整合项目 | Nexa Admin |
 | --- | --- | --- | --- |
 | RuoYi RBAC、JWT、数据权限 | 支持 | 通常保留 | 完整复用 |
 | Vue 3 现代化后台界面 | 不支持 | 支持 | 支持 |
@@ -144,13 +144,13 @@
 | Quartz | 定时任务 |
 | Springdoc OpenAPI | API 文档 |
 
-### 前端：Art Design Pro
+### 前端：Nexa Admin
 
 | 技术 | 说明 |
 | --- | --- |
 | Vue 3 + TypeScript | 前端开发框架 |
 | Vite | 开发与构建工具 |
-| Art Design Pro / artpro-ui | 页面、布局和业务组件 |
+| Art 风格组件体系 | 页面、布局和业务组件 |
 | Element Plus | 基础 UI 组件 |
 | Pinia | 状态管理 |
 | Vue Router | 动态路由 |
@@ -259,8 +259,8 @@ Art 模板会生成：
 ## 项目结构
 
 ```text
-ruoyi-art-design-pro
-├── artpro-ui          # Art Design Pro Vue 3 前端
+nexa-admin
+├── artpro-ui          # Nexa Admin Vue 3 前端
 ├── ruoyi-admin        # RuoYi Web 服务入口
 ├── ruoyi-framework    # 安全认证、JWT、验证码等核心能力
 ├── ruoyi-system       # 系统管理业务
@@ -435,4 +435,4 @@ http://localhost:3006
 
 ## License
 
-本仓库包含基于 RuoYi 与 Art Design Pro 的整合代码。使用前请分别遵守上游项目许可证以及本仓库中的许可证文件。
+本仓库包含 Nexa Admin 整合代码。使用前请分别遵守上游项目许可证以及本仓库中的许可证文件。

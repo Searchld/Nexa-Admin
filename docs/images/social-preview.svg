@@ -24,8 +24,8 @@
     <path d="M52 94L104 0l52 94z" fill="#5678ff" opacity="0.92"/>
     <circle cx="140" cy="20" r="16" fill="#35c6ff"/>
   </g>
-  <text x="342" y="194" fill="#ffffff" font-size="58" font-weight="700" font-family="Arial, Helvetica, sans-serif">Art Design Pro RuoYi</text>
-  <text x="342" y="254" fill="#bdeaff" font-size="27" font-family="Arial, Helvetica, sans-serif">Modern Art UI · Stable RuoYi Backend</text>
+  <text x="342" y="194" fill="#ffffff" font-size="58" font-weight="700" font-family="Arial, Helvetica, sans-serif">Nexa Admin</text>
+  <text x="342" y="254" fill="#bdeaff" font-size="27" font-family="Arial, Helvetica, sans-serif">Modern Enterprise Admin Console</text>
   <rect x="142" y="326" width="208" height="66" rx="18" fill="#ffffff" opacity="0.10"/>
   <rect x="372" y="326" width="242" height="66" rx="18" fill="#ffffff" opacity="0.10"/>
   <rect x="636" y="326" width="174" height="66" rx="18" fill="#ffffff" opacity="0.10"/>
@@ -35,6 +35,6 @@
   <text x="676" y="368" fill="#ffffff" font-size="25" font-weight="600" font-family="Arial, Helvetica, sans-serif">Art Bot</text>
   <text x="870" y="368" fill="#ffffff" font-size="25" font-weight="600" font-family="Arial, Helvetica, sans-serif">Vue 3 + TS</text>
   <rect x="142" y="454" width="870" height="4" rx="2" fill="url(#accent)"/>
-  <text x="142" y="510" fill="#d3eeff" font-size="23" font-family="Arial, Helvetica, sans-serif">github.com/Searchld/art-design-pro-ruoyi</text>
+  <text x="142" y="510" fill="#d3eeff" font-size="23" font-family="Arial, Helvetica, sans-serif">github.com/Searchld/nexa-admin</text>
   </g>
 </svg>

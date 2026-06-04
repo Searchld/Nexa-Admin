@@ -1,6 +1,6 @@
 # Roadmap
 
-本路线图用于说明 Art Design Pro RuoYi 后续演进方向。优先级会根据 Issue、Discussions 和实际使用反馈调整。
+本路线图用于说明 Nexa Admin 后续演进方向。优先级会根据 Issue、Discussions 和实际使用反馈调整。
 
 ## 近期计划
 

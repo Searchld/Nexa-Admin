@@ -3,10 +3,10 @@
     <div>
       <h2 class="text-2xl font-medium">关于项目</h2>
       <p class="text-g-700 mt-1">
-        {{ systemName }} 融合 Art Design Pro 的现代化界面与 RuoYi 成熟的后台能力
+        {{ systemName }} 是面向企业后台的现代化管理控制台
       </p>
       <p class="text-g-700 mt-1">
-        前端基于 Vue 3、TypeScript、Vite，后端复用 RuoYi RBAC、菜单权限与数据权限体系
+        前端基于 Vue 3、TypeScript、Vite，权限与系统管理能力复用成熟 RBAC 体系
       </p>
 
       <div class="flex flex-wrap gap-3.5 max-w-150 mt-9">
@@ -33,7 +33,7 @@
 
   const linkList = [
     { label: '项目 Github', url: WEB_LINKS.GITHUB_HOME },
-    { label: 'Art Design Pro 文档', url: WEB_LINKS.DOCS },
+    { label: '前端文档', url: WEB_LINKS.DOCS },
     { label: 'RuoYi 官网', url: WEB_LINKS.RUOYI_HOME },
     { label: 'RuoYi 文档', url: WEB_LINKS.RUOYI_DOCS }
   ]

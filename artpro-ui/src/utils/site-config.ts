@@ -7,8 +7,8 @@ export const siteConfig = reactive<Record<string, string>>({
   'site.description': '商业化中后台管理系统',
   'site.login.title': '欢迎回来',
   'site.login.description': '输入您的账号和密码登录',
-  'site.login-left-title': '专注用户体验',
-  'site.login-left-sub-title': '基于 Art Design Pro 与 RuoYi 构建',
+  'site.login-left-title': '统一管理入口',
+  'site.login-left-sub-title': '高效、清晰、可扩展的企业管理控制台',
   'site.watermark.content': '',
   'site.watermark.mode': 'username',
   'site.watermark.show-time': 'false'

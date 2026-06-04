@@ -1,6 +1,6 @@
 # 参与贡献
 
-感谢你关注 Art Design Pro RuoYi。提交 Issue 或 Pull Request 前，请先确认问题与本仓库的整合目标一致：保留 RuoYi 后端能力，优先复用 Art Design Pro / artpro-ui 封装。
+感谢你关注 Nexa Admin。提交 Issue 或 Pull Request 前，请先确认问题与本仓库的整合目标一致：保留既有后端能力，优先复用 Art 风格组件封装。
 
 ## 本地开发
 

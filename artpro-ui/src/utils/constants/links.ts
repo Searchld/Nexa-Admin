@@ -7,10 +7,10 @@
  */
 export const WEB_LINKS = {
   // Github 主页
-  GITHUB_HOME: 'https://github.com/Searchld/art-design-pro-ruoyi',
+  GITHUB_HOME: 'https://github.com/Searchld/nexa-admin',
 
   // 项目 Github 主页
-  GITHUB: 'https://github.com/Searchld/art-design-pro-ruoyi',
+  GITHUB: 'https://github.com/Searchld/nexa-admin',
 
   // RuoYi 官网
   RUOYI_HOME: 'https://ruoyi.vip',
