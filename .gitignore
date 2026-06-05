@@ -41,6 +41,7 @@ nbdist/
 .DS_Store
 node_modules/
 .vscode/
+sql/
 *.log
 *.xml.versionsBackup
 *.swp
