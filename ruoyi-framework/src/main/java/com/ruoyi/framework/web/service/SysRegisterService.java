@@ -51,6 +51,10 @@ public class SysRegisterService
         {
             validateCaptcha(username, registerBody.getCode(), registerBody.getUuid());
         }
+        else if (captchaEnabled && "slider".equals(configService.selectCaptchaType()))
+        {
+            validateSliderCaptcha(registerBody.getCaptchaToken());
+        }
 
         if (StringUtils.isEmpty(username))
         {
@@ -134,5 +138,16 @@ public class SysRegisterService
         {
             throw new CaptchaException();
         }
+    }
+
+    public void validateSliderCaptcha(String captchaToken)
+    {
+        String verifyKey = CacheConstants.CAPTCHA_TOKEN_KEY + StringUtils.nvl(captchaToken, "");
+        String captchaId = redisCache.getCacheObject(verifyKey);
+        if (StringUtils.isEmpty(captchaId))
+        {
+            throw new CaptchaExpireException();
+        }
+        redisCache.deleteObject(verifyKey);
     }
 }

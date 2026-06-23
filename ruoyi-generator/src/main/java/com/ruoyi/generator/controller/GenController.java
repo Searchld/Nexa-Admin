@@ -36,12 +36,15 @@ import com.ruoyi.generator.domain.GenTable;
 import com.ruoyi.generator.domain.GenTableColumn;
 import com.ruoyi.generator.service.IGenTableColumnService;
 import com.ruoyi.generator.service.IGenTableService;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 
 /**
  * 代码生成 操作处理
  * 
  * @author ruoyi
  */
+@Tag(name = "代码生成")
 @RestController
 @RequestMapping("/tool/gen")
 public class GenController extends BaseController
@@ -56,6 +59,7 @@ public class GenController extends BaseController
      * 查询代码生成列表
      */
     @PreAuthorize("@ss.hasPermi('tool:gen:list')")
+    @Operation(summary = "查询代码生成列表")
     @GetMapping("/list")
     public TableDataInfo genList(GenTable genTable)
     {
@@ -68,7 +72,9 @@ public class GenController extends BaseController
      * 获取代码生成信息
      */
     @PreAuthorize("@ss.hasPermi('tool:gen:query')")
+    @Operation(summary = "获取代码生成详情")
     @GetMapping(value = "/{tableId}")
+    @io.swagger.v3.oas.annotations.Parameter(description = "代码生成表ID")
     public AjaxResult getInfo(@PathVariable Long tableId)
     {
         GenTable table = genTableService.selectGenTableById(tableId);
@@ -85,6 +91,7 @@ public class GenController extends BaseController
      * 查询数据库列表
      */
     @PreAuthorize("@ss.hasPermi('tool:gen:list')")
+    @Operation(summary = "查询代码生成列表")
     @GetMapping("/db/list")
     public TableDataInfo dataList(GenTable genTable)
     {
@@ -97,6 +104,7 @@ public class GenController extends BaseController
      * 查询数据表字段列表
      */
     @PreAuthorize("@ss.hasPermi('tool:gen:list')")
+    @Operation(summary = "查询代码生成列表")
     @GetMapping(value = "/column/{tableId}")
     public TableDataInfo columnList(Long tableId)
     {
@@ -112,6 +120,7 @@ public class GenController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('tool:gen:import')")
     @Log(title = "代码生成", businessType = BusinessType.IMPORT)
+    @Operation(summary = "导入数据库表")
     @PostMapping("/importTable")
     public AjaxResult importTableSave(@RequestParam("tables") String tables, @RequestParam("tplWebType") String tplWebType)
     {
@@ -127,6 +136,7 @@ public class GenController extends BaseController
      */
     @PreAuthorize("@ss.hasRole('admin')")
     @Log(title = "创建表", businessType = BusinessType.OTHER)
+    @Operation(summary = "创建数据库表")
     @PostMapping("/createTable")
     public AjaxResult createTableSave(@RequestParam("sql") String sql, @RequestParam("tplWebType") String tplWebType)
     {
@@ -164,6 +174,7 @@ public class GenController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('tool:gen:edit')")
     @Log(title = "代码生成", businessType = BusinessType.UPDATE)
+    @Operation(summary = "修改代码生成配置")
     @PutMapping
     public AjaxResult editSave(@Validated @RequestBody GenTable genTable)
     {
@@ -177,7 +188,9 @@ public class GenController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('tool:gen:remove')")
     @Log(title = "代码生成", businessType = BusinessType.DELETE)
+    @Operation(summary = "删除代码生成")
     @DeleteMapping("/{tableIds}")
+    @io.swagger.v3.oas.annotations.Parameter(description = "代码生成表ID数组")
     public AjaxResult remove(@PathVariable Long[] tableIds)
     {
         genTableService.deleteGenTableByIds(tableIds);
@@ -188,7 +201,9 @@ public class GenController extends BaseController
      * 预览代码
      */
     @PreAuthorize("@ss.hasPermi('tool:gen:preview')")
+    @Operation(summary = "预览生成代码")
     @GetMapping("/preview/{tableId}")
+    @io.swagger.v3.oas.annotations.Parameter(description = "路径参数")
     public AjaxResult preview(@PathVariable("tableId") Long tableId) throws IOException
     {
         Map<String, String> dataMap = genTableService.previewCode(tableId);
@@ -200,7 +215,9 @@ public class GenController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('tool:gen:code')")
     @Log(title = "代码生成", businessType = BusinessType.GENCODE)
+    @Operation(summary = "下载文件")
     @GetMapping("/download/{tableName}")
+    @io.swagger.v3.oas.annotations.Parameter(description = "路径参数")
     public void download(HttpServletResponse response, @PathVariable("tableName") String tableName) throws IOException
     {
         byte[] data = genTableService.downloadCode(tableName);
@@ -212,7 +229,9 @@ public class GenController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('tool:gen:code')")
     @Log(title = "代码生成", businessType = BusinessType.GENCODE)
+    @Operation(summary = "生成代码")
     @GetMapping("/genCode/{tableName}")
+    @io.swagger.v3.oas.annotations.Parameter(description = "路径参数")
     public AjaxResult genCode(@PathVariable("tableName") String tableName)
     {
         if (!GenConfig.isAllowOverwrite())
@@ -228,7 +247,9 @@ public class GenController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('tool:gen:edit')")
     @Log(title = "代码生成", businessType = BusinessType.UPDATE)
+    @Operation(summary = "同步数据库表结构")
     @GetMapping("/synchDb/{tableName}")
+    @io.swagger.v3.oas.annotations.Parameter(description = "路径参数")
     public AjaxResult synchDb(@PathVariable("tableName") String tableName)
     {
         genTableService.synchDb(tableName);
@@ -240,6 +261,7 @@ public class GenController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('tool:gen:code')")
     @Log(title = "代码生成", businessType = BusinessType.GENCODE)
+    @Operation(summary = "生成代码")
     @GetMapping("/batchGenCode")
     public void batchGenCode(HttpServletResponse response, String tables) throws IOException
     {

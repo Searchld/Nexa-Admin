@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.agent.SysAgentMapper">
+    <resultMap id="AppResult" type="SysAgentApp">
+        <id property="appId" column="app_id"/>
+        <result property="appName" column="app_name"/>
+        <result property="appType" column="app_type"/>
+        <result property="baseUrl" column="base_url"/>
+        <result property="apiKey" column="api_key"/>
+        <result property="modelCode" column="model_code"/>
+        <result property="embeddingBaseUrl" column="embedding_base_url"/>
+        <result property="embeddingApiKey" column="embedding_api_key"/>
+        <result property="embeddingModelCode" column="embedding_model_code"/>
+        <result property="temperature" column="temperature"/>
+        <result property="maxTokens" column="max_tokens"/>
+        <result property="systemPrompt" column="system_prompt"/>
+        <result property="bindModule" column="bind_module"/>
+        <result property="isDefault" column="is_default"/>
+        <result property="status" column="status"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="remark" column="remark"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+    <resultMap id="SessionResult" type="SysAgentSession">
+        <id property="sessionId" column="session_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="appId" column="app_id"/>
+        <result property="title" column="title"/>
+        <result property="module" column="module"/>
+        <result property="lastMessageTime" column="last_message_time"/>
+        <result property="appName" column="app_name"/>
+        <result property="modelCode" column="model_code"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+    <resultMap id="MessageResult" type="SysAgentMessage">
+        <id property="messageId" column="message_id"/>
+        <result property="sessionId" column="session_id"/>
+        <result property="role" column="role"/>
+        <result property="content" column="content"/>
+        <result property="referencesJson" column="references_json"/>
+        <result property="promptTokens" column="prompt_tokens"/>
+        <result property="completionTokens" column="completion_tokens"/>
+        <result property="elapsedMs" column="elapsed_ms"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+    <resultMap id="KbResult" type="SysAgentKnowledgeBase">
+        <id property="kbId" column="kb_id"/>
+        <result property="kbName" column="kb_name"/>
+        <result property="description" column="description"/>
+        <result property="visibility" column="visibility"/>
+        <result property="status" column="status"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="docCount" column="doc_count"/>
+        <result property="remark" column="remark"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+    <resultMap id="DocResult" type="SysAgentKnowledgeDoc">
+        <id property="docId" column="doc_id"/>
+        <result property="kbId" column="kb_id"/>
+        <result property="fileName" column="file_name"/>
+        <result property="fileType" column="file_type"/>
+        <result property="filePath" column="file_path"/>
+        <result property="fileSize" column="file_size"/>
+        <result property="parseStatus" column="parse_status"/>
+        <result property="errorMsg" column="error_msg"/>
+        <result property="chunkCount" column="chunk_count"/>
+        <result property="kbName" column="kb_name"/>
+        <result property="remark" column="remark"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+    <resultMap id="ChunkResult" type="SysAgentKnowledgeChunk">
+        <id property="chunkId" column="chunk_id"/>
+        <result property="kbId" column="kb_id"/>
+        <result property="docId" column="doc_id"/>
+        <result property="chunkText" column="chunk_text"/>
+        <result property="chunkSummary" column="chunk_summary"/>
+        <result property="vectorId" column="vector_id"/>
+        <result property="sourcePage" column="source_page"/>
+        <result property="sourceParagraph" column="source_paragraph"/>
+        <result property="contentHash" column="content_hash"/>
+        <result property="createTime" column="create_time"/>
+        <result property="fileName" column="file_name"/>
+        <result property="kbName" column="kb_name"/>
+    </resultMap>
+    <resultMap id="WorkflowResult" type="SysAgentWorkflow">
+        <id property="workflowId" column="workflow_id"/>
+        <result property="workflowName" column="workflow_name"/>
+        <result property="definitionJson" column="definition_json"/>
+        <result property="version" column="version"/>
+        <result property="status" column="status"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="remark" column="remark"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+    <resultMap id="WorkflowRunResult" type="SysAgentWorkflowRun">
+        <id property="runId" column="run_id"/>
+        <result property="workflowId" column="workflow_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="inputJson" column="input_json"/>
+        <result property="outputJson" column="output_json"/>
+        <result property="status" column="status"/>
+        <result property="elapsedMs" column="elapsed_ms"/>
+        <result property="errorMsg" column="error_msg"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="workflowName" column="workflow_name"/>
+    </resultMap>
+    <resultMap id="ToolCallResult" type="SysAgentToolCall">
+        <id property="toolCallId" column="tool_call_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="sessionId" column="session_id"/>
+        <result property="workflowRunId" column="workflow_run_id"/>
+        <result property="toolName" column="tool_name"/>
+        <result property="argumentsJson" column="arguments_json"/>
+        <result property="resultSummary" column="result_summary"/>
+        <result property="elapsedMs" column="elapsed_ms"/>
+        <result property="errorMsg" column="error_msg"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+    <resultMap id="ActionDraftResult" type="SysAgentActionDraft">
+        <id property="draftId" column="draft_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="sessionId" column="session_id"/>
+        <result property="actionType" column="action_type"/>
+        <result property="actionTitle" column="action_title"/>
+        <result property="actionDesc" column="action_desc"/>
+        <result property="argumentsJson" column="arguments_json"/>
+        <result property="requiredPerms" column="required_perms"/>
+        <result property="executable" column="executable"/>
+        <result property="status" column="status"/>
+        <result property="resultMsg" column="result_msg"/>
+        <result property="errorMsg" column="error_msg"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="confirmTime" column="confirm_time"/>
+    </resultMap>
+
+    <sql id="AppColumns">app_id, app_name, app_type, base_url, api_key, model_code, embedding_base_url, embedding_api_key, embedding_model_code, temperature, max_tokens, system_prompt, bind_module, is_default, status, del_flag, create_by, create_time, update_by, update_time, remark</sql>
+
+    <select id="selectAppList" parameterType="SysAgentApp" resultMap="AppResult">
+        select <include refid="AppColumns"/> from sys_agent_app
+        <where>
+            del_flag = '0'
+            <if test="appName != null and appName != ''">and app_name like concat('%', #{appName}, '%')</if>
+            <if test="appType != null and appType != ''">and app_type = #{appType}</if>
+            <if test="modelCode != null and modelCode != ''">and model_code like concat('%', #{modelCode}, '%')</if>
+            <if test="status != null and status != ''">and status = #{status}</if>
+        </where>
+        order by is_default desc, app_id desc
+    </select>
+    <select id="selectEnabledApps" resultMap="AppResult">
+        select <include refid="AppColumns"/> from sys_agent_app where del_flag = '0' and status = '0' order by is_default desc, app_id desc
+    </select>
+    <select id="selectAppById" resultMap="AppResult">select <include refid="AppColumns"/> from sys_agent_app where app_id = #{appId} and del_flag = '0'</select>
+    <insert id="insertApp" parameterType="SysAgentApp" useGeneratedKeys="true" keyProperty="appId">
+        insert into sys_agent_app(app_name, app_type, base_url, api_key, model_code, embedding_base_url, embedding_api_key, embedding_model_code, temperature, max_tokens, system_prompt, bind_module, is_default, status, del_flag, create_by, create_time, remark)
+        values(#{appName}, #{appType}, #{baseUrl}, #{apiKey}, #{modelCode}, #{embeddingBaseUrl}, #{embeddingApiKey}, #{embeddingModelCode}, #{temperature}, #{maxTokens}, #{systemPrompt}, #{bindModule}, #{isDefault}, #{status}, '0', #{createBy}, sysdate(), #{remark})
+    </insert>
+    <update id="updateApp" parameterType="SysAgentApp">
+        update sys_agent_app
+        <set>
+            <if test="appName != null">app_name = #{appName},</if>
+            <if test="appType != null">app_type = #{appType},</if>
+            <if test="baseUrl != null">base_url = #{baseUrl},</if>
+            <if test="apiKey != null and apiKey != ''">api_key = #{apiKey},</if>
+            <if test="modelCode != null">model_code = #{modelCode},</if>
+            <if test="embeddingBaseUrl != null">embedding_base_url = #{embeddingBaseUrl},</if>
+            <if test="embeddingApiKey != null and embeddingApiKey != ''">embedding_api_key = #{embeddingApiKey},</if>
+            <if test="embeddingModelCode != null">embedding_model_code = #{embeddingModelCode},</if>
+            <if test="temperature != null">temperature = #{temperature},</if>
+            <if test="maxTokens != null">max_tokens = #{maxTokens},</if>
+            <if test="systemPrompt != null">system_prompt = #{systemPrompt},</if>
+            <if test="bindModule != null">bind_module = #{bindModule},</if>
+            <if test="isDefault != null">is_default = #{isDefault},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            update_time = sysdate()
+        </set>
+        where app_id = #{appId} and del_flag = '0'
+    </update>
+    <update id="clearDefaultApp">
+        update sys_agent_app set is_default = '0'
+        <if test="excludeAppId != null">where app_id != #{excludeAppId}</if>
+    </update>
+    <update id="deleteAppsByIds">update sys_agent_app set del_flag = '2' where app_id in <foreach collection="array" item="id" open="(" separator="," close=")">#{id}</foreach></update>
+
+    <select id="selectSessionList" resultMap="SessionResult">
+        select s.*, a.app_name, a.model_code from sys_agent_session s inner join sys_agent_app a on a.app_id = s.app_id
+        where s.user_id = #{userId}
+        <if test="appId != null">and s.app_id = #{appId}</if>
+        order by s.last_message_time desc, s.session_id desc
+    </select>
+    <select id="selectSession" resultMap="SessionResult">
+        select s.*, a.app_name, a.model_code from sys_agent_session s inner join sys_agent_app a on a.app_id = s.app_id
+        where s.session_id = #{sessionId} and s.user_id = #{userId}
+    </select>
+    <insert id="insertSession" parameterType="SysAgentSession" useGeneratedKeys="true" keyProperty="sessionId">
+        insert into sys_agent_session(user_id, app_id, title, module, last_message_time, create_time, update_time)
+        values(#{userId}, #{appId}, #{title}, #{module}, sysdate(), sysdate(), sysdate())
+    </insert>
+    <delete id="deleteSession">delete from sys_agent_session where session_id = #{sessionId} and user_id = #{userId}</delete>
+    <delete id="deleteMessagesBySessionId">delete from sys_agent_message where session_id = #{sessionId}</delete>
+    <update id="updateSessionTitle">update sys_agent_session set title = #{title}, update_time = sysdate() where session_id = #{sessionId}</update>
+    <update id="touchSession">update sys_agent_session set last_message_time = sysdate(), update_time = sysdate() where session_id = #{sessionId}</update>
+    <select id="selectMessageList" resultMap="MessageResult">select * from sys_agent_message where session_id = #{sessionId} order by message_id</select>
+    <select id="selectRecentMessages" resultMap="MessageResult">
+        select * from (select * from sys_agent_message where session_id = #{sessionId} order by message_id desc limit #{limit}) recent order by message_id
+    </select>
+    <insert id="insertMessage" parameterType="SysAgentMessage" useGeneratedKeys="true" keyProperty="messageId">
+        insert into sys_agent_message(session_id, role, content, references_json, prompt_tokens, completion_tokens, elapsed_ms, create_time)
+        values(#{sessionId}, #{role}, #{content}, #{referencesJson}, #{promptTokens}, #{completionTokens}, #{elapsedMs}, sysdate())
+    </insert>
+
+    <select id="selectKbList" parameterType="SysAgentKnowledgeBase" resultMap="KbResult">
+        select k.*, (select count(1) from sys_agent_knowledge_doc d where d.kb_id = k.kb_id) doc_count from sys_agent_knowledge_base k
+        <where>
+            k.del_flag = '0'
+            <if test="kbName != null and kbName != ''">and k.kb_name like concat('%', #{kbName}, '%')</if>
+            <if test="visibility != null and visibility != ''">and k.visibility = #{visibility}</if>
+            <if test="status != null and status != ''">and k.status = #{status}</if>
+        </where>
+        order by k.kb_id desc
+    </select>
+    <select id="selectEnabledKbList" resultMap="KbResult">select *, 0 doc_count from sys_agent_knowledge_base where del_flag = '0' and status = '0' order by kb_id desc</select>
+    <select id="selectKbById" resultMap="KbResult">select *, 0 doc_count from sys_agent_knowledge_base where kb_id = #{kbId} and del_flag = '0'</select>
+    <insert id="insertKb" parameterType="SysAgentKnowledgeBase" useGeneratedKeys="true" keyProperty="kbId">
+        insert into sys_agent_knowledge_base(kb_name, description, visibility, status, del_flag, create_by, create_time, remark)
+        values(#{kbName}, #{description}, #{visibility}, #{status}, '0', #{createBy}, sysdate(), #{remark})
+    </insert>
+    <update id="updateKb" parameterType="SysAgentKnowledgeBase">
+        update sys_agent_knowledge_base
+        <set>
+            <if test="kbName != null">kb_name = #{kbName},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="visibility != null">visibility = #{visibility},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            update_time = sysdate()
+        </set>
+        where kb_id = #{kbId} and del_flag = '0'
+    </update>
+    <update id="deleteKbsByIds">update sys_agent_knowledge_base set del_flag = '2' where kb_id in <foreach collection="array" item="id" open="(" separator="," close=")">#{id}</foreach></update>
+    <select id="selectDocList" resultMap="DocResult">
+        select d.*, k.kb_name from sys_agent_knowledge_doc d left join sys_agent_knowledge_base k on k.kb_id = d.kb_id
+        <where><if test="kbId != null">d.kb_id = #{kbId}</if></where>
+        order by d.doc_id desc
+    </select>
+    <select id="selectDocById" resultMap="DocResult">select d.*, k.kb_name from sys_agent_knowledge_doc d left join sys_agent_knowledge_base k on k.kb_id = d.kb_id where d.doc_id = #{docId}</select>
+    <insert id="insertDoc" parameterType="SysAgentKnowledgeDoc" useGeneratedKeys="true" keyProperty="docId">
+        insert into sys_agent_knowledge_doc(kb_id, file_name, file_type, file_path, file_size, parse_status, error_msg, chunk_count, create_by, create_time, remark)
+        values(#{kbId}, #{fileName}, #{fileType}, #{filePath}, #{fileSize}, #{parseStatus}, #{errorMsg}, #{chunkCount}, #{createBy}, sysdate(), #{remark})
+    </insert>
+    <update id="updateDoc" parameterType="SysAgentKnowledgeDoc">
+        update sys_agent_knowledge_doc
+        <set>
+            <if test="parseStatus != null">parse_status = #{parseStatus},</if>
+            <if test="errorMsg != null">error_msg = #{errorMsg},</if>
+            <if test="chunkCount != null">chunk_count = #{chunkCount},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            update_time = sysdate()
+        </set>
+        where doc_id = #{docId}
+    </update>
+    <delete id="deleteDocsByIds">delete from sys_agent_knowledge_doc where doc_id in <foreach collection="array" item="id" open="(" separator="," close=")">#{id}</foreach></delete>
+    <delete id="deleteChunksByDocId">delete from sys_agent_knowledge_chunk where doc_id = #{docId}</delete>
+    <insert id="insertChunk" parameterType="SysAgentKnowledgeChunk" useGeneratedKeys="true" keyProperty="chunkId">
+        insert into sys_agent_knowledge_chunk(kb_id, doc_id, chunk_text, chunk_summary, vector_id, source_page, source_paragraph, content_hash, create_time)
+        values(#{kbId}, #{docId}, #{chunkText}, #{chunkSummary}, #{vectorId}, #{sourcePage}, #{sourceParagraph}, #{contentHash}, sysdate())
+    </insert>
+    <select id="selectChunksByDocId" resultMap="ChunkResult">
+        select c.*, d.file_name, k.kb_name from sys_agent_knowledge_chunk c
+        left join sys_agent_knowledge_doc d on d.doc_id = c.doc_id
+        left join sys_agent_knowledge_base k on k.kb_id = c.kb_id
+        where c.doc_id = #{docId}
+        order by c.chunk_id
+    </select>
+    <select id="searchChunks" resultMap="ChunkResult">
+        select c.*, d.file_name, k.kb_name from sys_agent_knowledge_chunk c
+        left join sys_agent_knowledge_doc d on d.doc_id = c.doc_id
+        left join sys_agent_knowledge_base k on k.kb_id = c.kb_id
+        <where>
+            <if test="kbIds != null and kbIds.size > 0">c.kb_id in <foreach collection="kbIds" item="id" open="(" separator="," close=")">#{id}</foreach></if>
+            <if test="query != null and query != ''">and c.chunk_text like concat('%', #{query}, '%')</if>
+        </where>
+        order by c.chunk_id desc limit #{limit}
+    </select>
+
+    <select id="selectWorkflowList" parameterType="SysAgentWorkflow" resultMap="WorkflowResult">
+        select * from sys_agent_workflow
+        <where>
+            del_flag = '0'
+            <if test="workflowName != null and workflowName != ''">and workflow_name like concat('%', #{workflowName}, '%')</if>
+            <if test="status != null and status != ''">and status = #{status}</if>
+        </where>
+        order by workflow_id desc
+    </select>
+    <select id="selectWorkflowById" resultMap="WorkflowResult">select * from sys_agent_workflow where workflow_id = #{workflowId} and del_flag = '0'</select>
+    <insert id="insertWorkflow" parameterType="SysAgentWorkflow" useGeneratedKeys="true" keyProperty="workflowId">
+        insert into sys_agent_workflow(workflow_name, definition_json, version, status, del_flag, create_by, create_time, remark)
+        values(#{workflowName}, #{definitionJson}, #{version}, #{status}, '0', #{createBy}, sysdate(), #{remark})
+    </insert>
+    <update id="updateWorkflow" parameterType="SysAgentWorkflow">
+        update sys_agent_workflow
+        <set>
+            <if test="workflowName != null">workflow_name = #{workflowName},</if>
+            <if test="definitionJson != null">definition_json = #{definitionJson},</if>
+            <if test="version != null">version = #{version},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            update_time = sysdate()
+        </set>
+        where workflow_id = #{workflowId} and del_flag = '0'
+    </update>
+    <update id="deleteWorkflowsByIds">update sys_agent_workflow set del_flag = '2' where workflow_id in <foreach collection="array" item="id" open="(" separator="," close=")">#{id}</foreach></update>
+    <insert id="insertWorkflowRun" parameterType="SysAgentWorkflowRun" useGeneratedKeys="true" keyProperty="runId">
+        insert into sys_agent_workflow_run(workflow_id, user_id, input_json, output_json, status, elapsed_ms, error_msg, create_time, update_time)
+        values(#{workflowId}, #{userId}, #{inputJson}, #{outputJson}, #{status}, #{elapsedMs}, #{errorMsg}, sysdate(), sysdate())
+    </insert>
+    <update id="updateWorkflowRun" parameterType="SysAgentWorkflowRun">
+        update sys_agent_workflow_run set output_json = #{outputJson}, status = #{status}, elapsed_ms = #{elapsedMs}, error_msg = #{errorMsg}, update_time = sysdate() where run_id = #{runId}
+    </update>
+    <select id="selectWorkflowRunById" resultMap="WorkflowRunResult">
+        select r.*, w.workflow_name from sys_agent_workflow_run r left join sys_agent_workflow w on w.workflow_id = r.workflow_id where r.run_id = #{runId}
+    </select>
+    <select id="selectWorkflowRunList" parameterType="SysAgentWorkflowRun" resultMap="WorkflowRunResult">
+        select r.*, w.workflow_name from sys_agent_workflow_run r left join sys_agent_workflow w on w.workflow_id = r.workflow_id
+        <where><if test="workflowId != null">r.workflow_id = #{workflowId}</if><if test="status != null and status != ''">and r.status = #{status}</if></where>
+        order by r.run_id desc
+    </select>
+    <insert id="insertToolCall" parameterType="SysAgentToolCall" useGeneratedKeys="true" keyProperty="toolCallId">
+        insert into sys_agent_tool_call(user_id, session_id, workflow_run_id, tool_name, arguments_json, result_summary, elapsed_ms, error_msg, create_time)
+        values(#{userId}, #{sessionId}, #{workflowRunId}, #{toolName}, #{argumentsJson}, #{resultSummary}, #{elapsedMs}, #{errorMsg}, sysdate())
+    </insert>
+    <select id="selectToolCallList" parameterType="SysAgentToolCall" resultMap="ToolCallResult">
+        select * from sys_agent_tool_call
+        <where>
+            <if test="userId != null">user_id = #{userId}</if>
+            <if test="sessionId != null">and session_id = #{sessionId}</if>
+            <if test="workflowRunId != null">and workflow_run_id = #{workflowRunId}</if>
+            <if test="toolName != null and toolName != ''">and tool_name like concat('%', #{toolName}, '%')</if>
+        </where>
+        order by tool_call_id desc
+    </select>
+    <insert id="insertActionDraft" parameterType="SysAgentActionDraft" useGeneratedKeys="true" keyProperty="draftId">
+        insert into sys_agent_action_draft(user_id, session_id, action_type, action_title, action_desc, arguments_json, required_perms, executable, status, result_msg, error_msg, create_time, update_time)
+        values(#{userId}, #{sessionId}, #{actionType}, #{actionTitle}, #{actionDesc}, #{argumentsJson}, #{requiredPerms}, #{executable}, #{status}, #{resultMsg}, #{errorMsg}, sysdate(), sysdate())
+    </insert>
+    <select id="selectActionDraftById" resultMap="ActionDraftResult">
+        select * from sys_agent_action_draft where draft_id = #{draftId} and user_id = #{userId}
+    </select>
+    <select id="selectPendingActionDrafts" resultMap="ActionDraftResult">
+        select * from sys_agent_action_draft
+        where session_id = #{sessionId} and user_id = #{userId} and status = 'pending'
+        order by draft_id desc
+    </select>
+    <update id="updateActionDraft" parameterType="SysAgentActionDraft">
+        update sys_agent_action_draft
+        <set>
+            <if test="status != null">status = #{status},</if>
+            <if test="resultMsg != null">result_msg = #{resultMsg},</if>
+            <if test="errorMsg != null">error_msg = #{errorMsg},</if>
+            <if test="confirmTime != null">confirm_time = #{confirmTime},</if>
+            update_time = sysdate()
+        </set>
+        where draft_id = #{draftId} and user_id = #{userId}
+    </update>
+</mapper>

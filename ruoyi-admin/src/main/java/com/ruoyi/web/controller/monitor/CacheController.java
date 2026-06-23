@@ -23,12 +23,15 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.system.domain.SysCache;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 
 /**
  * 缓存监控
  * 
  * @author ruoyi
  */
+@Tag(name = "缓存监控")
 @RestController
 @RequestMapping("/monitor/cache")
 public class CacheController
@@ -49,6 +52,7 @@ public class CacheController
 
     @SuppressWarnings("deprecation")
     @PreAuthorize("@ss.hasPermi('monitor:cache:list')")
+    @Operation(summary = "获取缓存监控详情")
     @GetMapping()
     public AjaxResult getInfo() throws Exception
     {
@@ -73,6 +77,7 @@ public class CacheController
     }
 
     @PreAuthorize("@ss.hasPermi('monitor:cache:list')")
+    @Operation(summary = "查询 Redis 缓存概览")
     @GetMapping("/getNames")
     public AjaxResult cache()
     {
@@ -81,6 +86,7 @@ public class CacheController
 
     @PreAuthorize("@ss.hasPermi('monitor:cache:list')")
     @GetMapping("/getKeys/{cacheName}")
+    @io.swagger.v3.oas.annotations.Parameter(description = "缓存分组名称")
     public AjaxResult getCacheKeys(@PathVariable String cacheName)
     {
         Set<String> cacheKeys = redisTemplate.keys(cacheName + "*");
@@ -89,7 +95,9 @@ public class CacheController
 
     @PreAuthorize("@ss.hasPermi('monitor:cache:query')")
     @Log(title = "缓存详情", businessType = BusinessType.OTHER, isSaveResponseData = false)
+    @Operation(summary = "查询缓存键值")
     @GetMapping("/getValue/{cacheName}/{cacheKey}")
+    @io.swagger.v3.oas.annotations.Parameter(description = "缓存分组名称")
     public AjaxResult getCacheValue(@PathVariable String cacheName, @PathVariable String cacheKey)
     {
         String cacheValue = redisTemplate.opsForValue().get(cacheKey);
@@ -99,7 +107,9 @@ public class CacheController
 
     @PreAuthorize("@ss.hasPermi('monitor:cache:remove')")
     @Log(title = "缓存清理", businessType = BusinessType.CLEAN, isSaveResponseData = false)
+    @Operation(summary = "清空指定缓存分组")
     @DeleteMapping("/clearCacheName/{cacheName}")
+    @io.swagger.v3.oas.annotations.Parameter(description = "缓存分组名称")
     public AjaxResult clearCacheName(@PathVariable String cacheName)
     {
         Collection<String> cacheKeys = redisTemplate.keys(cacheName + "*");
@@ -109,7 +119,9 @@ public class CacheController
 
     @PreAuthorize("@ss.hasPermi('monitor:cache:remove')")
     @Log(title = "缓存清理", businessType = BusinessType.CLEAN, isSaveResponseData = false)
+    @Operation(summary = "清空指定缓存键")
     @DeleteMapping("/clearCacheKey/{cacheKey}")
+    @io.swagger.v3.oas.annotations.Parameter(description = "缓存键名")
     public AjaxResult clearCacheKey(@PathVariable String cacheKey)
     {
         redisTemplate.delete(cacheKey);
@@ -118,6 +130,7 @@ public class CacheController
 
     @PreAuthorize("@ss.hasPermi('monitor:cache:remove')")
     @Log(title = "缓存清理", businessType = BusinessType.CLEAN, isSaveResponseData = false)
+    @Operation(summary = "清空全部缓存")
     @DeleteMapping("/clearCacheAll")
     public AjaxResult clearCacheAll()
     {

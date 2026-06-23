@@ -33,10 +33,7 @@
                 :placeholder="$t('login.placeholder.password')"
               />
             </ElFormItem>
-            <ElFormItem
-              v-if="captchaInfo.captchaEnabled && captchaInfo.captchaType === 'image'"
-              prop="code"
-            >
+            <ElFormItem v-if="isImageCaptcha" prop="code">
               <div class="captcha-row">
                 <ElInput
                   v-model.trim="formData.code"
@@ -53,30 +50,22 @@
                 </button>
               </div>
             </ElFormItem>
-            <div
-              v-if="captchaInfo.captchaEnabled && captchaInfo.captchaType === 'slider'"
-              class="relative pb-5 mt-6"
-            >
-              <div
-                class="relative z-[2] overflow-hidden select-none rounded-lg border border-transparent tad-300"
-                :class="{ '!border-[#FF4E4F]': !isPassing && isClickPass }"
+            <div v-if="isSliderCaptcha" id="tianai-captcha-box" class="relative mt-6">
+              <ElButton
+                class="w-full custom-height"
+                plain
+                :loading="captchaLoading"
+                @click="openSliderCaptcha"
               >
-                <ArtDragVerify
-                  ref="dragVerify"
-                  v-model:value="isPassing"
-                  :text="$t('login.sliderText')"
-                  :successText="$t('login.sliderSuccessText')"
-                  textColor="var(--art-gray-700)"
-                  progressBarBg="var(--main-color)"
-                  :background="isDark ? '#26272F' : '#F1F1F4'"
-                  handlerBg="var(--default-box-color)"
+                <ArtSvgIcon
+                  :icon="formData.captchaToken ? 'ri:shield-check-line' : 'ri:shield-keyhole-line'"
+                  class="mr-1"
                 />
-              </div>
-              <p
-                class="absolute top-0 z-[1] px-px mt-2 text-xs text-[#f56c6c] tad-300"
-                :class="{ 'translate-y-10': !isPassing && isClickPass }"
-                >{{ $t('login.placeholder.slider') }}</p
-              >
+                {{ formData.captchaToken ? $t('login.sliderSuccessText') : $t('login.sliderText') }}
+              </ElButton>
+              <p v-if="isClickPass && !formData.captchaToken" class="mt-2 text-xs text-[#f56c6c]">{{
+                $t('login.placeholder.slider')
+              }}</p>
             </div>
             <div class="flex-cb mt-2 text-sm">
               <ElCheckbox v-model="formData.rememberPassword">{{
@@ -112,20 +101,19 @@
   import { useI18n } from 'vue-i18n'
   import { fetchCaptcha, fetchLogin, type CaptchaInfo } from '@/api/auth'
   import { ElNotification, type FormInstance, type FormRules } from 'element-plus'
-  import { useSettingStore } from '@/store/modules/setting'
   import { getSiteConfig, loadSiteConfig } from '@/utils/site-config'
+  import ArtSvgIcon from '@/components/core/base/art-svg-icon/index.vue'
+  import { verifyByTianaiCaptcha } from '@/utils/tianai-captcha'
 
   defineOptions({ name: 'Login' })
 
-  const { isDark } = storeToRefs(useSettingStore())
   const { t } = useI18n()
   const userStore = useUserStore()
   const router = useRouter()
   const route = useRoute()
   const formRef = ref<FormInstance>()
-  const dragVerify = ref<{ reset: () => void }>()
   const loading = ref(false)
-  const isPassing = ref(false)
+  const captchaLoading = ref(false)
   const isClickPass = ref(false)
   const captchaInfo = reactive<CaptchaInfo>({
     captchaEnabled: true,
@@ -135,19 +123,25 @@
   const captchaImage = computed(() =>
     captchaInfo.img ? `data:image/gif;base64,${captchaInfo.img}` : ''
   )
+  const isCaptchaEnabled = computed(() => captchaInfo.captchaEnabled)
+  const isImageCaptcha = computed(
+    () => isCaptchaEnabled.value && captchaInfo.captchaType === 'image'
+  )
+  const isSliderCaptcha = computed(
+    () => isCaptchaEnabled.value && captchaInfo.captchaType === 'slider'
+  )
   const formData = reactive({
     username: '',
     password: '',
     code: '',
     uuid: '',
+    captchaToken: '',
     rememberPassword: true
   })
   const rules = computed<FormRules>(() => ({
     username: [{ required: true, message: t('login.placeholder.username'), trigger: 'blur' }],
     password: [{ required: true, message: t('login.placeholder.password'), trigger: 'blur' }],
-    code: [
-      { required: captchaInfo.captchaType === 'image', message: '请输入验证码', trigger: 'blur' }
-    ]
+    code: [{ required: isImageCaptcha.value, message: '请输入验证码', trigger: 'blur' }]
   }))
 
   onMounted(async () => {
@@ -159,22 +153,32 @@
     Object.assign(captchaInfo, await fetchCaptcha())
     formData.code = ''
     formData.uuid = captchaInfo.uuid || ''
+    formData.captchaToken = ''
+    isClickPass.value = false
   }
 
   async function handleSubmit() {
     if (!formRef.value) return
     try {
       await formRef.value.validate()
-      if (captchaInfo.captchaEnabled && captchaInfo.captchaType === 'slider' && !isPassing.value) {
+      if (isSliderCaptcha.value && !formData.captchaToken) {
         isClickPass.value = true
-        return
+        await openSliderCaptcha()
+        if (!formData.captchaToken) return
+        isClickPass.value = false
       }
       loading.value = true
+      const captchaParams = isCaptchaEnabled.value
+        ? {
+            code: formData.code,
+            uuid: formData.uuid,
+            captchaToken: formData.captchaToken
+          }
+        : {}
       const { token, refreshToken } = await fetchLogin({
         username: formData.username,
         password: formData.password,
-        code: formData.code,
-        uuid: formData.uuid
+        ...captchaParams
       })
       userStore.setToken(token, refreshToken)
       userStore.setLoginStatus(true)
@@ -186,9 +190,21 @@
       await router.push((route.query.redirect as string) || '/')
     } catch {
       await loadCaptcha()
-      dragVerify.value?.reset()
     } finally {
       loading.value = false
+    }
+  }
+
+  async function openSliderCaptcha() {
+    if (captchaLoading.value) return
+    captchaLoading.value = true
+    try {
+      formData.captchaToken = await verifyByTianaiCaptcha('#tianai-captcha-box')
+      isClickPass.value = false
+    } catch {
+      formData.captchaToken = ''
+    } finally {
+      captchaLoading.value = false
     }
   }
 </script>

@@ -10,7 +10,6 @@ import {
 import { useUserStore } from './user'
 
 const NOTICE_TYPES: NoticeType[] = ['1', '2', '3']
-const POLL_INTERVAL = 60_000
 const WS_RECONNECT_INTERVAL = 5_000
 const WS_MAX_RECONNECT_ATTEMPTS = 12
 const WS_REFRESH_DELAY = 300
@@ -23,7 +22,6 @@ export const useNoticeStore = defineStore('noticeStore', () => {
   const lists = ref<Record<NoticeType, TopNotice[]>>({ '1': [], '2': [], '3': [] })
   const unreadCounts = ref<Record<NoticeType, number>>({ '1': 0, '2': 0, '3': 0 })
   const loading = ref(false)
-  let pollTimer: ReturnType<typeof setInterval> | undefined
   let socket: WebSocket | undefined
   let reconnectTimer: ReturnType<typeof setTimeout> | undefined
   let refreshTimer: ReturnType<typeof setTimeout> | undefined
@@ -60,18 +58,13 @@ export const useNoticeStore = defineStore('noticeStore', () => {
     await refresh(true)
   }
 
-  const startPolling = () => {
-    stopPolling()
+  const startRealtime = () => {
+    stopRealtime()
     void refresh(true)
-    pollTimer = setInterval(() => void refresh(true), POLL_INTERVAL)
     connectWebSocket()
   }
 
-  const stopPolling = () => {
-    if (pollTimer) {
-      clearInterval(pollTimer)
-      pollTimer = undefined
-    }
+  const stopRealtime = () => {
     disconnectWebSocket()
   }
 
@@ -135,7 +128,7 @@ export const useNoticeStore = defineStore('noticeStore', () => {
         scheduleRefresh()
       }
     } catch {
-      // 非通知业务消息忽略，轮询兜底仍会保持数据一致。
+      // 非通知业务消息忽略。
     }
   }
 
@@ -166,7 +159,7 @@ export const useNoticeStore = defineStore('noticeStore', () => {
     refresh,
     read,
     readAll,
-    startPolling,
-    stopPolling
+    startRealtime,
+    stopRealtime
   }
 })

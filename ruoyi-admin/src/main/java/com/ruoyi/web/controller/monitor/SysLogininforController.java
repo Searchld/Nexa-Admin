@@ -19,12 +19,15 @@ import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.web.service.SysPasswordService;
 import com.ruoyi.system.domain.SysLogininfor;
 import com.ruoyi.system.service.ISysLogininforService;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 
 /**
  * 系统访问记录
  * 
  * @author ruoyi
  */
+@Tag(name = "登录日志")
 @RestController
 @RequestMapping("/monitor/logininfor")
 public class SysLogininforController extends BaseController
@@ -36,6 +39,7 @@ public class SysLogininforController extends BaseController
     private SysPasswordService passwordService;
 
     @PreAuthorize("@ss.hasPermi('monitor:logininfor:list')")
+    @Operation(summary = "查询登录日志列表")
     @GetMapping("/list")
     public TableDataInfo list(SysLogininfor logininfor)
     {
@@ -46,6 +50,7 @@ public class SysLogininforController extends BaseController
 
     @Log(title = "登录日志", businessType = BusinessType.EXPORT)
     @PreAuthorize("@ss.hasPermi('monitor:logininfor:export')")
+    @Operation(summary = "导出登录日志")
     @PostMapping("/export")
     public void export(HttpServletResponse response, SysLogininfor logininfor)
     {
@@ -56,7 +61,9 @@ public class SysLogininforController extends BaseController
 
     @PreAuthorize("@ss.hasPermi('monitor:logininfor:remove')")
     @Log(title = "登录日志", businessType = BusinessType.DELETE)
+    @Operation(summary = "删除登录日志")
     @DeleteMapping("/{infoIds}")
+    @io.swagger.v3.oas.annotations.Parameter(description = "登录日志ID数组")
     public AjaxResult remove(@PathVariable Long[] infoIds)
     {
         return toAjax(logininforService.deleteLogininforByIds(infoIds));
@@ -64,6 +71,7 @@ public class SysLogininforController extends BaseController
 
     @PreAuthorize("@ss.hasPermi('monitor:logininfor:remove')")
     @Log(title = "登录日志", businessType = BusinessType.CLEAN)
+    @Operation(summary = "清空登录日志")
     @DeleteMapping("/clean")
     public AjaxResult clean()
     {
@@ -73,7 +81,9 @@ public class SysLogininforController extends BaseController
 
     @PreAuthorize("@ss.hasPermi('monitor:logininfor:unlock')")
     @Log(title = "账户解锁", businessType = BusinessType.OTHER)
+    @Operation(summary = "解锁登录用户")
     @GetMapping("/unlock/{userName}")
+    @io.swagger.v3.oas.annotations.Parameter(description = "路径参数")
     public AjaxResult unlock(@PathVariable("userName") String userName)
     {
         passwordService.clearLoginRecordCache(userName);

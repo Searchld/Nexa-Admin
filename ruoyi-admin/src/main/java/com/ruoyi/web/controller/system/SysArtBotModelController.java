@@ -26,7 +26,10 @@ import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.system.domain.SysArtBotModel;
 import com.ruoyi.system.service.ISysArtBotService;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 
+@Tag(name = "AI 模型管理")
 @RestController
 @RequestMapping("/system/artbot/model")
 public class SysArtBotModelController extends BaseController
@@ -35,6 +38,7 @@ public class SysArtBotModelController extends BaseController
     private ISysArtBotService artBotService;
 
     @PreAuthorize("@ss.hasPermi('system:artbot:list')")
+    @Operation(summary = "查询AI 模型管理列表")
     @GetMapping("/list")
     public TableDataInfo list(SysArtBotModel model)
     {
@@ -43,7 +47,9 @@ public class SysArtBotModelController extends BaseController
     }
 
     @PreAuthorize("@ss.hasPermi('system:artbot:query')")
+    @Operation(summary = "获取AI 模型管理详情")
     @GetMapping("/{modelId}")
+    @io.swagger.v3.oas.annotations.Parameter(description = "AI 模型ID")
     public AjaxResult getInfo(@PathVariable Long modelId)
     {
         return success(artBotService.selectModelById(modelId));
@@ -51,6 +57,7 @@ public class SysArtBotModelController extends BaseController
 
     @PreAuthorize("@ss.hasPermi('system:artbot:add')")
     @Log(title = "AI模型", businessType = BusinessType.INSERT)
+    @Operation(summary = "新增AI 模型管理")
     @PostMapping
     public AjaxResult add(@RequestBody SysArtBotModel model)
     {
@@ -60,6 +67,7 @@ public class SysArtBotModelController extends BaseController
 
     @PreAuthorize("@ss.hasPermi('system:artbot:edit')")
     @Log(title = "AI模型", businessType = BusinessType.UPDATE)
+    @Operation(summary = "修改AI 模型管理")
     @PutMapping
     public AjaxResult edit(@RequestBody SysArtBotModel model)
     {
@@ -69,7 +77,9 @@ public class SysArtBotModelController extends BaseController
 
     @PreAuthorize("@ss.hasPermi('system:artbot:edit')")
     @Log(title = "AI模型", businessType = BusinessType.UPDATE)
+    @Operation(summary = "设置默认 AI 模型")
     @PutMapping("/{modelId}/default")
+    @io.swagger.v3.oas.annotations.Parameter(description = "AI 模型ID")
     public AjaxResult setDefault(@PathVariable Long modelId)
     {
         return toAjax(artBotService.setDefaultModel(modelId, getUsername()));
@@ -77,7 +87,9 @@ public class SysArtBotModelController extends BaseController
 
     @PreAuthorize("@ss.hasPermi('system:artbot:remove')")
     @Log(title = "AI模型", businessType = BusinessType.DELETE)
+    @Operation(summary = "删除AI 模型管理")
     @DeleteMapping("/{modelId}")
+    @io.swagger.v3.oas.annotations.Parameter(description = "AI 模型ID")
     public AjaxResult remove(@PathVariable Long modelId)
     {
         return toAjax(artBotService.deleteModel(modelId));
@@ -85,7 +97,9 @@ public class SysArtBotModelController extends BaseController
 
     @PreAuthorize("@ss.hasPermi('system:artbot:test')")
     @Log(title = "AI模型连接测试", businessType = BusinessType.OTHER, isSaveResponseData = false)
+    @Operation(summary = "测试 AI 模型连接")
     @PostMapping("/{modelId}/test")
+    @io.swagger.v3.oas.annotations.Parameter(description = "AI 模型ID")
     public AjaxResult test(@PathVariable Long modelId)
     {
         SysArtBotModel model = artBotService.selectModelSecretById(modelId);

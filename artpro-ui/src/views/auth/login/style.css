@@ -2,7 +2,7 @@
 
 /* 授权页右侧区域 */
 .auth-right-wrap {
-  @apply absolute inset-0 w-[440px] h-fit py-[5px] m-auto overflow-hidden
+  @apply absolute inset-0 w-[440px] h-fit max-h-[calc(100vh-40px)] py-[5px] m-auto overflow-y-auto overflow-x-visible
     max-sm:px-7 max-sm:w-full
     animate-[slideInRight_0.6s_cubic-bezier(0.25,0.46,0.45,0.94)_forwards]
     max-md:animate-none;

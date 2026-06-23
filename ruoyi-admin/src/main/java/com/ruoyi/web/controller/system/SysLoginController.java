@@ -23,12 +23,15 @@ import com.ruoyi.framework.web.service.SysPermissionService;
 import com.ruoyi.framework.web.service.TokenService;
 import com.ruoyi.system.service.ISysConfigService;
 import com.ruoyi.system.service.ISysMenuService;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 
 /**
  * 登录验证
  * 
  * @author ruoyi
  */
+@Tag(name = "登录认证")
 @RestController
 public class SysLoginController
 {
@@ -53,13 +56,14 @@ public class SysLoginController
      * @param loginBody 登录信息
      * @return 结果
      */
+    @Operation(summary = "用户登录")
     @PostMapping("/login")
     public AjaxResult login(@RequestBody LoginBody loginBody)
     {
         AjaxResult ajax = AjaxResult.success();
         // 生成令牌
         String token = loginService.login(loginBody.getUsername(), loginBody.getPassword(), loginBody.getCode(),
-                loginBody.getUuid());
+                loginBody.getUuid(), loginBody.getCaptchaToken());
         ajax.put(Constants.TOKEN, token);
         return ajax;
     }
@@ -69,6 +73,7 @@ public class SysLoginController
      * 
      * @return 用户信息
      */
+    @Operation(summary = "获取当前登录用户信息")
     @GetMapping("getInfo")
     public AjaxResult getInfo()
     {
@@ -98,6 +103,7 @@ public class SysLoginController
      * 
      * @return 路由信息
      */
+    @Operation(summary = "获取当前用户动态路由")
     @GetMapping("getRouters")
     public AjaxResult getRouters()
     {

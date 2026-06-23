@@ -101,7 +101,64 @@
                 v-html="renderMarkdown(message.content)"
               />
               <div
-                v-else
+                v-if="message.role === 'assistant' && message.toolCalls?.length"
+                class="mt-2 flex max-w-full flex-wrap gap-1"
+              >
+                <span
+                  v-for="tool in message.toolCalls"
+                  :key="tool"
+                  class="rounded border border-theme/30 bg-theme/10 px-2 py-0.5 text-xs text-theme"
+                >
+                  {{ tool }}
+                </span>
+              </div>
+              <div
+                v-if="message.role === 'assistant' && message.references?.length"
+                class="mt-2 max-w-full rounded border border-dashed border-g-300 px-2 py-1 text-xs text-g-700"
+              >
+                <div class="mb-1 font-medium">引用来源</div>
+                <div
+                  v-for="(ref, index) in message.references.slice(0, 5)"
+                  :key="index"
+                  class="truncate"
+                >
+                  {{ ref.fileName || ref.kbName || '知识片段' }}
+                </div>
+              </div>
+              <div
+                v-if="message.role === 'assistant' && message.actionDrafts?.length"
+                class="mt-2 w-full rounded border border-warning/40 bg-warning/5 p-2 text-xs text-g-800"
+              >
+                <div class="mb-2 font-medium">待确认动作</div>
+                <div
+                  v-for="draft in message.actionDrafts"
+                  :key="draft.draftId"
+                  class="mb-2 last:mb-0"
+                >
+                  <div class="font-medium">{{ draft.actionTitle }}</div>
+                  <div class="mt-0.5 text-g-600">{{ draft.actionDesc }}</div>
+                  <div class="mt-2 flex gap-2">
+                    <ElButton
+                      size="small"
+                      type="primary"
+                      :disabled="draft.status !== 'pending' || draft.executable !== '1'"
+                      @click="confirmActionDraft(draft)"
+                    >
+                      确认执行
+                    </ElButton>
+                    <ElButton
+                      size="small"
+                      :disabled="draft.status !== 'pending'"
+                      @click="cancelActionDraft(draft)"
+                    >
+                      取消
+                    </ElButton>
+                    <span class="self-center text-g-500">状态：{{ draft.status }}</span>
+                  </div>
+                </div>
+              </div>
+              <div
+                v-if="message.role !== 'assistant'"
                 class="whitespace-pre-wrap rounded-md bg-theme/15 px-3.5 py-2.5 text-sm leading-6 text-g-900"
               >
                 {{ message.content }}
@@ -151,11 +208,14 @@
   import aiAvatar from '@/assets/images/avatar/avatar10.webp'
   import {
     createArtBotConversation,
+    cancelAgentActionDraft,
+    confirmAgentActionDraft,
     fetchArtBotConversations,
     fetchArtBotMessages,
     fetchAvailableArtBotModels,
     removeArtBotConversation,
     streamArtBotMessage,
+    type AgentActionDraft,
     type ArtBotConversation,
     type ArtBotMessage,
     type ArtBotModel
@@ -246,7 +306,13 @@
           answer.content += chunk
           scrollToBottom()
         },
-        abortController.signal
+        abortController.signal,
+        (event, payload) => {
+          if (event === 'tool_calls') answer.toolCalls = payload
+          if (event === 'references') answer.references = payload
+          if (event === 'action_drafts') answer.actionDrafts = payload
+          scrollToBottom()
+        }
       )
       await loadConversations()
     } catch (error) {
@@ -262,6 +328,17 @@
   function stopGeneration() {
     abortController?.abort()
     generating.value = false
+  }
+  async function confirmActionDraft(draft: AgentActionDraft) {
+    await ElMessageBox.confirm(`确定执行“${draft.actionTitle}”吗？`, '动作确认', {
+      type: 'warning'
+    })
+    const result = await confirmAgentActionDraft(draft.draftId)
+    Object.assign(draft, result)
+  }
+  async function cancelActionDraft(draft: AgentActionDraft) {
+    const result = await cancelAgentActionDraft(draft.draftId)
+    Object.assign(draft, result)
   }
   async function openChat() {
     isDrawerVisible.value = true

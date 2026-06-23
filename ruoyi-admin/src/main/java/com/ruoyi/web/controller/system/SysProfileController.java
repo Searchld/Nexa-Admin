@@ -25,12 +25,15 @@ import com.ruoyi.common.utils.file.FileUtils;
 import com.ruoyi.common.utils.file.MimeTypeUtils;
 import com.ruoyi.framework.web.service.TokenService;
 import com.ruoyi.system.service.ISysUserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 
 /**
  * 个人信息 业务处理
  * 
  * @author ruoyi
  */
+@Tag(name = "个人中心")
 @RestController
 @RequestMapping("/system/user/profile")
 public class SysProfileController extends BaseController
@@ -44,6 +47,7 @@ public class SysProfileController extends BaseController
     /**
      * 个人信息
      */
+    @Operation(summary = "获取或修改个人资料")
     @GetMapping
     public AjaxResult profile()
     {
@@ -59,6 +63,7 @@ public class SysProfileController extends BaseController
      * 修改用户
      */
     @Log(title = "个人信息", businessType = BusinessType.UPDATE)
+    @Operation(summary = "获取或修改个人资料")
     @PutMapping
     public AjaxResult updateProfile(@RequestBody SysUser user)
     {
@@ -89,6 +94,7 @@ public class SysProfileController extends BaseController
      * 重置密码
      */
     @Log(title = "个人信息", businessType = BusinessType.UPDATE)
+    @Operation(summary = "修改当前用户密码")
     @PutMapping("/updatePwd")
     public AjaxResult updatePwd(@RequestBody Map<String, String> params)
     {
@@ -122,6 +128,7 @@ public class SysProfileController extends BaseController
      * 头像上传
      */
     @Log(title = "用户头像", businessType = BusinessType.UPDATE)
+    @Operation(summary = "上传当前用户头像")
     @PostMapping("/avatar")
     public AjaxResult avatar(@RequestParam("avatarfile") MultipartFile file) throws Exception
     {

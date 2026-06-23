@@ -243,12 +243,12 @@
 
   onMounted(() => {
     initLanguage()
-    noticeStore.startPolling()
+    noticeStore.startRealtime()
     document.addEventListener('click', bodyCloseNotice)
   })
 
   onUnmounted(() => {
-    noticeStore.stopPolling()
+    noticeStore.stopRealtime()
     document.removeEventListener('click', bodyCloseNotice)
   })
 

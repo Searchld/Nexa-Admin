@@ -21,12 +21,15 @@ import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.system.domain.SysPost;
 import com.ruoyi.system.service.ISysPostService;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 
 /**
  * 岗位信息操作处理
  * 
  * @author ruoyi
  */
+@Tag(name = "岗位管理")
 @RestController
 @RequestMapping("/system/post")
 public class SysPostController extends BaseController
@@ -38,6 +41,7 @@ public class SysPostController extends BaseController
      * 获取岗位列表
      */
     @PreAuthorize("@ss.hasPermi('system:post:list')")
+    @Operation(summary = "查询岗位管理列表")
     @GetMapping("/list")
     public TableDataInfo list(SysPost post)
     {
@@ -48,6 +52,7 @@ public class SysPostController extends BaseController
     
     @Log(title = "岗位管理", businessType = BusinessType.EXPORT)
     @PreAuthorize("@ss.hasPermi('system:post:export')")
+    @Operation(summary = "导出岗位管理")
     @PostMapping("/export")
     public void export(HttpServletResponse response, SysPost post)
     {
@@ -60,7 +65,9 @@ public class SysPostController extends BaseController
      * 根据岗位编号获取详细信息
      */
     @PreAuthorize("@ss.hasPermi('system:post:query')")
+    @Operation(summary = "获取岗位管理详情")
     @GetMapping(value = "/{postId}")
+    @io.swagger.v3.oas.annotations.Parameter(description = "岗位ID")
     public AjaxResult getInfo(@PathVariable Long postId)
     {
         return success(postService.selectPostById(postId));
@@ -71,6 +78,7 @@ public class SysPostController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('system:post:add')")
     @Log(title = "岗位管理", businessType = BusinessType.INSERT)
+    @Operation(summary = "新增岗位管理")
     @PostMapping
     public AjaxResult add(@Validated @RequestBody SysPost post)
     {
@@ -91,6 +99,7 @@ public class SysPostController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('system:post:edit')")
     @Log(title = "岗位管理", businessType = BusinessType.UPDATE)
+    @Operation(summary = "修改岗位管理")
     @PutMapping
     public AjaxResult edit(@Validated @RequestBody SysPost post)
     {
@@ -111,7 +120,9 @@ public class SysPostController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('system:post:remove')")
     @Log(title = "岗位管理", businessType = BusinessType.DELETE)
+    @Operation(summary = "删除岗位管理")
     @DeleteMapping("/{postIds}")
+    @io.swagger.v3.oas.annotations.Parameter(description = "岗位ID数组")
     public AjaxResult remove(@PathVariable Long[] postIds)
     {
         return toAjax(postService.deletePostByIds(postIds));
@@ -120,6 +131,7 @@ public class SysPostController extends BaseController
     /**
      * 获取岗位选择框列表
      */
+    @Operation(summary = "获取岗位管理选项")
     @GetMapping("/optionselect")
     public AjaxResult optionselect()
     {

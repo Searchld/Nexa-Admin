@@ -5,12 +5,25 @@
     :fields="fields"
     :list-fn="fetchOnlineList"
     :remove-fn="forceLogout"
-  />
+  >
+    <template #toolbar="{ refresh }">
+      <ElButton
+        v-if="hasAuth('monitor:online:forceLogout')"
+        type="danger"
+        @click="clearOnline(refresh)"
+      >
+        清空
+      </ElButton>
+    </template>
+  </MonitorListPage>
 </template>
 <script setup lang="ts">
+  import { ElMessageBox } from 'element-plus'
   import MonitorListPage from '@/components/business/monitor-list-page/index.vue'
-  import { fetchOnlineList, forceLogout } from '@/api/monitor'
+  import { cleanOnlineUsers, fetchOnlineList, forceLogout } from '@/api/monitor'
+  import { useAuth } from '@/hooks/core/useAuth'
   defineOptions({ name: 'MonitorOnline' })
+  const { hasAuth } = useAuth()
   const fields = [
     { prop: 'tokenId', label: '会话编号', minWidth: 230 },
     { prop: 'userName', label: '用户名称', search: true },
@@ -27,5 +40,13 @@
     if (Number.isNaN(date.getTime())) return '-'
     const pad = (value: number) => String(value).padStart(2, '0')
     return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`
+  }
+
+  async function clearOnline(refresh: () => void) {
+    await ElMessageBox.confirm('确定清空其他在线用户会话吗？当前会话将保留。', '提示', {
+      type: 'warning'
+    })
+    await cleanOnlineUsers()
+    refresh()
   }
 </script>

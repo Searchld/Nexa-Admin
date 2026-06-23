@@ -68,6 +68,7 @@ declare namespace Api {
       password: string
       code?: string
       uuid?: string
+      captchaToken?: string
     }
 
     /** 登录响应 */

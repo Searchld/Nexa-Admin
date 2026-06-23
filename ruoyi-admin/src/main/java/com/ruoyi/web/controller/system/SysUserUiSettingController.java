@@ -12,10 +12,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.system.service.ISysUserUiSettingService;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 
 /**
  * 当前用户界面偏好
  */
+@Tag(name = "用户界面设置")
 @RestController
 @RequestMapping("/system/user-ui")
 public class SysUserUiSettingController extends BaseController
@@ -49,6 +52,7 @@ public class SysUserUiSettingController extends BaseController
     @Autowired
     private ISysUserUiSettingService settingService;
 
+    @Operation(summary = "获取用户界面设置")
     @GetMapping
     public AjaxResult get()
     {

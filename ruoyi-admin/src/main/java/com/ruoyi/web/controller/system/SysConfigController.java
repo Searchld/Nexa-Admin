@@ -24,12 +24,15 @@ import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.system.domain.SysConfig;
 import com.ruoyi.system.service.ISysConfigService;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 
 /**
  * 参数配置 信息操作处理
  * 
  * @author ruoyi
  */
+@Tag(name = "参数配置")
 @RestController
 @RequestMapping("/system/config")
 public class SysConfigController extends BaseController
@@ -44,11 +47,16 @@ public class SysConfigController extends BaseController
         SITE_CONFIGS.put("site.login.description", "登录欢迎描述");
         SITE_CONFIGS.put("site.login-left-title", "登录页左侧标题");
         SITE_CONFIGS.put("site.login-left-sub-title", "登录页左侧描述");
+        SITE_CONFIGS.put("sys.index.skinName", "默认皮肤样式");
+        SITE_CONFIGS.put("sys.index.sideTheme", "侧边栏主题");
         SITE_CONFIGS.put("site.watermark.content", "公共水印内容");
         SITE_CONFIGS.put("site.watermark.mode", "水印内容模式");
         SITE_CONFIGS.put("site.watermark.show-time", "水印叠加时间");
+        SITE_CONFIGS.put("sys.account.captchaEnabled", "验证码开关");
         SITE_CONFIGS.put("sys.account.captchaType", "验证码类型");
+        SITE_CONFIGS.put("sys.account.behaviorCaptchaType", "行为验证码类型");
         SITE_CONFIGS.put("sys.account.registerUser", "开放用户注册");
+        SITE_CONFIGS.put("sys.login.blackIPList", "登录黑名单");
         SITE_CONFIGS.put("security.access-token-hours", "访问令牌有效时长");
         SITE_CONFIGS.put("security.max-failed-login-count", "登录失败锁定阈值");
         SITE_CONFIGS.put("security.account-lock-minutes", "账号锁定时长");
@@ -58,6 +66,10 @@ public class SysConfigController extends BaseController
         SITE_CONFIGS.put("security.password-require-lowercase", "密码要求小写字母");
         SITE_CONFIGS.put("security.password-require-number", "密码要求数字");
         SITE_CONFIGS.put("security.password-require-special", "密码要求特殊字符");
+        SITE_CONFIGS.put("sys.user.initPassword", "用户初始密码");
+        SITE_CONFIGS.put("sys.account.initPasswordModify", "初始密码修改策略");
+        SITE_CONFIGS.put("sys.account.passwordValidateDays", "账号密码更新周期");
+        SITE_CONFIGS.put("sys.account.chrtype", "密码字符范围");
     }
 
     @Autowired
@@ -67,6 +79,7 @@ public class SysConfigController extends BaseController
      * 获取前端站点配置。登录页需要匿名读取。
      */
     @Anonymous
+    @Operation(summary = "获取站点配置")
     @GetMapping("/site")
     public AjaxResult site()
     {
@@ -80,6 +93,7 @@ public class SysConfigController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('system:config:edit')")
     @Log(title = "站点配置", businessType = BusinessType.UPDATE)
+    @Operation(summary = "保存站点配置")
     @PutMapping("/site")
     public AjaxResult updateSite(@RequestBody Map<String, String> values)
     {
@@ -114,6 +128,7 @@ public class SysConfigController extends BaseController
      * 获取参数配置列表
      */
     @PreAuthorize("@ss.hasPermi('system:config:list')")
+    @Operation(summary = "查询参数配置列表")
     @GetMapping("/list")
     public TableDataInfo list(SysConfig config)
     {
@@ -124,6 +139,7 @@ public class SysConfigController extends BaseController
 
     @Log(title = "参数管理", businessType = BusinessType.EXPORT)
     @PreAuthorize("@ss.hasPermi('system:config:export')")
+    @Operation(summary = "导出参数配置")
     @PostMapping("/export")
     public void export(HttpServletResponse response, SysConfig config)
     {
@@ -136,7 +152,9 @@ public class SysConfigController extends BaseController
      * 根据参数编号获取详细信息
      */
     @PreAuthorize("@ss.hasPermi('system:config:query')")
+    @Operation(summary = "获取参数配置详情")
     @GetMapping(value = "/{configId}")
+    @io.swagger.v3.oas.annotations.Parameter(description = "参数ID")
     public AjaxResult getInfo(@PathVariable Long configId)
     {
         return success(configService.selectConfigById(configId));
@@ -145,7 +163,9 @@ public class SysConfigController extends BaseController
     /**
      * 根据参数键名查询参数值
      */
+    @Operation(summary = "根据参数键名查询参数值")
     @GetMapping(value = "/configKey/{configKey}")
+    @io.swagger.v3.oas.annotations.Parameter(description = "参数键名")
     public AjaxResult getConfigKey(@PathVariable String configKey)
     {
         return success(configService.selectConfigByKey(configKey));
@@ -156,6 +176,7 @@ public class SysConfigController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('system:config:add')")
     @Log(title = "参数管理", businessType = BusinessType.INSERT)
+    @Operation(summary = "新增参数配置")
     @PostMapping
     public AjaxResult add(@Validated @RequestBody SysConfig config)
     {
@@ -172,6 +193,7 @@ public class SysConfigController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('system:config:edit')")
     @Log(title = "参数管理", businessType = BusinessType.UPDATE)
+    @Operation(summary = "修改参数配置")
     @PutMapping
     public AjaxResult edit(@Validated @RequestBody SysConfig config)
     {
@@ -188,7 +210,9 @@ public class SysConfigController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('system:config:remove')")
     @Log(title = "参数管理", businessType = BusinessType.DELETE)
+    @Operation(summary = "删除参数配置")
     @DeleteMapping("/{configIds}")
+    @io.swagger.v3.oas.annotations.Parameter(description = "参数ID数组")
     public AjaxResult remove(@PathVariable Long[] configIds)
     {
         configService.deleteConfigByIds(configIds);
@@ -200,6 +224,7 @@ public class SysConfigController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('system:config:remove')")
     @Log(title = "参数管理", businessType = BusinessType.CLEAN)
+    @Operation(summary = "刷新缓存")
     @DeleteMapping("/refreshCache")
     public AjaxResult refreshCache()
     {

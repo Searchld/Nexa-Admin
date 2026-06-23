@@ -31,12 +31,15 @@ import com.ruoyi.system.service.ISysDeptService;
 import com.ruoyi.system.service.ISysPostService;
 import com.ruoyi.system.service.ISysRoleService;
 import com.ruoyi.system.service.ISysUserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 
 /**
  * 用户信息
  * 
  * @author ruoyi
  */
+@Tag(name = "用户管理")
 @RestController
 @RequestMapping("/system/user")
 public class SysUserController extends BaseController
@@ -57,6 +60,7 @@ public class SysUserController extends BaseController
      * 获取用户列表
      */
     @PreAuthorize("@ss.hasPermi('system:user:list')")
+    @Operation(summary = "查询用户管理列表")
     @GetMapping("/list")
     public TableDataInfo list(SysUser user)
     {
@@ -67,6 +71,7 @@ public class SysUserController extends BaseController
 
     @Log(title = "用户管理", businessType = BusinessType.EXPORT)
     @PreAuthorize("@ss.hasPermi('system:user:export')")
+    @Operation(summary = "导出用户管理")
     @PostMapping("/export")
     public void export(HttpServletResponse response, SysUser user)
     {
@@ -77,6 +82,7 @@ public class SysUserController extends BaseController
 
     @Log(title = "用户管理", businessType = BusinessType.IMPORT)
     @PreAuthorize("@ss.hasPermi('system:user:import')")
+    @Operation(summary = "导入用户数据")
     @PostMapping("/importData")
     public AjaxResult importData(MultipartFile file, boolean updateSupport) throws Exception
     {
@@ -87,6 +93,7 @@ public class SysUserController extends BaseController
         return success(message);
     }
 
+    @Operation(summary = "下载用户导入模板")
     @PostMapping("/importTemplate")
     public void importTemplate(HttpServletResponse response)
     {
@@ -98,7 +105,9 @@ public class SysUserController extends BaseController
      * 根据用户编号获取详细信息
      */
     @PreAuthorize("@ss.hasPermi('system:user:query')")
+    @Operation(summary = "获取用户管理详情")
     @GetMapping(value = { "/", "/{userId}" })
+    @io.swagger.v3.oas.annotations.Parameter(description = "用户ID")
     public AjaxResult getInfo(@PathVariable(value = "userId", required = false) Long userId)
     {
         AjaxResult ajax = AjaxResult.success();
@@ -121,6 +130,7 @@ public class SysUserController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('system:user:add')")
     @Log(title = "用户管理", businessType = BusinessType.INSERT)
+    @Operation(summary = "新增用户管理")
     @PostMapping
     public AjaxResult add(@Validated @RequestBody SysUser user)
     {
@@ -148,6 +158,7 @@ public class SysUserController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('system:user:edit')")
     @Log(title = "用户管理", businessType = BusinessType.UPDATE)
+    @Operation(summary = "修改用户管理")
     @PutMapping
     public AjaxResult edit(@Validated @RequestBody SysUser user)
     {
@@ -176,7 +187,9 @@ public class SysUserController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('system:user:remove')")
     @Log(title = "用户管理", businessType = BusinessType.DELETE)
+    @Operation(summary = "删除用户管理")
     @DeleteMapping("/{userIds}")
+    @io.swagger.v3.oas.annotations.Parameter(description = "用户ID数组")
     public AjaxResult remove(@PathVariable Long[] userIds)
     {
         if (ArrayUtils.contains(userIds, getUserId()))
@@ -191,6 +204,7 @@ public class SysUserController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('system:user:resetPwd')")
     @Log(title = "用户管理", businessType = BusinessType.UPDATE)
+    @Operation(summary = "重置用户密码")
     @PutMapping("/resetPwd")
     public AjaxResult resetPwd(@RequestBody SysUser user)
     {
@@ -206,6 +220,7 @@ public class SysUserController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('system:user:edit')")
     @Log(title = "用户管理", businessType = BusinessType.UPDATE)
+    @Operation(summary = "修改用户管理状态")
     @PutMapping("/changeStatus")
     public AjaxResult changeStatus(@RequestBody SysUser user)
     {
@@ -219,7 +234,9 @@ public class SysUserController extends BaseController
      * 根据用户编号获取授权角色
      */
     @PreAuthorize("@ss.hasPermi('system:user:query')")
+    @Operation(summary = "查询或保存用户授权角色")
     @GetMapping("/authRole/{userId}")
+    @io.swagger.v3.oas.annotations.Parameter(description = "路径参数")
     public AjaxResult authRole(@PathVariable("userId") Long userId)
     {
         AjaxResult ajax = AjaxResult.success();
@@ -235,6 +252,7 @@ public class SysUserController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('system:user:edit')")
     @Log(title = "用户管理", businessType = BusinessType.GRANT)
+    @Operation(summary = "查询或保存用户授权角色")
     @PutMapping("/authRole")
     public AjaxResult insertAuthRole(Long userId, Long[] roleIds)
     {
@@ -248,6 +266,7 @@ public class SysUserController extends BaseController
      * 获取部门树列表
      */
     @PreAuthorize("@ss.hasPermi('system:user:list')")
+    @Operation(summary = "获取部门树")
     @GetMapping("/deptTree")
     public AjaxResult deptTree(SysDept dept)
     {

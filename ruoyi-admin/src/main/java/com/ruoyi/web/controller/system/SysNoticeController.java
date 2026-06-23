@@ -23,12 +23,15 @@ import com.ruoyi.system.domain.SysNotice;
 import com.ruoyi.system.service.ISysNoticeReadService;
 import com.ruoyi.system.service.ISysNoticeService;
 import com.ruoyi.web.service.SysNoticeBroadcastService;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 
 /**
  * 公告 信息操作处理
  * 
  * @author ruoyi
  */
+@Tag(name = "通知公告")
 @RestController
 @RequestMapping("/system/notice")
 public class SysNoticeController extends BaseController
@@ -46,6 +49,7 @@ public class SysNoticeController extends BaseController
      * 获取通知公告列表
      */
     @PreAuthorize("@ss.hasPermi('system:notice:list')")
+    @Operation(summary = "查询通知公告列表")
     @GetMapping("/list")
     public TableDataInfo list(SysNotice notice)
     {
@@ -57,7 +61,9 @@ public class SysNoticeController extends BaseController
     /**
      * 根据通知公告编号获取详细信息
      */
+    @Operation(summary = "获取通知公告详情")
     @GetMapping(value = "/{noticeId}")
+    @io.swagger.v3.oas.annotations.Parameter(description = "通知公告ID")
     public AjaxResult getInfo(@PathVariable Long noticeId)
     {
         return success(noticeService.selectNoticeById(noticeId));
@@ -68,6 +74,7 @@ public class SysNoticeController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('system:notice:add')")
     @Log(title = "通知公告", businessType = BusinessType.INSERT)
+    @Operation(summary = "新增通知公告")
     @PostMapping
     public AjaxResult add(@Validated @RequestBody SysNotice notice)
     {
@@ -85,6 +92,7 @@ public class SysNoticeController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('system:notice:edit')")
     @Log(title = "通知公告", businessType = BusinessType.UPDATE)
+    @Operation(summary = "修改通知公告")
     @PutMapping
     public AjaxResult edit(@Validated @RequestBody SysNotice notice)
     {
@@ -100,6 +108,7 @@ public class SysNoticeController extends BaseController
     /**
      * 首页顶部公告列表（返回全部正常公告，带当前用户已读标记，最多5条）
      */
+    @Operation(summary = "查询置顶通知公告")
     @GetMapping("/listTop")
     @ResponseBody
     public AjaxResult listTop(String noticeType)
@@ -115,6 +124,7 @@ public class SysNoticeController extends BaseController
     /**
      * 标记公告已读
      */
+    @Operation(summary = "标记通知已读")
     @PostMapping("/markRead")
     @ResponseBody
     public AjaxResult markRead(Long noticeId)
@@ -127,6 +137,7 @@ public class SysNoticeController extends BaseController
     /**
      * 批量标记已读
      */
+    @Operation(summary = "全部标记为已读")
     @PostMapping("/markReadAll")
     @ResponseBody
     public AjaxResult markReadAll(String ids)
@@ -148,6 +159,7 @@ public class SysNoticeController extends BaseController
      * 已读用户列表数据
      */
     @PreAuthorize("@ss.hasPermi('system:notice:list')")
+    @Operation(summary = "查询通知已读用户列表")
     @GetMapping("/readUsers/list")
     @ResponseBody
     public TableDataInfo readUsersList(Long noticeId, String searchValue)
@@ -162,7 +174,9 @@ public class SysNoticeController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('system:notice:remove')")
     @Log(title = "通知公告", businessType = BusinessType.DELETE)
+    @Operation(summary = "删除通知公告")
     @DeleteMapping("/{noticeIds}")
+    @io.swagger.v3.oas.annotations.Parameter(description = "通知公告ID数组")
     public AjaxResult remove(@PathVariable Long[] noticeIds)
     {
         noticeReadService.deleteByNoticeIds(noticeIds);

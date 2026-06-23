@@ -12,12 +12,15 @@ import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.system.service.ISysUserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 
 /**
  * 首页
  *
  * @author ruoyi
  */
+@Tag(name = "首页与锁屏")
 @RestController
 public class SysIndexController
 {
@@ -31,6 +34,7 @@ public class SysIndexController
     /**
      * 访问首页，提示语
      */
+    @Operation(summary = "系统首页")
     @RequestMapping("/")
     public String index()
     {
@@ -40,6 +44,7 @@ public class SysIndexController
     /**
      * 解锁屏幕
      */
+    @Operation(summary = "解锁屏幕")
     @PostMapping("/unlockscreen")
     public AjaxResult unlockScreen(@RequestBody Map<String, String> body)
     {

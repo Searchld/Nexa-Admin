@@ -27,6 +27,11 @@ public class LoginBody
      */
     private String uuid;
 
+    /**
+     * 行为验证码二次校验 token
+     */
+    private String captchaToken;
+
     public String getUsername()
     {
         return username;
@@ -65,5 +70,15 @@ public class LoginBody
     public void setUuid(String uuid)
     {
         this.uuid = uuid;
+    }
+
+    public String getCaptchaToken()
+    {
+        return captchaToken;
+    }
+
+    public void setCaptchaToken(String captchaToken)
+    {
+        this.captchaToken = captchaToken;
     }
 }

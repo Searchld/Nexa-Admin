@@ -21,12 +21,15 @@ import com.ruoyi.common.core.domain.entity.SysMenu;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.system.service.ISysMenuService;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 
 /**
  * 菜单信息
  *
  * @author ruoyi
  */
+@Tag(name = "菜单管理")
 @RestController
 @RequestMapping("/system/menu")
 public class SysMenuController extends BaseController
@@ -38,6 +41,7 @@ public class SysMenuController extends BaseController
      * 获取菜单列表
      */
     @PreAuthorize("@ss.hasPermi('system:menu:list')")
+    @Operation(summary = "查询菜单管理列表")
     @GetMapping("/list")
     public AjaxResult list(SysMenu menu)
     {
@@ -49,7 +53,9 @@ public class SysMenuController extends BaseController
      * 根据菜单编号获取详细信息
      */
     @PreAuthorize("@ss.hasPermi('system:menu:query')")
+    @Operation(summary = "获取菜单管理详情")
     @GetMapping(value = "/{menuId}")
+    @io.swagger.v3.oas.annotations.Parameter(description = "菜单ID")
     public AjaxResult getInfo(@PathVariable Long menuId)
     {
         return success(menuService.selectMenuById(menuId));
@@ -58,6 +64,7 @@ public class SysMenuController extends BaseController
     /**
      * 获取菜单下拉树列表
      */
+    @Operation(summary = "获取树形选择数据")
     @GetMapping("/treeselect")
     public AjaxResult treeselect(SysMenu menu)
     {
@@ -68,7 +75,9 @@ public class SysMenuController extends BaseController
     /**
      * 加载对应角色菜单列表树
      */
+    @Operation(summary = "获取角色菜单树")
     @GetMapping(value = "/roleMenuTreeselect/{roleId}")
+    @io.swagger.v3.oas.annotations.Parameter(description = "路径参数")
     public AjaxResult roleMenuTreeselect(@PathVariable("roleId") Long roleId)
     {
         List<SysMenu> menus = menuService.selectMenuList(getUserId());
@@ -83,6 +92,7 @@ public class SysMenuController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('system:menu:add')")
     @Log(title = "菜单管理", businessType = BusinessType.INSERT)
+    @Operation(summary = "新增菜单管理")
     @PostMapping
     public AjaxResult add(@Validated @RequestBody SysMenu menu)
     {
@@ -107,6 +117,7 @@ public class SysMenuController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('system:menu:edit')")
     @Log(title = "菜单管理", businessType = BusinessType.UPDATE)
+    @Operation(summary = "修改菜单管理")
     @PutMapping
     public AjaxResult edit(@Validated @RequestBody SysMenu menu)
     {
@@ -135,6 +146,7 @@ public class SysMenuController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('system:menu:edit')")
     @Log(title = "保存菜单排序", businessType = BusinessType.UPDATE)
+    @Operation(summary = "更新菜单排序")
     @PutMapping("/updateSort")
     public AjaxResult updateSort(@RequestBody Map<String, String> params)
     {
@@ -149,7 +161,9 @@ public class SysMenuController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('system:menu:remove')")
     @Log(title = "菜单管理", businessType = BusinessType.DELETE)
+    @Operation(summary = "删除菜单管理")
     @DeleteMapping("/{menuId}")
+    @io.swagger.v3.oas.annotations.Parameter(description = "路径参数")
     public AjaxResult remove(@PathVariable("menuId") Long menuId)
     {
         if (menuService.hasChildByMenuId(menuId))

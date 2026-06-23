@@ -1,8 +1,11 @@
 package com.ruoyi.web.core.config;
 
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springdoc.core.models.GroupedOpenApi;
+import org.springdoc.core.properties.SwaggerUiConfigProperties;
 import com.ruoyi.common.config.RuoYiConfig;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -22,6 +25,15 @@ public class SwaggerConfig
     /** 系统基础配置 */
     @Autowired
     private RuoYiConfig ruoyiConfig;
+
+    @Autowired
+    private SwaggerUiConfigProperties swaggerUiConfigProperties;
+
+    @PostConstruct
+    public void initSwaggerUi()
+    {
+        swaggerUiConfigProperties.setUrlsPrimaryName("all");
+    }
     
     /**
      * 自定义的 OpenAPI 对象
@@ -44,6 +56,53 @@ public class SwaggerConfig
             .name("Authorization")
             .in(SecurityScheme.In.HEADER)
             .scheme("Bearer");
+    }
+
+    @Bean
+    public GroupedOpenApi allApi()
+    {
+        return apiGroup("all", "全部接口", "com.ruoyi.web.controller", "com.ruoyi.quartz.controller",
+            "com.ruoyi.generator.controller");
+    }
+
+    @Bean
+    public GroupedOpenApi commonApi()
+    {
+        return apiGroup("common", "公共接口", "com.ruoyi.web.controller.common");
+    }
+
+    @Bean
+    public GroupedOpenApi systemApi()
+    {
+        return apiGroup("system", "系统管理", "com.ruoyi.web.controller.system");
+    }
+
+    @Bean
+    public GroupedOpenApi monitorApi()
+    {
+        return apiGroup("monitor", "系统监控", "com.ruoyi.web.controller.monitor", "com.ruoyi.quartz.controller");
+    }
+
+    @Bean
+    public GroupedOpenApi deviceApi()
+    {
+        return apiGroup("device", "设备管理", "com.ruoyi.web.controller.device");
+    }
+
+    @Bean
+    public GroupedOpenApi toolApi()
+    {
+        return apiGroup("tool", "系统工具", "com.ruoyi.web.controller.tool", "com.ruoyi.generator.controller");
+    }
+
+    private GroupedOpenApi apiGroup(String group, String displayName, String... packagesToScan)
+    {
+        return GroupedOpenApi.builder()
+            .group(group)
+            .displayName(displayName)
+            .pathsToMatch("/**")
+            .packagesToScan(packagesToScan)
+            .build();
     }
     
     /**

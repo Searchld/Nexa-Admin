@@ -1,83 +1,44 @@
 <template>
   <div class="art-full-height">
-    <ElTabs v-model="activeTab" class="config-tabs h-full">
-      <ElTabPane label="站点配置" name="site">
-        <ElCard>
-          <ElTabs v-model="siteTab">
-            <ElTabPane
-              v-for="group in groups"
-              :key="group.name"
-              :label="group.label"
-              :name="group.name"
-            >
-              <ArtForm
-                v-model="siteForm"
-                :items="group.items"
-                :show-submit="false"
-                :show-reset="false"
-                label-width="130px"
-              />
-            </ElTabPane>
-          </ElTabs>
-          <ElButton
-            v-if="hasAuth('system:config:edit')"
-            type="primary"
-            :loading="saving"
-            @click="saveSite"
-          >
-            保存站点配置
-          </ElButton>
-        </ElCard>
-      </ElTabPane>
-      <ElTabPane label="参数列表" name="list">
-        <SystemCrudPage
-          ref="page"
-          title="参数"
-          permission="system:config"
-          id-key="configId"
-          :fields="fields"
-          :list-fn="fetchConfigList"
-          :get-fn="fetchConfig"
-          :add-fn="addConfig"
-          :update-fn="updateConfig"
-          :remove-fn="removeConfig"
-          export-url="/system/config/export"
-          :defaults="{ configType: 'N' }"
+    <ElCard class="site-config-card">
+      <ElTabs v-model="siteTab">
+        <ElTabPane
+          v-for="group in groups"
+          :key="group.name"
+          :label="group.label"
+          :name="group.name"
         >
-          <template #toolbar="{ refresh }">
-            <ElButton v-if="hasAuth('system:config:remove')" @click="clear(refresh)"
-              >刷新缓存</ElButton
-            >
-          </template>
-        </SystemCrudPage>
-      </ElTabPane>
-    </ElTabs>
+          <ArtForm
+            v-model="siteForm"
+            :items="group.items"
+            :show-submit="false"
+            :show-reset="false"
+            label-width="130px"
+          />
+        </ElTabPane>
+      </ElTabs>
+      <ElButton
+        v-if="hasAuth('system:config:edit')"
+        type="primary"
+        :loading="saving"
+        @click="saveSite"
+      >
+        保存站点配置
+      </ElButton>
+    </ElCard>
   </div>
 </template>
 
 <script setup lang="ts">
-  import { ElMessage, ElMessageBox } from 'element-plus'
-  import SystemCrudPage from '@/components/business/system-crud-page/index.vue'
-  import {
-    addConfig,
-    fetchConfig,
-    fetchConfigList,
-    fetchSiteConfig,
-    refreshConfigCache,
-    removeConfig,
-    updateConfig,
-    updateSiteConfig
-  } from '@/api/system/config'
-  import { useDict } from '@/hooks/core/useDict'
+  import { ElMessage } from 'element-plus'
+  import { fetchSiteConfig, updateSiteConfig } from '@/api/system/config'
   import { useAuth } from '@/hooks/core/useAuth'
   import { loadSiteConfig } from '@/utils/site-config'
 
   defineOptions({ name: 'SystemConfig' })
   const { hasAuth } = useAuth()
-  const { dict } = useDict('sys_yes_no')
-  const activeTab = ref('site'),
-    siteTab = ref('identity'),
-    saving = ref(false)
+  const siteTab = ref('identity')
+  const saving = ref(false)
   const siteForm = reactive<Record<string, any>>({})
   const keyOf = (key: string) => key.replaceAll('.', '__').replaceAll('-', '_')
   const option = (label: string, value: string) => ({ label, value })
@@ -89,7 +50,33 @@
     props: { clearable: true, ...props }
   })
   const yesNo = [option('是', 'true'), option('否', 'false')]
-  const groups = [
+  const skinOptions = [
+    option('蓝色', 'skin-blue'),
+    option('绿色', 'skin-green'),
+    option('紫色', 'skin-purple'),
+    option('红色', 'skin-red'),
+    option('黄色', 'skin-yellow')
+  ]
+  const sideThemeOptions = [option('深色主题', 'theme-dark'), option('浅色主题', 'theme-light')]
+  const behaviorCaptchaOptions = [
+    option('随机', 'RANDOM'),
+    option('滑块验证', 'SLIDER'),
+    option('旋转验证', 'ROTATE'),
+    option('滑动还原', 'CONCAT'),
+    option('文字点选', 'WORD_IMAGE_CLICK')
+  ]
+  const initPasswordModifyOptions = [option('关闭提醒', '0'), option('提醒修改', '1')]
+  const passwordCharTypeOptions = [
+    option('任意字符', '0'),
+    option('仅数字', '1'),
+    option('仅英文字母', '2'),
+    option('字母和数字', '3'),
+    option('字母数字和特殊字符', '4')
+  ]
+  const showBehaviorCaptcha = computed(
+    () => siteForm[keyOf('sys.account.captchaType')] === 'slider'
+  )
+  const groups = computed(() => [
     {
       name: 'identity',
       label: '系统标识',
@@ -99,7 +86,15 @@
         field('site.login.title', '登录欢迎标题'),
         field('site.login.description', '登录欢迎描述'),
         field('site.login-left-title', '登录左侧标题'),
-        field('site.login-left-sub-title', '登录左侧描述'),
+        field('site.login-left-sub-title', '登录左侧描述')
+      ]
+    },
+    {
+      name: 'appearance',
+      label: '界面与水印',
+      items: [
+        field('sys.index.skinName', '默认皮肤样式', 'select', { options: skinOptions }),
+        field('sys.index.sideTheme', '侧边栏主题', 'select', { options: sideThemeOptions }),
         field('site.watermark.mode', '水印内容', 'select', {
           options: [
             option('当前用户名', 'username'),
@@ -111,15 +106,26 @@
         field('site.watermark.show-time', '叠加当前时间', 'select', { options: yesNo })
       ]
     },
-    // 界面风格统一由右上角设置面板维护，避免出现两个配置入口。
     {
       name: 'security',
       label: '登录与安全',
       items: [
+        field('sys.account.captchaEnabled', '验证码开关', 'select', { options: yesNo }),
         field('sys.account.captchaType', '验证码类型', 'select', {
           options: [option('滑块验证码', 'slider'), option('图片验证码', 'image')]
         }),
+        {
+          ...field('sys.account.behaviorCaptchaType', '行为验证码类型', 'select', {
+            options: behaviorCaptchaOptions
+          }),
+          hidden: !showBehaviorCaptcha.value
+        },
         field('sys.account.registerUser', '开放用户注册', 'select', { options: yesNo }),
+        field('sys.login.blackIPList', '登录黑名单', 'input', {
+          type: 'textarea',
+          rows: 3,
+          placeholder: '多个匹配项以 ; 分隔，支持 * 通配和网段'
+        }),
         field('security.access-token-hours', '令牌有效时长（小时）', 'number'),
         field('security.max-failed-login-count', '失败锁定阈值', 'number'),
         field('security.account-lock-minutes', '账号锁定时长（分钟）', 'number'),
@@ -130,8 +136,26 @@
         field('security.password-require-number', '要求数字', 'select', { options: yesNo }),
         field('security.password-require-special', '要求特殊字符', 'select', { options: yesNo })
       ]
+    },
+    {
+      name: 'account',
+      label: '用户账号',
+      items: [
+        field('sys.user.initPassword', '用户初始密码', 'input', {
+          type: 'password',
+          showPassword: true,
+          autocomplete: 'new-password'
+        }),
+        field('sys.account.initPasswordModify', '初始密码修改策略', 'select', {
+          options: initPasswordModifyOptions
+        }),
+        field('sys.account.passwordValidateDays', '密码更新周期（天）', 'number'),
+        field('sys.account.chrtype', '密码字符范围', 'select', {
+          options: passwordCharTypeOptions
+        })
+      ]
     }
-  ]
+  ])
   const defaults: Record<string, string> = {
     'site.name': 'Nexa Admin',
     'site.description': '商业化中后台管理系统',
@@ -139,11 +163,16 @@
     'site.login.description': '输入您的账号和密码登录',
     'site.login-left-title': '统一管理入口',
     'site.login-left-sub-title': '高效、清晰、可扩展的企业管理控制台',
+    'sys.index.skinName': 'skin-blue',
+    'sys.index.sideTheme': 'theme-dark',
     'site.watermark.content': '',
     'site.watermark.mode': 'username',
     'site.watermark.show-time': 'false',
+    'sys.account.captchaEnabled': 'true',
     'sys.account.captchaType': 'slider',
+    'sys.account.behaviorCaptchaType': 'SLIDER',
     'sys.account.registerUser': 'false',
+    'sys.login.blackIPList': '',
     'security.access-token-hours': '2',
     'security.max-failed-login-count': '5',
     'security.account-lock-minutes': '10',
@@ -152,30 +181,39 @@
     'security.password-require-uppercase': 'false',
     'security.password-require-lowercase': 'false',
     'security.password-require-number': 'false',
-    'security.password-require-special': 'false'
+    'security.password-require-special': 'false',
+    'sys.user.initPassword': '123456',
+    'sys.account.initPasswordModify': '1',
+    'sys.account.passwordValidateDays': '0',
+    'sys.account.chrtype': '0'
   }
-  const originalKeys = groups
-    .flatMap((group) => group.items)
-    .map((item) => {
-      const match = Object.keys(defaults).find((key) => keyOf(key) === item.key)
-      return match!
-    })
+  const originalKeys = computed(() =>
+    groups.value
+      .flatMap((group) => group.items)
+      .map((item) => {
+        const match = Object.keys(defaults).find((key) => keyOf(key) === item.key)
+        return match!
+      })
+  )
   async function loadSite() {
     const received = await fetchSiteConfig()
     const values = Object.fromEntries(
       Object.entries(defaults).map(([key, defaultValue]) => [key, received[key] || defaultValue])
     )
-    originalKeys.forEach((key) => {
+    originalKeys.value.forEach((key) => {
       const value = values[key]
       siteForm[keyOf(key)] =
-        key.startsWith('security.') && !key.includes('require-') ? Number(value) : value
+        (key.startsWith('security.') && !key.includes('require-')) ||
+        key === 'sys.account.passwordValidateDays'
+          ? Number(value)
+          : value
     })
   }
   async function saveSite() {
     saving.value = true
     try {
       const values = Object.fromEntries(
-        originalKeys.map((key) => [key, String(siteForm[keyOf(key)] ?? '')])
+        originalKeys.value.map((key) => [key, String(siteForm[keyOf(key)] ?? '')])
       )
       await updateSiteConfig(values)
       await loadSiteConfig()
@@ -184,48 +222,11 @@
       saving.value = false
     }
   }
-  const fields = computed(() => [
-    { prop: 'configName', label: '参数名称', required: true, search: true },
-    { prop: 'configKey', label: '参数键名', required: true, search: true },
-    { prop: 'configValue', label: '参数键值', required: true },
-    {
-      prop: 'configType',
-      label: '系统内置',
-      type: 'select',
-      options: dict.sys_yes_no,
-      dict: dict.sys_yes_no,
-      search: true
-    },
-    { prop: 'remark', label: '备注', table: false },
-    { prop: 'createTime', label: '创建时间', form: false }
-  ])
-  async function clear(refresh: () => void) {
-    await ElMessageBox.confirm('确定刷新参数缓存吗？', '提示', { type: 'warning' })
-    await refreshConfigCache()
-    refresh()
-  }
   onMounted(loadSite)
 </script>
 
 <style scoped>
-  .config-tabs {
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-  }
-
-  .config-tabs :deep(.el-tabs__content) {
-    flex: 1;
-    min-height: 0;
-    overflow: hidden;
-  }
-
-  .config-tabs :deep(.el-tab-pane) {
-    height: 100%;
-    min-height: 0;
-  }
-
-  .config-tabs :deep(.system-crud-page) {
-    height: 100%;
+  .site-config-card {
+    min-height: 100%;
   }
 </style>

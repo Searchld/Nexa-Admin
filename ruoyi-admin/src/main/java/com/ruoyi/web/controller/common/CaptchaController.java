@@ -19,12 +19,15 @@ import com.ruoyi.common.core.redis.RedisCache;
 import com.ruoyi.common.utils.sign.Base64;
 import com.ruoyi.common.utils.uuid.IdUtils;
 import com.ruoyi.system.service.ISysConfigService;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 
 /**
  * 验证码操作处理
  * 
  * @author ruoyi
  */
+@Tag(name = "图片验证码")
 @RestController
 public class CaptchaController
 {
@@ -42,6 +45,7 @@ public class CaptchaController
     /**
      * 生成验证码
      */
+    @Operation(summary = "获取验证码图片")
     @GetMapping("/captchaImage")
     public AjaxResult getCode(HttpServletResponse response) throws IOException
     {

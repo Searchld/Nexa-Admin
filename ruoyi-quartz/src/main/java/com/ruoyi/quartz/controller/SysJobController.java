@@ -26,12 +26,15 @@ import com.ruoyi.quartz.domain.SysJob;
 import com.ruoyi.quartz.service.ISysJobService;
 import com.ruoyi.quartz.util.CronUtils;
 import com.ruoyi.quartz.util.ScheduleUtils;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 
 /**
  * 调度任务信息操作处理
  * 
  * @author ruoyi
  */
+@Tag(name = "定时任务")
 @RestController
 @RequestMapping("/monitor/job")
 public class SysJobController extends BaseController
@@ -43,6 +46,7 @@ public class SysJobController extends BaseController
      * 查询定时任务列表
      */
     @PreAuthorize("@ss.hasPermi('monitor:job:list')")
+    @Operation(summary = "查询定时任务列表")
     @GetMapping("/list")
     public TableDataInfo list(SysJob sysJob)
     {
@@ -56,6 +60,7 @@ public class SysJobController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('monitor:job:export')")
     @Log(title = "定时任务", businessType = BusinessType.EXPORT)
+    @Operation(summary = "导出定时任务")
     @PostMapping("/export")
     public void export(HttpServletResponse response, SysJob sysJob)
     {
@@ -68,7 +73,9 @@ public class SysJobController extends BaseController
      * 获取定时任务详细信息
      */
     @PreAuthorize("@ss.hasPermi('monitor:job:query')")
+    @Operation(summary = "获取定时任务详情")
     @GetMapping(value = "/{jobId}")
+    @io.swagger.v3.oas.annotations.Parameter(description = "路径参数")
     public AjaxResult getInfo(@PathVariable("jobId") Long jobId)
     {
         return success(jobService.selectJobById(jobId));
@@ -79,6 +86,7 @@ public class SysJobController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('monitor:job:add')")
     @Log(title = "定时任务", businessType = BusinessType.INSERT)
+    @Operation(summary = "新增定时任务")
     @PostMapping
     public AjaxResult add(@RequestBody SysJob job) throws SchedulerException, TaskException
     {
@@ -115,6 +123,7 @@ public class SysJobController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('monitor:job:edit')")
     @Log(title = "定时任务", businessType = BusinessType.UPDATE)
+    @Operation(summary = "修改定时任务")
     @PutMapping
     public AjaxResult edit(@RequestBody SysJob job) throws SchedulerException, TaskException
     {
@@ -151,6 +160,7 @@ public class SysJobController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('monitor:job:changeStatus')")
     @Log(title = "定时任务", businessType = BusinessType.UPDATE)
+    @Operation(summary = "修改定时任务状态")
     @PutMapping("/changeStatus")
     public AjaxResult changeStatus(@RequestBody SysJob job) throws SchedulerException
     {
@@ -164,6 +174,7 @@ public class SysJobController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('monitor:job:changeStatus')")
     @Log(title = "定时任务", businessType = BusinessType.UPDATE)
+    @Operation(summary = "立即运行定时任务")
     @PutMapping("/run")
     public AjaxResult run(@RequestBody SysJob job) throws SchedulerException
     {
@@ -176,7 +187,9 @@ public class SysJobController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('monitor:job:remove')")
     @Log(title = "定时任务", businessType = BusinessType.DELETE)
+    @Operation(summary = "删除定时任务")
     @DeleteMapping("/{jobIds}")
+    @io.swagger.v3.oas.annotations.Parameter(description = "任务ID数组")
     public AjaxResult remove(@PathVariable Long[] jobIds) throws SchedulerException
     {
         jobService.deleteJobByIds(jobIds);

@@ -397,6 +397,10 @@ http://localhost:3006
 | `sql/20260602_add_artbot.sql` | 增加 Art Bot 模型、会话、消息表和权限 |
 | `sql/20260602_add_user_ui_setting.sql` | 将界面风格改为按用户 ID 入库 |
 | `sql/20260602_tighten_cache_permissions.sql` | 拆分缓存详情与缓存清理权限 |
+| `sql/20260613_add_device_management.sql` | 增加设备管理数据表、菜单和权限 |
+| `sql/20260623_add_spring_ai_agent.sql` | 增加 Spring AI Agent、知识库、工作流和权限 |
+| `sql/20260623_seed_agent_workflows.sql` | 初始化 Agent 工作流示例 |
+| `sql/20260623_seed_shandong_gold_mining_kb.sql` | 初始化山东黄金矿山行业知识库 |
 
 ## 加入微信交流群
 

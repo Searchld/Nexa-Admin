@@ -45,6 +45,7 @@ public class TestController extends BaseController
     
     @Operation(summary = "获取用户详细")
     @GetMapping("/{userId}")
+    @io.swagger.v3.oas.annotations.Parameter(description = "用户ID")
     public R<UserEntity> getUser(@PathVariable(name = "userId")
     Integer userId)
     {
@@ -90,6 +91,7 @@ public class TestController extends BaseController
     
     @Operation(summary = "删除用户信息")
     @DeleteMapping("/{userId}")
+    @io.swagger.v3.oas.annotations.Parameter(description = "用户ID")
     public R<String> delete(@PathVariable(name = "userId")
     Integer userId)
     {

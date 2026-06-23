@@ -31,7 +31,10 @@ import com.ruoyi.system.domain.SysArtBotConversation;
 import com.ruoyi.system.domain.SysArtBotMessage;
 import com.ruoyi.system.domain.SysArtBotModel;
 import com.ruoyi.system.service.ISysArtBotService;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 
+@Tag(name = "AI 对话")
 @RestController
 @RequestMapping("/artbot")
 @PreAuthorize("@ss.hasPermi('artbot:chat:use')")
@@ -44,6 +47,7 @@ public class SysArtBotChatController extends BaseController
     @Qualifier("threadPoolTaskExecutor")
     private Executor executor;
 
+    @Operation(summary = "查询可用 AI 模型")
     @GetMapping("/models")
     public AjaxResult models()
     {
@@ -56,6 +60,7 @@ public class SysArtBotChatController extends BaseController
         return success(artBotService.selectConversationList(getUserId()));
     }
 
+    @Operation(summary = "创建 AI 会话")
     @PostMapping("/conversations")
     public AjaxResult createConversation(@RequestBody ChatRequest request)
     {
@@ -63,13 +68,16 @@ public class SysArtBotChatController extends BaseController
     }
 
     @DeleteMapping("/conversations/{conversationId}")
+    @io.swagger.v3.oas.annotations.Parameter(description = "AI 会话ID")
     public AjaxResult deleteConversation(@PathVariable Long conversationId)
     {
         artBotService.deleteConversation(conversationId, getUserId());
         return success();
     }
 
+    @Operation(summary = "查询 AI 会话消息")
     @GetMapping("/conversations/{conversationId}/messages")
+    @io.swagger.v3.oas.annotations.Parameter(description = "AI 会话ID")
     public AjaxResult messages(@PathVariable Long conversationId)
     {
         return success(artBotService.selectMessageList(conversationId, getUserId()));

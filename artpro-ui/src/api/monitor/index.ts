@@ -12,6 +12,7 @@ const put = (url: string, data: Entity) =>
 
 export const fetchOnlineList = (params: Query) => page('/monitor/online/list', params)
 export const forceLogout = (tokenId: string | number) => del(`/monitor/online/${tokenId}`)
+export const cleanOnlineUsers = () => del('/monitor/online/clean')
 
 export const fetchJobList = (params: Query) => page('/monitor/job/list', params)
 export const fetchJob = (id: number) => get<Entity>(`/monitor/job/${id}`)
