@@ -26,22 +26,6 @@ export interface ArtBotMessage {
   role: 'user' | 'assistant'
   content: string
   createTime?: string
-  referencesJson?: string
-  toolCalls?: string[]
-  references?: Array<Record<string, any>>
-  actionDrafts?: AgentActionDraft[]
-}
-
-export interface AgentActionDraft {
-  draftId: number
-  actionType: string
-  actionTitle: string
-  actionDesc: string
-  requiredPerms: string
-  executable: string
-  status: string
-  resultMsg?: string
-  errorMsg?: string
 }
 
 export const fetchArtBotModelList = (params: Query) =>
@@ -56,65 +40,19 @@ export const testArtBotModel = (id: number) =>
   request.post<void>({ url: `${modelRoot}/${id}/test`, showSuccessMessage: true })
 
 export const fetchAvailableArtBotModels = () =>
-  request
-    .get<
-      Array<ArtBotModel & { appId?: number; appName?: string }>
-    >({ url: '/system/agent/chat/apps' })
-    .then((rows) =>
-      rows.map((row) => ({
-        ...row,
-        modelId: row.modelId ?? row.appId!,
-        modelName: row.modelName ?? row.appName ?? row.modelCode
-      }))
-    )
+  request.get<ArtBotModel[]>({ url: '/artbot/models' })
 export const fetchArtBotConversations = () =>
-  request
-    .get<Array<ArtBotConversation & { sessionId?: number; appId?: number; appName?: string }>>({
-      url: '/system/agent/chat/sessions'
-    })
-    .then((rows) =>
-      rows.map((row) => ({
-        ...row,
-        conversationId: row.conversationId ?? row.sessionId!,
-        modelId: row.modelId ?? row.appId!,
-        modelName: row.modelName ?? row.appName ?? row.modelCode
-      }))
-    )
+  request.get<ArtBotConversation[]>({ url: '/artbot/conversations' })
 export const createArtBotConversation = (modelId: number) =>
-  request
-    .post<ArtBotConversation & { sessionId?: number; appId?: number; appName?: string }>({
-      url: '/system/agent/chat/sessions',
-      data: { appId: modelId }
-    })
-    .then((row) => ({
-      ...row,
-      conversationId: row.conversationId ?? row.sessionId!,
-      modelId: row.modelId ?? row.appId!,
-      modelName: row.modelName ?? row.appName ?? row.modelCode
-    }))
-export const removeArtBotConversation = (id: number) =>
-  request.del<void>({ url: `/system/agent/chat/sessions/${id}` })
-export const fetchArtBotMessages = (id: number) =>
-  request
-    .get<Array<ArtBotMessage & { sessionId?: number }>>({
-      url: `/system/agent/chat/sessions/${id}/messages`
-    })
-    .then((rows) =>
-      rows.map((row) => ({
-        ...row,
-        conversationId: row.conversationId ?? row.sessionId ?? id
-      }))
-    )
-
-export const confirmAgentActionDraft = (draftId: number) =>
-  request.post<AgentActionDraft>({
-    url: `/system/agent/action-draft/${draftId}/confirm`,
-    showSuccessMessage: true
+  request.post<ArtBotConversation>({
+    url: '/artbot/conversations',
+    data: { modelId }
   })
-export const cancelAgentActionDraft = (draftId: number) =>
-  request.post<AgentActionDraft>({
-    url: `/system/agent/action-draft/${draftId}/cancel`,
-    showSuccessMessage: true
+export const removeArtBotConversation = (id: number) =>
+  request.del<void>({ url: `/artbot/conversations/${id}` })
+export const fetchArtBotMessages = (id: number) =>
+  request.get<ArtBotMessage[]>({
+    url: `/artbot/conversations/${id}/messages`
   })
 
 export async function streamArtBotMessage(
@@ -122,16 +60,15 @@ export async function streamArtBotMessage(
   content: string,
   token: string,
   onChunk: (chunk: string) => void,
-  signal: AbortSignal,
-  onMeta?: (event: 'tool_calls' | 'references' | 'action_drafts', payload: any) => void
+  signal: AbortSignal
 ) {
-  const response = await fetch(`${import.meta.env.VITE_API_URL}/system/agent/chat`, {
+  const response = await fetch(`${import.meta.env.VITE_API_URL}/artbot/chat`, {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ sessionId: conversationId, content }),
+    body: JSON.stringify({ conversationId, content }),
     signal
   })
   if (!response.ok || !response.body) {
@@ -159,15 +96,6 @@ export async function streamArtBotMessage(
           receivedChunk = true
           onChunk(payload)
         }
-        if (event === 'tool_calls') {
-          onMeta?.('tool_calls', safeJson(payload, []))
-        }
-        if (event === 'references') {
-          onMeta?.('references', safeJson(payload, []))
-        }
-        if (event === 'action_drafts') {
-          onMeta?.('action_drafts', safeJson(payload, []))
-        }
         if (event === 'error' && !receivedChunk) throw new Error(payload || '生成失败')
       }
       if (done) break
@@ -177,12 +105,4 @@ export async function streamArtBotMessage(
     throw error
   }
   if (!receivedChunk) throw new Error('模型未返回有效内容')
-}
-
-function safeJson<T>(text: string, fallback: T): T {
-  try {
-    return JSON.parse(text) as T
-  } catch {
-    return fallback
-  }
 }

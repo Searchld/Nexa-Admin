@@ -23,17 +23,6 @@
             <artifactId>ruoyi-common</artifactId>
         </dependency>
 
-        <!-- 文档解析用于 Agent 知识库 txt/md/docx/xlsx 入库切片 -->
-        <dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>poi-ooxml</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.pdfbox</groupId>
-            <artifactId>pdfbox</artifactId>
-        </dependency>
-
     </dependencies>
 
 </project>
