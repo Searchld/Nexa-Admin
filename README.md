@@ -14,12 +14,12 @@ Nexa Admin 保留成熟的权限体系、系统管理、系统监控与代码生
 
 > 产品名统一为 Nexa Admin，底层继续复用已有后端能力与前端封装，避免重写稳定业务逻辑。
 
-仓库地址：[Searchld/nexa-admin](https://github.com/Searchld/nexa-admin)
+仓库地址：[Searchld/Nexa-Admin](https://github.com/Searchld/Nexa-Admin)
 
 ## 快速入口
 
 - 在线演示：[https://art.beta.kim/](https://art.beta.kim/)
-- 版本发布：[v1.0.0](https://github.com/Searchld/nexa-admin/releases/tag/v1.0.0)
+- 版本发布：[v1.0.0](https://github.com/Searchld/Nexa-Admin/releases/tag/v1.0.0)
 - 实施说明：[docs/ruoyi-art-plan.md](docs/ruoyi-art-plan.md)
 - 部署说明：[docs/deployment.md](docs/deployment.md)
 - 路线图：[ROADMAP.md](ROADMAP.md)
@@ -398,9 +398,6 @@ http://localhost:3006
 | `sql/20260602_add_user_ui_setting.sql` | 将界面风格改为按用户 ID 入库 |
 | `sql/20260602_tighten_cache_permissions.sql` | 拆分缓存详情与缓存清理权限 |
 | `sql/20260613_add_device_management.sql` | 增加设备管理数据表、菜单和权限 |
-| `sql/20260623_add_spring_ai_agent.sql` | 增加 Spring AI Agent、知识库、工作流和权限 |
-| `sql/20260623_seed_agent_workflows.sql` | 初始化 Agent 工作流示例 |
-| `sql/20260623_seed_shandong_gold_mining_kb.sql` | 初始化山东黄金矿山行业知识库 |
 
 ## 加入微信交流群
 
