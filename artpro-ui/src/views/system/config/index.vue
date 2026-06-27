@@ -126,7 +126,10 @@
           rows: 3,
           placeholder: '多个匹配项以 ; 分隔，支持 * 通配和网段'
         }),
-        field('security.access-token-hours', '令牌有效时长（小时）', 'number'),
+        field('security.access-token-hours', '令牌有效时长（小时）', 'number', {
+          min: 0,
+          placeholder: '0 表示永久有效'
+        }),
         field('security.max-failed-login-count', '失败锁定阈值', 'number'),
         field('security.account-lock-minutes', '账号锁定时长（分钟）', 'number'),
         field('security.password-min-length', '密码最小长度', 'number'),

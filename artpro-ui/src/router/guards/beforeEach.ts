@@ -188,6 +188,21 @@ async function handleRouteGuard(
 
   // 5. 处理已匹配的路由
   if (to.matched.length > 0) {
+    // catch-all 404 会让任意未知地址看起来“已匹配”。
+    // 如果用户已登录且访问的不是显式 /404，说明更可能是动态路由尚未恢复或菜单权限变更，
+    // 此时不要把 404 当成正常业务页放行，改为回到当前可访问首页。
+    if (to.name === 'Exception404' && to.path !== '/404') {
+      const { homePath } = useCommon()
+      const targetHomePath = homePath.value || '/'
+
+      if (to.path !== targetHomePath) {
+        next({ path: targetHomePath, replace: true })
+      } else {
+        next({ path: '/404', replace: true })
+      }
+      return
+    }
+
     setWorktab(to)
     setPageTitle(to)
     next()

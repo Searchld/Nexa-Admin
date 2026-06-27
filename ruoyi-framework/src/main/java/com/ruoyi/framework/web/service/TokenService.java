@@ -53,6 +53,8 @@ public class TokenService
 
     private static final Long MILLIS_MINUTE_TWENTY = 20 * 60 * 1000L;
 
+    private static final Long TOKEN_NEVER_EXPIRE_TIME = Long.MAX_VALUE;
+
     @Autowired
     private RedisCache redisCache;
 
@@ -152,6 +154,25 @@ public class TokenService
      */
     public void verifyToken(LoginUser loginUser)
     {
+        Integer configuredHours = getConfiguredAccessTokenHours();
+        if (loginUser.getExpireTime() == null)
+        {
+            refreshToken(loginUser, configuredHours);
+            return;
+        }
+        if (TOKEN_NEVER_EXPIRE_TIME.equals(loginUser.getExpireTime()))
+        {
+            if (!Integer.valueOf(0).equals(configuredHours))
+            {
+                refreshToken(loginUser, configuredHours);
+            }
+            return;
+        }
+        if (Integer.valueOf(0).equals(configuredHours))
+        {
+            refreshToken(loginUser, configuredHours);
+            return;
+        }
         long expireTime = loginUser.getExpireTime();
         long currentTime = System.currentTimeMillis();
         if (expireTime - currentTime <= MILLIS_MINUTE_TWENTY)
@@ -167,13 +188,53 @@ public class TokenService
      */
     public void refreshToken(LoginUser loginUser)
     {
+        refreshToken(loginUser, getConfiguredAccessTokenHours());
+    }
+
+    private void refreshToken(LoginUser loginUser, Integer configuredHours)
+    {
         loginUser.setLoginTime(System.currentTimeMillis());
-        int configuredMinutes = configService.selectConfigInt("security.access-token-hours", 0) * 60;
-        int tokenMinutes = configuredMinutes > 0 ? configuredMinutes : expireTime;
+        String userKey = getTokenKey(loginUser.getToken());
+        if (Integer.valueOf(0).equals(configuredHours))
+        {
+            loginUser.setExpireTime(TOKEN_NEVER_EXPIRE_TIME);
+            redisCache.setCacheObject(userKey, loginUser);
+            return;
+        }
+
+        int tokenMinutes = configuredHours != null && configuredHours > 0
+                ? toTokenMinutes(configuredHours)
+                : expireTime;
         loginUser.setExpireTime(loginUser.getLoginTime() + tokenMinutes * MILLIS_MINUTE);
         // 根据uuid将loginUser缓存
-        String userKey = getTokenKey(loginUser.getToken());
         redisCache.setCacheObject(userKey, loginUser, tokenMinutes, TimeUnit.MINUTES);
+    }
+
+    private Integer getConfiguredAccessTokenHours()
+    {
+        String value = configService.selectConfigByKey("security.access-token-hours");
+        if (StringUtils.isEmpty(value))
+        {
+            return null;
+        }
+        try
+        {
+            int hours = Integer.parseInt(value.trim());
+            return hours >= 0 ? hours : null;
+        }
+        catch (NumberFormatException e)
+        {
+            return null;
+        }
+    }
+
+    private int toTokenMinutes(int hours)
+    {
+        if (hours > Integer.MAX_VALUE / 60)
+        {
+            return Integer.MAX_VALUE;
+        }
+        return hours * 60;
     }
 
     /**

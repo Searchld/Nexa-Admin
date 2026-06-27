@@ -31,8 +31,37 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { AppRouteRecord } from '@/types/router'
-import { getFirstMenuPath } from '@/utils'
+import { getFirstMenuPath, isNavigableMenuItem } from '@/utils'
 import { HOME_PAGE_PATH } from '@/router'
+
+function normalizePath(path: string): string {
+  return path.startsWith('/') ? path : `/${path}`
+}
+
+function hasExactNavigablePath(menuList: AppRouteRecord[], targetPath: string): boolean {
+  if (!targetPath) {
+    return false
+  }
+
+  const normalizedTarget = normalizePath(targetPath)
+
+  return menuList.some((item) => {
+    const currentPath = item.path ? normalizePath(item.path) : ''
+    if (currentPath === normalizedTarget && isNavigableMenuItem(item)) {
+      return true
+    }
+
+    return item.children?.length ? hasExactNavigablePath(item.children, normalizedTarget) : false
+  })
+}
+
+function resolveHomePath(menuList: AppRouteRecord[]): string {
+  if (HOME_PAGE_PATH && hasExactNavigablePath(menuList, HOME_PAGE_PATH)) {
+    return HOME_PAGE_PATH
+  }
+
+  return getFirstMenuPath(menuList) || HOME_PAGE_PATH || '/'
+}
 
 /**
  * 菜单状态管理
@@ -54,7 +83,7 @@ export const useMenuStore = defineStore('menuStore', () => {
    */
   const setMenuList = (list: AppRouteRecord[]) => {
     menuList.value = list
-    setHomePath(HOME_PAGE_PATH || getFirstMenuPath(list))
+    setHomePath(resolveHomePath(list))
   }
 
   /**
