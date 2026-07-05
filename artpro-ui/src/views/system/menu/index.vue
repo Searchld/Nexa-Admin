@@ -153,11 +153,7 @@
             <section class="icon-picker-main">
               <div class="icon-picker-search iconify-search">
                 <ElRadioGroup v-model="activeIconifySet" class="iconify-set-radio">
-                  <ElRadioButton
-                    v-for="item in iconifyIconSets"
-                    :key="item.key"
-                    :value="item.key"
-                  >
+                  <ElRadioButton v-for="item in iconifyIconSets" :key="item.key" :value="item.key">
                     {{ item.label }}
                   </ElRadioButton>
                 </ElRadioGroup>
@@ -197,7 +193,7 @@
 
 <script setup lang="ts">
   import { h, nextTick } from 'vue'
-  import { ElMessageBox, ElTag } from 'element-plus'
+  import { ElMessage, ElMessageBox, ElSwitch } from 'element-plus'
   import eosIcons from '@iconify-json/eos-icons/icons.json'
   import epIcons from '@iconify-json/ep/icons.json'
   import lineMdIcons from '@iconify-json/line-md/icons.json'
@@ -237,6 +233,7 @@
     activeIconifyCategory = ref('all')
   const rows = ref<Entity[]>([]),
     options = ref<Entity[]>([])
+  const statusChangingIds = ref<number[]>([])
   const filters = reactive({ menuName: '', status: '' }),
     form = reactive<Entity>({})
   const tableRef = ref<any>(),
@@ -777,12 +774,18 @@
     { prop: 'component', label: '组件路径', minWidth: 170 },
     {
       prop: 'status',
-      label: '状态',
-      width: 90,
+      label: '是否启用',
+      width: 120,
       formatter: (row: Entity) =>
-        h(ElTag, { type: row.status === '0' ? 'success' : 'danger' }, () =>
-          row.status === '0' ? '正常' : '停用'
-        )
+        h(ElSwitch, {
+          modelValue: row.status === '0',
+          inlinePrompt: true,
+          activeText: '启用',
+          inactiveText: '停用',
+          disabled: !hasAuth('system:menu:edit') || isStatusChanging(row),
+          loading: isStatusChanging(row),
+          onChange: (enabled: string | number | boolean) => toggleMenuStatus(row, Boolean(enabled))
+        })
     },
     {
       prop: 'operation',
@@ -811,6 +814,7 @@
     loading.value = true
     try {
       rows.value = await fetchMenuList(filters)
+      setExpandedRows(true)
     } finally {
       loading.value = false
     }
@@ -905,6 +909,36 @@
     await removeMenu(row.menuId)
     load()
   }
+  function isStatusChanging(row: Entity) {
+    return statusChangingIds.value.includes(Number(row.menuId))
+  }
+  function toStatusPayload(row: Entity, status: string) {
+    const payload = { ...row }
+    delete payload.children
+    return { ...payload, status }
+  }
+  async function toggleMenuStatus(row: Entity, enabled: boolean) {
+    const menuId = Number(row.menuId)
+    const previousStatus = row.status
+    const nextStatus = enabled ? '0' : '1'
+
+    if (previousStatus === nextStatus || statusChangingIds.value.includes(menuId)) {
+      return
+    }
+
+    statusChangingIds.value = [...statusChangingIds.value, menuId]
+    row.status = nextStatus
+    try {
+      await updateMenu(toStatusPayload(row, nextStatus))
+      ElMessage.success(`${row.menuName}已${enabled ? '启用' : '停用'}`)
+      await load()
+    } catch (error) {
+      row.status = previousStatus
+      throw error
+    } finally {
+      statusChangingIds.value = statusChangingIds.value.filter((id) => id !== menuId)
+    }
+  }
   async function saveSort() {
     const list = flattenTree(treeData.value)
     await updateMenuSort(
@@ -914,7 +948,10 @@
     load()
   }
   function toggleExpand() {
-    expanded.value = !expanded.value
+    setExpandedRows(!expanded.value)
+  }
+  function setExpandedRows(isExpanded: boolean) {
+    expanded.value = isExpanded
     nextTick(() =>
       flattenTree(treeData.value).forEach((row) =>
         tableRef.value?.elTableRef?.toggleRowExpansion(row, expanded.value)

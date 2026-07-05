@@ -256,24 +256,22 @@
   :deep(.scrollbar-wrapper) {
     flex: 1;
     min-width: 0;
-    margin: 0 50px 0 30px;
+    margin: 0 50px 0 14px;
   }
 
   .menu-item-active::after {
     position: absolute;
-    right: 0;
+    right: 12px;
     bottom: 0;
-    left: 0;
-    width: 40px;
+    left: 12px;
     height: 2px;
-    margin: auto;
     content: '';
     background-color: var(--theme-color);
   }
 
   @media (width <= 1440px) {
     :deep(.scrollbar-wrapper) {
-      margin: 0 45px;
+      margin: 0 45px 0 14px;
     }
   }
 </style>
