@@ -15,11 +15,11 @@
         select `dept_id`, `pid`, `sub_count`, `name`, `dept_sort`, `enabled`, `type` from `yn_wx_dept`
     </sql>
 
-    <select id="selectById" resultMap="YnWxDeptResult">
+    <select id="selectYnWxDeptById" resultMap="YnWxDeptResult">
         <include refid="selectYnWxDeptVo"/> where `dept_id` = #{id}
     </select>
 
-    <select id="selectList" resultMap="YnWxDeptResult">
+    <select id="selectYnWxDeptList" resultMap="YnWxDeptResult">
         <include refid="selectYnWxDeptVo"/>
         <where>
             <if test="id != null"> and `dept_id` = #{id}</if>
@@ -32,20 +32,7 @@
         </where>
     </select>
 
-    <select id="selectMapList" resultType="java.util.LinkedHashMap">
-        <include refid="selectYnWxDeptVo"/>
-        <where>
-            <if test="id != null"> and `dept_id` = #{id}</if>
-            <if test="pid != null"> and `pid` = #{pid}</if>
-            <if test="subCount != null"> and `sub_count` = #{subCount}</if>
-            <if test="name != null and name != ''"> and `name` = #{name}</if>
-            <if test="deptSort != null"> and `dept_sort` = #{deptSort}</if>
-            <if test="enabled != null"> and `enabled` = #{enabled}</if>
-            <if test="type != null and type != ''"> and `type` = #{type}</if>
-        </where>
-    </select>
-
-    <insert id="insert" parameterType="com.ruoyi.sq.domain.YnWxDept" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertYnWxDept" parameterType="com.ruoyi.sq.domain.YnWxDept" useGeneratedKeys="true" keyProperty="id">
         insert into `yn_wx_dept`
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">`dept_id`,</if>
@@ -67,7 +54,7 @@
         </trim>
     </insert>
 
-    <update id="update" parameterType="com.ruoyi.sq.domain.YnWxDept">
+    <update id="updateYnWxDept" parameterType="com.ruoyi.sq.domain.YnWxDept">
         update `yn_wx_dept`
         <set>
             <if test="pid != null">`pid` = #{pid},</if>
@@ -79,14 +66,13 @@
         </set>
         where `dept_id` = #{id}
     </update>
-
-    <delete id="deleteByIds">
-        delete from `yn_wx_dept` where `dept_id` in
-        <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
-    </delete>
-
-    <update id="softDeleteByIds">
+    <update id="deleteYnWxDeptByIds">
         update `yn_wx_dept` set `is_deleted` = '1' where `dept_id` in
         <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
     </update>
+
+    <update id="deleteYnWxDeptById">
+        update `yn_wx_dept` set `is_deleted` = '1' where `id` = #{id}
+    </update>
+
 </mapper>

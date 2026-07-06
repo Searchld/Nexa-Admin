@@ -11,11 +11,11 @@
         select `id`, `name`, `data` from `blade_visual_map`
     </sql>
 
-    <select id="selectById" resultMap="VisualMapResult">
+    <select id="selectVisualMapById" resultMap="VisualMapResult">
         <include refid="selectVisualMapVo"/> where `id` = #{id}
     </select>
 
-    <select id="selectList" resultMap="VisualMapResult">
+    <select id="selectVisualMapList" resultMap="VisualMapResult">
         <include refid="selectVisualMapVo"/>
         <where>
             <if test="id != null"> and `id` = #{id}</if>
@@ -24,16 +24,7 @@
         </where>
     </select>
 
-    <select id="selectMapList" resultType="java.util.LinkedHashMap">
-        <include refid="selectVisualMapVo"/>
-        <where>
-            <if test="id != null"> and `id` = #{id}</if>
-            <if test="name != null and name != ''"> and `name` = #{name}</if>
-            <if test="data != null and data != ''"> and `data` = #{data}</if>
-        </where>
-    </select>
-
-    <insert id="insert" parameterType="com.ruoyi.sq.domain.VisualMap" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertVisualMap" parameterType="com.ruoyi.sq.domain.VisualMap" useGeneratedKeys="true" keyProperty="id">
         insert into `blade_visual_map`
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">`id`,</if>
@@ -47,7 +38,7 @@
         </trim>
     </insert>
 
-    <update id="update" parameterType="com.ruoyi.sq.domain.VisualMap">
+    <update id="updateVisualMap" parameterType="com.ruoyi.sq.domain.VisualMap">
         update `blade_visual_map`
         <set>
             <if test="name != null">`name` = #{name},</if>
@@ -55,14 +46,13 @@
         </set>
         where `id` = #{id}
     </update>
-
-    <delete id="deleteByIds">
-        delete from `blade_visual_map` where `id` in
-        <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
-    </delete>
-
-    <update id="softDeleteByIds">
+    <update id="deleteVisualMapByIds">
         update `blade_visual_map` set `is_deleted` = '1' where `id` in
         <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
     </update>
+
+    <update id="deleteVisualMapById">
+        update `blade_visual_map` set `is_deleted` = '1' where `id` = #{id}
+    </update>
+
 </mapper>

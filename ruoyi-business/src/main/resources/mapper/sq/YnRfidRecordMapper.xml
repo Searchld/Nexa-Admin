@@ -13,11 +13,11 @@
         select `id`, `ip`, `cid`, `tname`, `create_time` from `yn_rfid_record`
     </sql>
 
-    <select id="selectById" resultMap="YnRfidRecordResult">
+    <select id="selectYnRfidRecordById" resultMap="YnRfidRecordResult">
         <include refid="selectYnRfidRecordVo"/> where `id` = #{id}
     </select>
 
-    <select id="selectList" resultMap="YnRfidRecordResult">
+    <select id="selectYnRfidRecordList" resultMap="YnRfidRecordResult">
         <include refid="selectYnRfidRecordVo"/>
         <where>
             <if test="id != null"> and `id` = #{id}</if>
@@ -28,18 +28,7 @@
         </where>
     </select>
 
-    <select id="selectMapList" resultType="java.util.LinkedHashMap">
-        <include refid="selectYnRfidRecordVo"/>
-        <where>
-            <if test="id != null"> and `id` = #{id}</if>
-            <if test="ip != null and ip != ''"> and `ip` = #{ip}</if>
-            <if test="cid != null and cid != ''"> and `cid` = #{cid}</if>
-            <if test="tname != null and tname != ''"> and `tname` = #{tname}</if>
-            <if test="createTime != null"> and `create_time` = #{createTime}</if>
-        </where>
-    </select>
-
-    <insert id="insert" parameterType="com.ruoyi.sq.domain.YnRfidRecord" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertYnRfidRecord" parameterType="com.ruoyi.sq.domain.YnRfidRecord" useGeneratedKeys="true" keyProperty="id">
         insert into `yn_rfid_record`
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">`id`,</if>
@@ -57,7 +46,7 @@
         </trim>
     </insert>
 
-    <update id="update" parameterType="com.ruoyi.sq.domain.YnRfidRecord">
+    <update id="updateYnRfidRecord" parameterType="com.ruoyi.sq.domain.YnRfidRecord">
         update `yn_rfid_record`
         <set>
             <if test="ip != null">`ip` = #{ip},</if>
@@ -67,14 +56,13 @@
         </set>
         where `id` = #{id}
     </update>
-
-    <delete id="deleteByIds">
-        delete from `yn_rfid_record` where `id` in
-        <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
-    </delete>
-
-    <update id="softDeleteByIds">
+    <update id="deleteYnRfidRecordByIds">
         update `yn_rfid_record` set `is_deleted` = '1' where `id` in
         <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
     </update>
+
+    <update id="deleteYnRfidRecordById">
+        update `yn_rfid_record` set `is_deleted` = '1' where `id` = #{id}
+    </update>
+
 </mapper>

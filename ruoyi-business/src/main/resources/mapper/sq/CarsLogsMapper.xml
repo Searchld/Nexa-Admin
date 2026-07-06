@@ -35,11 +35,11 @@
         select `id`, `name`, `cars`, `fulls`, `bigs`, `yiwu`, `water`, `mud`, `shitype`, `videopath`, `imgpath`, `timecha`, `createdate`, `is_deleted`, `create_user`, `forkcar`, `create_dept`, `create_time`, `update_user`, `update_time`, `status`, `ctype`, `company`, `rate`, `shift`, `groups`, `persons` from `a_cars_logs`
     </sql>
 
-    <select id="selectById" resultMap="CarsLogsResult">
+    <select id="selectCarsLogsById" resultMap="CarsLogsResult">
         <include refid="selectCarsLogsVo"/> where `id` = #{id}
     </select>
 
-    <select id="selectList" resultMap="CarsLogsResult">
+    <select id="selectCarsLogsList" resultMap="CarsLogsResult">
         <include refid="selectCarsLogsVo"/>
         <where>
             <if test="id != null"> and `id` = #{id}</if>
@@ -72,40 +72,7 @@
         </where>
     </select>
 
-    <select id="selectMapList" resultType="java.util.LinkedHashMap">
-        <include refid="selectCarsLogsVo"/>
-        <where>
-            <if test="id != null"> and `id` = #{id}</if>
-            <if test="name != null and name != ''"> and `name` = #{name}</if>
-            <if test="cars != null and cars != ''"> and `cars` = #{cars}</if>
-            <if test="fulls != null and fulls != ''"> and `fulls` = #{fulls}</if>
-            <if test="bigs != null and bigs != ''"> and `bigs` = #{bigs}</if>
-            <if test="yiwu != null and yiwu != ''"> and `yiwu` = #{yiwu}</if>
-            <if test="water != null and water != ''"> and `water` = #{water}</if>
-            <if test="mud != null and mud != ''"> and `mud` = #{mud}</if>
-            <if test="shitype != null and shitype != ''"> and `shitype` = #{shitype}</if>
-            <if test="videopath != null and videopath != ''"> and `videopath` = #{videopath}</if>
-            <if test="imgpath != null and imgpath != ''"> and `imgpath` = #{imgpath}</if>
-            <if test="timecha != null and timecha != ''"> and `timecha` = #{timecha}</if>
-            <if test="createdate != null"> and `createdate` = #{createdate}</if>
-            <if test="isDeleted != null and isDeleted != ''"> and `is_deleted` = #{isDeleted}</if>
-            <if test="createUser != null and createUser != ''"> and `create_user` = #{createUser}</if>
-            <if test="forkcar != null and forkcar != ''"> and `forkcar` = #{forkcar}</if>
-            <if test="createDept != null and createDept != ''"> and `create_dept` = #{createDept}</if>
-            <if test="createTime != null"> and `create_time` = #{createTime}</if>
-            <if test="updateUser != null and updateUser != ''"> and `update_user` = #{updateUser}</if>
-            <if test="updateTime != null"> and `update_time` = #{updateTime}</if>
-            <if test="status != null and status != ''"> and `status` = #{status}</if>
-            <if test="ctype != null and ctype != ''"> and `ctype` = #{ctype}</if>
-            <if test="company != null and company != ''"> and `company` = #{company}</if>
-            <if test="rate != null and rate != ''"> and `rate` = #{rate}</if>
-            <if test="shift != null and shift != ''"> and `shift` = #{shift}</if>
-            <if test="groups != null and groups != ''"> and `groups` = #{groups}</if>
-            <if test="persons != null and persons != ''"> and `persons` = #{persons}</if>
-        </where>
-    </select>
-
-    <insert id="insert" parameterType="com.ruoyi.sq.domain.CarsLogs" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertCarsLogs" parameterType="com.ruoyi.sq.domain.CarsLogs" useGeneratedKeys="true" keyProperty="id">
         insert into `a_cars_logs`
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">`id`,</if>
@@ -167,7 +134,7 @@
         </trim>
     </insert>
 
-    <update id="update" parameterType="com.ruoyi.sq.domain.CarsLogs">
+    <update id="updateCarsLogs" parameterType="com.ruoyi.sq.domain.CarsLogs">
         update `a_cars_logs`
         <set>
             <if test="name != null">`name` = #{name},</if>
@@ -199,14 +166,13 @@
         </set>
         where `id` = #{id}
     </update>
-
-    <delete id="deleteByIds">
-        delete from `a_cars_logs` where `id` in
-        <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
-    </delete>
-
-    <update id="softDeleteByIds">
+    <update id="deleteCarsLogsByIds">
         update `a_cars_logs` set `is_deleted` = '1' where `id` in
         <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
     </update>
+
+    <update id="deleteCarsLogsById">
+        update `a_cars_logs` set `is_deleted` = '1' where `id` = #{id}
+    </update>
+
 </mapper>

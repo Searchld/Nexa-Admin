@@ -35,11 +35,11 @@
         select `id`, `yd_no`, `leader`, `plate_number`, `task_time`, `create_time`, `instruction`, `team`, `vehicles`, `schedule`, `car_type`, `welling_point`, `welling_point_id`, `mineral_type`, `miners`, `discharge`, `release_date`, `release_confirmation`, `weighing_time`, `total_tonnage`, `unloading_point`, `unloading_types`, `unload_user`, `unloading_time`, `number_vehicles`, `unloading_confirmation`, `progress` from `yn_logs_out2`
     </sql>
 
-    <select id="selectById" resultMap="YnLogsOutResult">
+    <select id="selectYnLogsOutById" resultMap="YnLogsOutResult">
         <include refid="selectYnLogsOutVo"/> where `id` = #{id}
     </select>
 
-    <select id="selectList" resultMap="YnLogsOutResult">
+    <select id="selectYnLogsOutList" resultMap="YnLogsOutResult">
         <include refid="selectYnLogsOutVo"/>
         <where>
             <if test="id != null"> and `id` = #{id}</if>
@@ -72,40 +72,7 @@
         </where>
     </select>
 
-    <select id="selectMapList" resultType="java.util.LinkedHashMap">
-        <include refid="selectYnLogsOutVo"/>
-        <where>
-            <if test="id != null"> and `id` = #{id}</if>
-            <if test="ydNo != null and ydNo != ''"> and `yd_no` = #{ydNo}</if>
-            <if test="leader != null and leader != ''"> and `leader` = #{leader}</if>
-            <if test="plateNumber != null and plateNumber != ''"> and `plate_number` = #{plateNumber}</if>
-            <if test="taskTime != null and taskTime != ''"> and `task_time` = #{taskTime}</if>
-            <if test="createTime != null and createTime != ''"> and `create_time` = #{createTime}</if>
-            <if test="instruction != null and instruction != ''"> and `instruction` = #{instruction}</if>
-            <if test="team != null and team != ''"> and `team` = #{team}</if>
-            <if test="vehicles != null and vehicles != ''"> and `vehicles` = #{vehicles}</if>
-            <if test="schedule != null and schedule != ''"> and `schedule` = #{schedule}</if>
-            <if test="carType != null and carType != ''"> and `car_type` = #{carType}</if>
-            <if test="wellingPoint != null and wellingPoint != ''"> and `welling_point` = #{wellingPoint}</if>
-            <if test="wellingPointId != null and wellingPointId != ''"> and `welling_point_id` = #{wellingPointId}</if>
-            <if test="mineralType != null and mineralType != ''"> and `mineral_type` = #{mineralType}</if>
-            <if test="miners != null and miners != ''"> and `miners` = #{miners}</if>
-            <if test="discharge != null and discharge != ''"> and `discharge` = #{discharge}</if>
-            <if test="releaseDate != null and releaseDate != ''"> and `release_date` = #{releaseDate}</if>
-            <if test="releaseConfirmation != null and releaseConfirmation != ''"> and `release_confirmation` = #{releaseConfirmation}</if>
-            <if test="weighingTime != null and weighingTime != ''"> and `weighing_time` = #{weighingTime}</if>
-            <if test="totalTonnage != null and totalTonnage != ''"> and `total_tonnage` = #{totalTonnage}</if>
-            <if test="unloadingPoint != null and unloadingPoint != ''"> and `unloading_point` = #{unloadingPoint}</if>
-            <if test="unloadingTypes != null and unloadingTypes != ''"> and `unloading_types` = #{unloadingTypes}</if>
-            <if test="unloadUser != null and unloadUser != ''"> and `unload_user` = #{unloadUser}</if>
-            <if test="unloadingTime != null and unloadingTime != ''"> and `unloading_time` = #{unloadingTime}</if>
-            <if test="numberVehicles != null and numberVehicles != ''"> and `number_vehicles` = #{numberVehicles}</if>
-            <if test="unloadingConfirmation != null and unloadingConfirmation != ''"> and `unloading_confirmation` = #{unloadingConfirmation}</if>
-            <if test="progress != null and progress != ''"> and `progress` = #{progress}</if>
-        </where>
-    </select>
-
-    <insert id="insert" parameterType="com.ruoyi.sq.domain.YnLogsOut" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertYnLogsOut" parameterType="com.ruoyi.sq.domain.YnLogsOut" useGeneratedKeys="true" keyProperty="id">
         insert into `yn_logs_out2`
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">`id`,</if>
@@ -167,7 +134,7 @@
         </trim>
     </insert>
 
-    <update id="update" parameterType="com.ruoyi.sq.domain.YnLogsOut">
+    <update id="updateYnLogsOut" parameterType="com.ruoyi.sq.domain.YnLogsOut">
         update `yn_logs_out2`
         <set>
             <if test="ydNo != null">`yd_no` = #{ydNo},</if>
@@ -199,14 +166,13 @@
         </set>
         where `id` = #{id}
     </update>
-
-    <delete id="deleteByIds">
-        delete from `yn_logs_out2` where `id` in
-        <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
-    </delete>
-
-    <update id="softDeleteByIds">
+    <update id="deleteYnLogsOutByIds">
         update `yn_logs_out2` set `is_deleted` = '1' where `id` in
         <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
     </update>
+
+    <update id="deleteYnLogsOutById">
+        update `yn_logs_out2` set `is_deleted` = '1' where `id` = #{id}
+    </update>
+
 </mapper>

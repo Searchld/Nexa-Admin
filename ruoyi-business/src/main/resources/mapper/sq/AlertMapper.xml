@@ -22,11 +22,11 @@
         select `id`, `ip`, `name`, `img`, `state`, `create_user`, `create_dept`, `create_time`, `update_user`, `update_time`, `status`, `handle_time`, `handle`, `is_deleted` from `a_alert`
     </sql>
 
-    <select id="selectById" resultMap="AlertResult">
+    <select id="selectAlertById" resultMap="AlertResult">
         <include refid="selectAlertVo"/> where `id` = #{id}
     </select>
 
-    <select id="selectList" resultMap="AlertResult">
+    <select id="selectAlertList" resultMap="AlertResult">
         <include refid="selectAlertVo"/>
         <where>
             <if test="id != null"> and `id` = #{id}</if>
@@ -46,27 +46,7 @@
         </where>
     </select>
 
-    <select id="selectMapList" resultType="java.util.LinkedHashMap">
-        <include refid="selectAlertVo"/>
-        <where>
-            <if test="id != null"> and `id` = #{id}</if>
-            <if test="ip != null and ip != ''"> and `ip` = #{ip}</if>
-            <if test="name != null and name != ''"> and `name` = #{name}</if>
-            <if test="img != null and img != ''"> and `img` = #{img}</if>
-            <if test="state != null and state != ''"> and `state` = #{state}</if>
-            <if test="createUser != null and createUser != ''"> and `create_user` = #{createUser}</if>
-            <if test="createDept != null and createDept != ''"> and `create_dept` = #{createDept}</if>
-            <if test="createTime != null"> and `create_time` = #{createTime}</if>
-            <if test="updateUser != null and updateUser != ''"> and `update_user` = #{updateUser}</if>
-            <if test="updateTime != null"> and `update_time` = #{updateTime}</if>
-            <if test="status != null and status != ''"> and `status` = #{status}</if>
-            <if test="handleTime != null"> and `handle_time` = #{handleTime}</if>
-            <if test="handle != null and handle != ''"> and `handle` = #{handle}</if>
-            <if test="isDeleted != null and isDeleted != ''"> and `is_deleted` = #{isDeleted}</if>
-        </where>
-    </select>
-
-    <insert id="insert" parameterType="com.ruoyi.sq.domain.Alert" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertAlert" parameterType="com.ruoyi.sq.domain.Alert" useGeneratedKeys="true" keyProperty="id">
         insert into `a_alert`
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">`id`,</if>
@@ -102,7 +82,7 @@
         </trim>
     </insert>
 
-    <update id="update" parameterType="com.ruoyi.sq.domain.Alert">
+    <update id="updateAlert" parameterType="com.ruoyi.sq.domain.Alert">
         update `a_alert`
         <set>
             <if test="ip != null">`ip` = #{ip},</if>
@@ -121,14 +101,13 @@
         </set>
         where `id` = #{id}
     </update>
-
-    <delete id="deleteByIds">
-        delete from `a_alert` where `id` in
-        <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
-    </delete>
-
-    <update id="softDeleteByIds">
+    <update id="deleteAlertByIds">
         update `a_alert` set `is_deleted` = '1' where `id` in
         <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
     </update>
+
+    <update id="deleteAlertById">
+        update `a_alert` set `is_deleted` = '1' where `id` = #{id}
+    </update>
+
 </mapper>

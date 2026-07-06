@@ -16,11 +16,11 @@
         select `id`, `name`, `start_time`, `end_time`, `lname`, `channel`, `status`, `create_time` from `yn_task`
     </sql>
 
-    <select id="selectById" resultMap="YnTaskResult">
+    <select id="selectYnTaskById" resultMap="YnTaskResult">
         <include refid="selectYnTaskVo"/> where `id` = #{id}
     </select>
 
-    <select id="selectList" resultMap="YnTaskResult">
+    <select id="selectYnTaskList" resultMap="YnTaskResult">
         <include refid="selectYnTaskVo"/>
         <where>
             <if test="id != null"> and `id` = #{id}</if>
@@ -34,21 +34,7 @@
         </where>
     </select>
 
-    <select id="selectMapList" resultType="java.util.LinkedHashMap">
-        <include refid="selectYnTaskVo"/>
-        <where>
-            <if test="id != null"> and `id` = #{id}</if>
-            <if test="name != null and name != ''"> and `name` = #{name}</if>
-            <if test="startTime != null"> and `start_time` = #{startTime}</if>
-            <if test="endTime != null"> and `end_time` = #{endTime}</if>
-            <if test="lname != null and lname != ''"> and `lname` = #{lname}</if>
-            <if test="channel != null and channel != ''"> and `channel` = #{channel}</if>
-            <if test="status != null and status != ''"> and `status` = #{status}</if>
-            <if test="createTime != null"> and `create_time` = #{createTime}</if>
-        </where>
-    </select>
-
-    <insert id="insert" parameterType="com.ruoyi.sq.domain.YnTask" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertYnTask" parameterType="com.ruoyi.sq.domain.YnTask" useGeneratedKeys="true" keyProperty="id">
         insert into `yn_task`
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">`id`,</if>
@@ -72,7 +58,7 @@
         </trim>
     </insert>
 
-    <update id="update" parameterType="com.ruoyi.sq.domain.YnTask">
+    <update id="updateYnTask" parameterType="com.ruoyi.sq.domain.YnTask">
         update `yn_task`
         <set>
             <if test="name != null">`name` = #{name},</if>
@@ -85,14 +71,13 @@
         </set>
         where `id` = #{id}
     </update>
-
-    <delete id="deleteByIds">
-        delete from `yn_task` where `id` in
-        <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
-    </delete>
-
-    <update id="softDeleteByIds">
+    <update id="deleteYnTaskByIds">
         update `yn_task` set `is_deleted` = '1' where `id` in
         <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
     </update>
+
+    <update id="deleteYnTaskById">
+        update `yn_task` set `is_deleted` = '1' where `id` = #{id}
+    </update>
+
 </mapper>

@@ -1,7 +1,8 @@
 package com.ruoyi.sq.controller;
 
-import java.util.Map;
+import java.util.List;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,65 +11,83 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.ruoyi.common.annotation.Anonymous;
 import com.ruoyi.common.annotation.Log;
+import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.sq.domain.YnRfidYdq;
+import com.ruoyi.sq.service.IYnRfidYdqService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-@Tag(name = "旧系统ynRfidYdq接口")
+/**
+ * YnRfidYdqController
+ */
+@Tag(name = "旧系统YnRfidYdq接口")
 @RestController
 @RequestMapping("/api/ynRfidYdq")
-public class YnRfidYdqController extends SqBaseController
+public class YnRfidYdqController extends BaseController
 {
-    private static final String ENTITY = "ynRfidYdq";
+    @Autowired
+    private IYnRfidYdqService ynRfidYdqService;
 
     @PreAuthorize("@ss.hasPermi('ynRfidYdq:list')")
-    @Operation(summary = "查询列表")
-    @GetMapping
-    public TableDataInfo list(@RequestParam Map<String, Object> params)
+    @Operation(summary = "查询YnRfidYdq列表")
+    @GetMapping({"", "/list"})
+    public TableDataInfo list(YnRfidYdq ynRfidYdq)
     {
-        return listEntity(ENTITY, params);
+        startPage();
+        List<YnRfidYdq> list = ynRfidYdqService.selectYnRfidYdqList(ynRfidYdq);
+        return getDataTable(list);
     }
 
     @PreAuthorize("@ss.hasPermi('ynRfidYdq:list')")
-    @Log(title = "旧系统数据导出", businessType = BusinessType.EXPORT)
-    @Operation(summary = "导出数据")
-    @GetMapping("/download")
-    public void download(HttpServletResponse response, @RequestParam Map<String, Object> params)
+    @Log(title = "YnRfidYdq", businessType = BusinessType.EXPORT)
+    @Operation(summary = "导出YnRfidYdq")
+    @PostMapping({"/export", "/download"})
+    public void export(HttpServletResponse response, YnRfidYdq ynRfidYdq)
     {
-        exportEntity(response, ENTITY, params);
+        List<YnRfidYdq> list = ynRfidYdqService.selectYnRfidYdqList(ynRfidYdq);
+        ExcelUtil<YnRfidYdq> util = new ExcelUtil<>(YnRfidYdq.class);
+        util.exportExcel(response, list, "YnRfidYdq数据");
+    }
+
+    @PreAuthorize("@ss.hasPermi('ynRfidYdq:query')")
+    @Operation(summary = "获取YnRfidYdq详情")
+    @GetMapping("/{id}")
+    public AjaxResult getInfo(@PathVariable Integer id)
+    {
+        return success(ynRfidYdqService.selectYnRfidYdqById(id));
     }
 
     @PreAuthorize("@ss.hasPermi('ynRfidYdq:add')")
-    @Log(title = "旧系统数据新增", businessType = BusinessType.INSERT)
-    @Operation(summary = "新增数据")
+    @Log(title = "YnRfidYdq", businessType = BusinessType.INSERT)
+    @Operation(summary = "新增YnRfidYdq")
     @PostMapping
-    public AjaxResult add(@RequestBody Map<String, Object> body)
+    public AjaxResult add(@RequestBody YnRfidYdq ynRfidYdq)
     {
-        return createEntity(ENTITY, body);
+        return toAjax(ynRfidYdqService.insertYnRfidYdq(ynRfidYdq));
     }
 
     @PreAuthorize("@ss.hasPermi('ynRfidYdq:edit')")
-    @Log(title = "旧系统数据修改", businessType = BusinessType.UPDATE)
-    @Operation(summary = "修改数据")
+    @Log(title = "YnRfidYdq", businessType = BusinessType.UPDATE)
+    @Operation(summary = "修改YnRfidYdq")
     @PutMapping
-    public AjaxResult edit(@RequestBody Map<String, Object> body)
+    public AjaxResult edit(@RequestBody YnRfidYdq ynRfidYdq)
     {
-        return updateEntity(ENTITY, body);
+        return toAjax(ynRfidYdqService.updateYnRfidYdq(ynRfidYdq));
     }
 
     @PreAuthorize("@ss.hasPermi('ynRfidYdq:del')")
-    @Log(title = "旧系统数据删除", businessType = BusinessType.DELETE)
-    @Operation(summary = "删除数据")
-    @DeleteMapping
-    public AjaxResult remove(@RequestBody Object[] ids)
+    @Log(title = "YnRfidYdq", businessType = BusinessType.DELETE)
+    @Operation(summary = "删除YnRfidYdq")
+    @DeleteMapping("/{ids}")
+    public AjaxResult remove(@PathVariable Integer[] ids)
     {
-        return deleteEntity(ENTITY, ids);
+        return toAjax(ynRfidYdqService.deleteYnRfidYdqByIds(ids));
     }
 
 }

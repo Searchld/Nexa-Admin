@@ -26,11 +26,11 @@
         select `id`, `cars`, `cars_num`, `cars_xh`, `cars_comp`, `mine`, `cars_w`, `volume`, `create_user`, `create_dept`, `create_time`, `update_user`, `update_time`, `status`, `is_deleted`, `teamid`, `rfid`, `ctype` from `a_cars`
     </sql>
 
-    <select id="selectById" resultMap="CarsResult">
+    <select id="selectCarsById" resultMap="CarsResult">
         <include refid="selectCarsVo"/> where `id` = #{id}
     </select>
 
-    <select id="selectList" resultMap="CarsResult">
+    <select id="selectCarsList" resultMap="CarsResult">
         <include refid="selectCarsVo"/>
         <where>
             <if test="id != null"> and `id` = #{id}</if>
@@ -54,31 +54,7 @@
         </where>
     </select>
 
-    <select id="selectMapList" resultType="java.util.LinkedHashMap">
-        <include refid="selectCarsVo"/>
-        <where>
-            <if test="id != null"> and `id` = #{id}</if>
-            <if test="cars != null and cars != ''"> and `cars` = #{cars}</if>
-            <if test="carsNum != null and carsNum != ''"> and `cars_num` = #{carsNum}</if>
-            <if test="carsXh != null and carsXh != ''"> and `cars_xh` = #{carsXh}</if>
-            <if test="carsComp != null and carsComp != ''"> and `cars_comp` = #{carsComp}</if>
-            <if test="mine != null and mine != ''"> and `mine` = #{mine}</if>
-            <if test="carsW != null and carsW != ''"> and `cars_w` = #{carsW}</if>
-            <if test="volume != null and volume != ''"> and `volume` = #{volume}</if>
-            <if test="createUser != null and createUser != ''"> and `create_user` = #{createUser}</if>
-            <if test="createDept != null and createDept != ''"> and `create_dept` = #{createDept}</if>
-            <if test="createTime != null"> and `create_time` = #{createTime}</if>
-            <if test="updateUser != null and updateUser != ''"> and `update_user` = #{updateUser}</if>
-            <if test="updateTime != null"> and `update_time` = #{updateTime}</if>
-            <if test="status != null and status != ''"> and `status` = #{status}</if>
-            <if test="isDeleted != null and isDeleted != ''"> and `is_deleted` = #{isDeleted}</if>
-            <if test="teamid != null"> and `teamid` = #{teamid}</if>
-            <if test="rfid != null and rfid != ''"> and `rfid` = #{rfid}</if>
-            <if test="ctype != null and ctype != ''"> and `ctype` = #{ctype}</if>
-        </where>
-    </select>
-
-    <insert id="insert" parameterType="com.ruoyi.sq.domain.Cars" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertCars" parameterType="com.ruoyi.sq.domain.Cars" useGeneratedKeys="true" keyProperty="id">
         insert into `a_cars`
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">`id`,</if>
@@ -122,7 +98,7 @@
         </trim>
     </insert>
 
-    <update id="update" parameterType="com.ruoyi.sq.domain.Cars">
+    <update id="updateCars" parameterType="com.ruoyi.sq.domain.Cars">
         update `a_cars`
         <set>
             <if test="cars != null">`cars` = #{cars},</if>
@@ -145,14 +121,13 @@
         </set>
         where `id` = #{id}
     </update>
-
-    <delete id="deleteByIds">
-        delete from `a_cars` where `id` in
-        <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
-    </delete>
-
-    <update id="softDeleteByIds">
+    <update id="deleteCarsByIds">
         update `a_cars` set `is_deleted` = '1' where `id` in
         <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
     </update>
+
+    <update id="deleteCarsById">
+        update `a_cars` set `is_deleted` = '1' where `id` = #{id}
+    </update>
+
 </mapper>

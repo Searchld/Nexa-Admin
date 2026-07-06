@@ -20,11 +20,11 @@
         select `id`, `location`, `status`, `mark`, `create_time`, `name`, `ip`, `username`, `psw`, `port`, `l_user_id`, `tname` from `yn_rfid_ydq`
     </sql>
 
-    <select id="selectById" resultMap="YnRfidYdqResult">
+    <select id="selectYnRfidYdqById" resultMap="YnRfidYdqResult">
         <include refid="selectYnRfidYdqVo"/> where `id` = #{id}
     </select>
 
-    <select id="selectList" resultMap="YnRfidYdqResult">
+    <select id="selectYnRfidYdqList" resultMap="YnRfidYdqResult">
         <include refid="selectYnRfidYdqVo"/>
         <where>
             <if test="id != null"> and `id` = #{id}</if>
@@ -42,25 +42,7 @@
         </where>
     </select>
 
-    <select id="selectMapList" resultType="java.util.LinkedHashMap">
-        <include refid="selectYnRfidYdqVo"/>
-        <where>
-            <if test="id != null"> and `id` = #{id}</if>
-            <if test="location != null and location != ''"> and `location` = #{location}</if>
-            <if test="status != null and status != ''"> and `status` = #{status}</if>
-            <if test="mark != null and mark != ''"> and `mark` = #{mark}</if>
-            <if test="createTime != null"> and `create_time` = #{createTime}</if>
-            <if test="name != null and name != ''"> and `name` = #{name}</if>
-            <if test="ip != null and ip != ''"> and `ip` = #{ip}</if>
-            <if test="username != null and username != ''"> and `username` = #{username}</if>
-            <if test="psw != null and psw != ''"> and `psw` = #{psw}</if>
-            <if test="port != null and port != ''"> and `port` = #{port}</if>
-            <if test="lUserID != null"> and `l_user_id` = #{lUserID}</if>
-            <if test="tname != null and tname != ''"> and `tname` = #{tname}</if>
-        </where>
-    </select>
-
-    <insert id="insert" parameterType="com.ruoyi.sq.domain.YnRfidYdq" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertYnRfidYdq" parameterType="com.ruoyi.sq.domain.YnRfidYdq" useGeneratedKeys="true" keyProperty="id">
         insert into `yn_rfid_ydq`
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">`id`,</if>
@@ -92,7 +74,7 @@
         </trim>
     </insert>
 
-    <update id="update" parameterType="com.ruoyi.sq.domain.YnRfidYdq">
+    <update id="updateYnRfidYdq" parameterType="com.ruoyi.sq.domain.YnRfidYdq">
         update `yn_rfid_ydq`
         <set>
             <if test="location != null">`location` = #{location},</if>
@@ -109,14 +91,13 @@
         </set>
         where `id` = #{id}
     </update>
-
-    <delete id="deleteByIds">
-        delete from `yn_rfid_ydq` where `id` in
-        <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
-    </delete>
-
-    <update id="softDeleteByIds">
+    <update id="deleteYnRfidYdqByIds">
         update `yn_rfid_ydq` set `is_deleted` = '1' where `id` in
         <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
     </update>
+
+    <update id="deleteYnRfidYdqById">
+        update `yn_rfid_ydq` set `is_deleted` = '1' where `id` = #{id}
+    </update>
+
 </mapper>

@@ -13,11 +13,11 @@
         select `id`, `title`, `background_url`, `category`, `password` from `blade_visual`
     </sql>
 
-    <select id="selectById" resultMap="VisualResult">
+    <select id="selectVisualById" resultMap="VisualResult">
         <include refid="selectVisualVo"/> where `id` = #{id}
     </select>
 
-    <select id="selectList" resultMap="VisualResult">
+    <select id="selectVisualList" resultMap="VisualResult">
         <include refid="selectVisualVo"/>
         <where>
             <if test="id != null"> and `id` = #{id}</if>
@@ -28,18 +28,7 @@
         </where>
     </select>
 
-    <select id="selectMapList" resultType="java.util.LinkedHashMap">
-        <include refid="selectVisualVo"/>
-        <where>
-            <if test="id != null"> and `id` = #{id}</if>
-            <if test="title != null and title != ''"> and `title` = #{title}</if>
-            <if test="backgroundUrl != null and backgroundUrl != ''"> and `background_url` = #{backgroundUrl}</if>
-            <if test="category != null"> and `category` = #{category}</if>
-            <if test="password != null and password != ''"> and `password` = #{password}</if>
-        </where>
-    </select>
-
-    <insert id="insert" parameterType="com.ruoyi.sq.domain.Visual" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertVisual" parameterType="com.ruoyi.sq.domain.Visual" useGeneratedKeys="true" keyProperty="id">
         insert into `blade_visual`
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">`id`,</if>
@@ -57,7 +46,7 @@
         </trim>
     </insert>
 
-    <update id="update" parameterType="com.ruoyi.sq.domain.Visual">
+    <update id="updateVisual" parameterType="com.ruoyi.sq.domain.Visual">
         update `blade_visual`
         <set>
             <if test="title != null">`title` = #{title},</if>
@@ -67,14 +56,13 @@
         </set>
         where `id` = #{id}
     </update>
-
-    <delete id="deleteByIds">
-        delete from `blade_visual` where `id` in
-        <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
-    </delete>
-
-    <update id="softDeleteByIds">
+    <update id="deleteVisualByIds">
         update `blade_visual` set `is_deleted` = '1' where `id` in
         <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
     </update>
+
+    <update id="deleteVisualById">
+        update `blade_visual` set `is_deleted` = '1' where `id` = #{id}
+    </update>
+
 </mapper>

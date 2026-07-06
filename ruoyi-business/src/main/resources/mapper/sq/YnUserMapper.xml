@@ -23,11 +23,11 @@
         select `id`, `picture`, `video`, `remark`, `warning_time`, `create_time`, `handle_time`, `instruction`, `type`, `name`, `ip`, `scene`, `status`, `handle`, `section` from `yn_user`
     </sql>
 
-    <select id="selectById" resultMap="YnUserResult">
+    <select id="selectYnUserById" resultMap="YnUserResult">
         <include refid="selectYnUserVo"/> where `id` = #{id}
     </select>
 
-    <select id="selectList" resultMap="YnUserResult">
+    <select id="selectYnUserList" resultMap="YnUserResult">
         <include refid="selectYnUserVo"/>
         <where>
             <if test="id != null"> and `id` = #{id}</if>
@@ -48,28 +48,7 @@
         </where>
     </select>
 
-    <select id="selectMapList" resultType="java.util.LinkedHashMap">
-        <include refid="selectYnUserVo"/>
-        <where>
-            <if test="id != null"> and `id` = #{id}</if>
-            <if test="picture != null and picture != ''"> and `picture` = #{picture}</if>
-            <if test="video != null and video != ''"> and `video` = #{video}</if>
-            <if test="remark != null and remark != ''"> and `remark` = #{remark}</if>
-            <if test="warningTime != null"> and `warning_time` = #{warningTime}</if>
-            <if test="createTime != null"> and `create_time` = #{createTime}</if>
-            <if test="handleTime != null"> and `handle_time` = #{handleTime}</if>
-            <if test="instruction != null and instruction != ''"> and `instruction` = #{instruction}</if>
-            <if test="type != null and type != ''"> and `type` = #{type}</if>
-            <if test="name != null and name != ''"> and `name` = #{name}</if>
-            <if test="ip != null and ip != ''"> and `ip` = #{ip}</if>
-            <if test="scene != null and scene != ''"> and `scene` = #{scene}</if>
-            <if test="status != null and status != ''"> and `status` = #{status}</if>
-            <if test="handle != null and handle != ''"> and `handle` = #{handle}</if>
-            <if test="section != null and section != ''"> and `section` = #{section}</if>
-        </where>
-    </select>
-
-    <insert id="insert" parameterType="com.ruoyi.sq.domain.YnUser" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertYnUser" parameterType="com.ruoyi.sq.domain.YnUser" useGeneratedKeys="true" keyProperty="id">
         insert into `yn_user`
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">`id`,</if>
@@ -107,7 +86,7 @@
         </trim>
     </insert>
 
-    <update id="update" parameterType="com.ruoyi.sq.domain.YnUser">
+    <update id="updateYnUser" parameterType="com.ruoyi.sq.domain.YnUser">
         update `yn_user`
         <set>
             <if test="picture != null">`picture` = #{picture},</if>
@@ -127,14 +106,13 @@
         </set>
         where `id` = #{id}
     </update>
-
-    <delete id="deleteByIds">
-        delete from `yn_user` where `id` in
-        <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
-    </delete>
-
-    <update id="softDeleteByIds">
+    <update id="deleteYnUserByIds">
         update `yn_user` set `is_deleted` = '1' where `id` in
         <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
     </update>
+
+    <update id="deleteYnUserById">
+        update `yn_user` set `is_deleted` = '1' where `id` = #{id}
+    </update>
+
 </mapper>

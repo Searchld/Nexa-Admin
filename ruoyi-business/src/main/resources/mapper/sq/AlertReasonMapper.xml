@@ -18,11 +18,11 @@
         select `id`, `alert`, `reason`, `create_user`, `create_dept`, `create_time`, `update_user`, `update_time`, `status`, `is_deleted` from `a_alert_reason`
     </sql>
 
-    <select id="selectById" resultMap="AlertReasonResult">
+    <select id="selectAlertReasonById" resultMap="AlertReasonResult">
         <include refid="selectAlertReasonVo"/> where `id` = #{id}
     </select>
 
-    <select id="selectList" resultMap="AlertReasonResult">
+    <select id="selectAlertReasonList" resultMap="AlertReasonResult">
         <include refid="selectAlertReasonVo"/>
         <where>
             <if test="id != null"> and `id` = #{id}</if>
@@ -38,23 +38,7 @@
         </where>
     </select>
 
-    <select id="selectMapList" resultType="java.util.LinkedHashMap">
-        <include refid="selectAlertReasonVo"/>
-        <where>
-            <if test="id != null"> and `id` = #{id}</if>
-            <if test="alert != null and alert != ''"> and `alert` = #{alert}</if>
-            <if test="reason != null and reason != ''"> and `reason` = #{reason}</if>
-            <if test="createUser != null and createUser != ''"> and `create_user` = #{createUser}</if>
-            <if test="createDept != null and createDept != ''"> and `create_dept` = #{createDept}</if>
-            <if test="createTime != null"> and `create_time` = #{createTime}</if>
-            <if test="updateUser != null and updateUser != ''"> and `update_user` = #{updateUser}</if>
-            <if test="updateTime != null"> and `update_time` = #{updateTime}</if>
-            <if test="status != null and status != ''"> and `status` = #{status}</if>
-            <if test="isDeleted != null and isDeleted != ''"> and `is_deleted` = #{isDeleted}</if>
-        </where>
-    </select>
-
-    <insert id="insert" parameterType="com.ruoyi.sq.domain.AlertReason" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertAlertReason" parameterType="com.ruoyi.sq.domain.AlertReason" useGeneratedKeys="true" keyProperty="id">
         insert into `a_alert_reason`
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">`id`,</if>
@@ -82,7 +66,7 @@
         </trim>
     </insert>
 
-    <update id="update" parameterType="com.ruoyi.sq.domain.AlertReason">
+    <update id="updateAlertReason" parameterType="com.ruoyi.sq.domain.AlertReason">
         update `a_alert_reason`
         <set>
             <if test="alert != null">`alert` = #{alert},</if>
@@ -97,14 +81,13 @@
         </set>
         where `id` = #{id}
     </update>
-
-    <delete id="deleteByIds">
-        delete from `a_alert_reason` where `id` in
-        <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
-    </delete>
-
-    <update id="softDeleteByIds">
+    <update id="deleteAlertReasonByIds">
         update `a_alert_reason` set `is_deleted` = '1' where `id` in
         <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
     </update>
+
+    <update id="deleteAlertReasonById">
+        update `a_alert_reason` set `is_deleted` = '1' where `id` = #{id}
+    </update>
+
 </mapper>

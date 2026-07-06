@@ -21,11 +21,11 @@
         select `id`, `types`, `send_user`, `is_send`, `level`, `create_user`, `create_dept`, `create_time`, `update_user`, `update_time`, `tname`, `user_name`, `dept_id` from `yn_wx_send`
     </sql>
 
-    <select id="selectById" resultMap="YnWxSendResult">
+    <select id="selectYnWxSendById" resultMap="YnWxSendResult">
         <include refid="selectYnWxSendVo"/> where `id` = #{id}
     </select>
 
-    <select id="selectList" resultMap="YnWxSendResult">
+    <select id="selectYnWxSendList" resultMap="YnWxSendResult">
         <include refid="selectYnWxSendVo"/>
         <where>
             <if test="id != null"> and `id` = #{id}</if>
@@ -44,26 +44,7 @@
         </where>
     </select>
 
-    <select id="selectMapList" resultType="java.util.LinkedHashMap">
-        <include refid="selectYnWxSendVo"/>
-        <where>
-            <if test="id != null"> and `id` = #{id}</if>
-            <if test="types != null"> and `types` = #{types}</if>
-            <if test="sendUser != null and sendUser != ''"> and `send_user` = #{sendUser}</if>
-            <if test="isSend != null and isSend != ''"> and `is_send` = #{isSend}</if>
-            <if test="level != null and level != ''"> and `level` = #{level}</if>
-            <if test="createUser != null and createUser != ''"> and `create_user` = #{createUser}</if>
-            <if test="createDept != null and createDept != ''"> and `create_dept` = #{createDept}</if>
-            <if test="createTime != null"> and `create_time` = #{createTime}</if>
-            <if test="updateUser != null and updateUser != ''"> and `update_user` = #{updateUser}</if>
-            <if test="updateTime != null"> and `update_time` = #{updateTime}</if>
-            <if test="tname != null and tname != ''"> and `tname` = #{tname}</if>
-            <if test="userName != null and userName != ''"> and `user_name` = #{userName}</if>
-            <if test="deptId != null and deptId != ''"> and `dept_id` = #{deptId}</if>
-        </where>
-    </select>
-
-    <insert id="insert" parameterType="com.ruoyi.sq.domain.YnWxSend" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertYnWxSend" parameterType="com.ruoyi.sq.domain.YnWxSend" useGeneratedKeys="true" keyProperty="id">
         insert into `yn_wx_send`
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">`id`,</if>
@@ -97,7 +78,7 @@
         </trim>
     </insert>
 
-    <update id="update" parameterType="com.ruoyi.sq.domain.YnWxSend">
+    <update id="updateYnWxSend" parameterType="com.ruoyi.sq.domain.YnWxSend">
         update `yn_wx_send`
         <set>
             <if test="types != null">`types` = #{types},</if>
@@ -115,14 +96,13 @@
         </set>
         where `id` = #{id}
     </update>
-
-    <delete id="deleteByIds">
-        delete from `yn_wx_send` where `id` in
-        <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
-    </delete>
-
-    <update id="softDeleteByIds">
+    <update id="deleteYnWxSendByIds">
         update `yn_wx_send` set `is_deleted` = '1' where `id` in
         <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
     </update>
+
+    <update id="deleteYnWxSendById">
+        update `yn_wx_send` set `is_deleted` = '1' where `id` = #{id}
+    </update>
+
 </mapper>

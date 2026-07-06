@@ -1,152 +1,160 @@
 package com.ruoyi.sq.controller;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.ruoyi.common.annotation.Anonymous;
 import com.ruoyi.common.annotation.Log;
+import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
-import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
+/**
+ * 旧系统物料大屏接口
+ */
 @Tag(name = "旧系统materialLevel接口")
 @RestController
 @RequestMapping("/api/materialLevel")
-public class MaterialLevelController extends SqBaseController
+public class MaterialLevelController extends BaseController
 {
-    private static final String ENTITY = "materialLevel";
-
     @PreAuthorize("@ss.hasPermi('materialLevel:list')")
-    @Operation(summary = "查询列表")
+    @Operation(summary = "查询物料大屏汇总")
     @GetMapping
-    public TableDataInfo list(@RequestParam Map<String, Object> params)
+    public AjaxResult list()
     {
-        return listEntity(ENTITY, params);
+        return unsupported("list");
     }
 
     @PreAuthorize("@ss.hasPermi('materialLevel:edit')")
-    @Log(title = "旧系统数据修改", businessType = BusinessType.UPDATE)
-    @Operation(summary = "修改数据")
+    @Log(title = "物料大屏", businessType = BusinessType.UPDATE)
+    @Operation(summary = "修改物料大屏")
     @PutMapping
     public AjaxResult edit(@RequestBody Map<String, Object> body)
     {
-        return updateEntity(ENTITY, body);
+        return unsupported("edit");
     }
 
-    @Operation(summary = "旧系统兼容接口 GET /cars/num")
+    @Operation(summary = "车辆数量")
     @GetMapping("/cars/num")
-    public AjaxResult get1_cars_num(@PathVariable(required = false) Map<String, String> pathVars, @RequestParam(required = false) Map<String, Object> params, @RequestBody(required = false) Map<String, Object> body)
+    public AjaxResult carsNum()
     {
-        return specialEntity(ENTITY, "cars_num", params, body, pathVars);
+        return zeroCount("cars/num");
     }
 
-    @Operation(summary = "旧系统兼容接口 GET /team/num")
+    @Operation(summary = "班组数量")
     @GetMapping("/team/num")
-    public AjaxResult get2_team_num(@PathVariable(required = false) Map<String, String> pathVars, @RequestParam(required = false) Map<String, Object> params, @RequestBody(required = false) Map<String, Object> body)
+    public AjaxResult teamNum()
     {
-        return specialEntity(ENTITY, "team_num", params, body, pathVars);
+        return zeroCount("team/num");
     }
 
-    @Operation(summary = "旧系统兼容接口 GET /left/list")
+    @Operation(summary = "左侧列表")
     @GetMapping("/left/list")
-    public AjaxResult get3_left_list(@PathVariable(required = false) Map<String, String> pathVars, @RequestParam(required = false) Map<String, Object> params, @RequestBody(required = false) Map<String, Object> body)
+    public AjaxResult leftList()
     {
-        return specialEntity(ENTITY, "left_list", params, body, pathVars);
+        return success(new java.util.ArrayList<>());
     }
 
-    @Operation(summary = "旧系统兼容接口 GET /chart/count/ru")
+    @Operation(summary = "入库统计")
     @GetMapping("/chart/count/ru")
-    public AjaxResult get4_chart_count_ru(@PathVariable(required = false) Map<String, String> pathVars, @RequestParam(required = false) Map<String, Object> params, @RequestBody(required = false) Map<String, Object> body)
+    public AjaxResult chartCountRu()
     {
-        return specialEntity(ENTITY, "chart_count_ru", params, body, pathVars);
+        return zeroCount("chart/count/ru");
     }
 
-    @Operation(summary = "旧系统兼容接口 GET /chart/count/chu")
+    @Operation(summary = "出库统计")
     @GetMapping("/chart/count/chu")
-    public AjaxResult get5_chart_count_chu(@PathVariable(required = false) Map<String, String> pathVars, @RequestParam(required = false) Map<String, Object> params, @RequestBody(required = false) Map<String, Object> body)
+    public AjaxResult chartCountChu()
     {
-        return specialEntity(ENTITY, "chart_count_chu", params, body, pathVars);
+        return zeroCount("chart/count/chu");
     }
 
-    @Operation(summary = "旧系统兼容接口 GET /chart/count/chu/list")
+    @Operation(summary = "出库统计列表")
     @GetMapping("/chart/count/chu/list")
-    public AjaxResult get6_chart_count_chu_list(@PathVariable(required = false) Map<String, String> pathVars, @RequestParam(required = false) Map<String, Object> params, @RequestBody(required = false) Map<String, Object> body)
+    public AjaxResult chartCountChuList()
     {
-        return specialEntity(ENTITY, "chart_count_chu_list", params, body, pathVars);
+        return success(new java.util.ArrayList<>());
     }
 
-    @Operation(summary = "旧系统兼容接口 GET /chart/count/ru/list")
+    @Operation(summary = "入库统计列表")
     @GetMapping("/chart/count/ru/list")
-    public AjaxResult get7_chart_count_ru_list(@PathVariable(required = false) Map<String, String> pathVars, @RequestParam(required = false) Map<String, Object> params, @RequestBody(required = false) Map<String, Object> body)
+    public AjaxResult chartCountRuList()
     {
-        return specialEntity(ENTITY, "chart_count_ru_list", params, body, pathVars);
+        return success(new java.util.ArrayList<>());
     }
 
-    @Operation(summary = "旧系统兼容接口 GET /chart/count/537")
+    @Operation(summary = "537统计")
     @GetMapping("/chart/count/537")
-    public AjaxResult get8_chart_count_537(@PathVariable(required = false) Map<String, String> pathVars, @RequestParam(required = false) Map<String, Object> params, @RequestBody(required = false) Map<String, Object> body)
+    public AjaxResult chartCount537()
     {
-        return specialEntity(ENTITY, "chart_count_537", params, body, pathVars);
+        return zeroCount("chart/count/537");
     }
 
-    @Operation(summary = "旧系统兼容接口 GET /chart/count/537/list")
+    @Operation(summary = "537统计列表")
     @GetMapping("/chart/count/537/list")
-    public AjaxResult get9_chart_count_537_list(@PathVariable(required = false) Map<String, String> pathVars, @RequestParam(required = false) Map<String, Object> params, @RequestBody(required = false) Map<String, Object> body)
+    public AjaxResult chartCount537List()
     {
-        return specialEntity(ENTITY, "chart_count_537_list", params, body, pathVars);
+        return success(new java.util.ArrayList<>());
     }
 
-    @Operation(summary = "旧系统兼容接口 GET /cars/logs/byId")
+    @Operation(summary = "车辆入库日志")
     @GetMapping("/cars/logs/byId")
-    public AjaxResult get10_cars_logs_byId(@PathVariable(required = false) Map<String, String> pathVars, @RequestParam(required = false) Map<String, Object> params, @RequestBody(required = false) Map<String, Object> body)
+    public AjaxResult carsLogsById()
     {
-        return specialEntity(ENTITY, "cars_logs_byId", params, body, pathVars);
+        return unsupported("cars/logs/byId");
     }
 
-    @Operation(summary = "旧系统兼容接口 GET /cars/out/logs/byId")
+    @Operation(summary = "车辆出库日志")
     @GetMapping("/cars/out/logs/byId")
-    public AjaxResult get11_cars_out_logs_byId(@PathVariable(required = false) Map<String, String> pathVars, @RequestParam(required = false) Map<String, Object> params, @RequestBody(required = false) Map<String, Object> body)
+    public AjaxResult carsOutLogsById()
     {
-        return specialEntity(ENTITY, "cars_out_logs_byId", params, body, pathVars);
+        return unsupported("cars/out/logs/byId");
     }
 
-    @Operation(summary = "旧系统兼容接口 GET /getOne")
+    @Operation(summary = "查询单条物料数据")
     @GetMapping("/getOne")
-    public AjaxResult get12_getOne(@PathVariable(required = false) Map<String, String> pathVars, @RequestParam(required = false) Map<String, Object> params, @RequestBody(required = false) Map<String, Object> body)
+    public AjaxResult getOne()
     {
-        return specialEntity(ENTITY, "getOne", params, body, pathVars);
+        return unsupported("getOne");
     }
 
-    @Operation(summary = "旧系统兼容接口 GET /count/num")
+    @Operation(summary = "总数统计")
     @GetMapping("/count/num")
-    public AjaxResult get13_count_num(@PathVariable(required = false) Map<String, String> pathVars, @RequestParam(required = false) Map<String, Object> params, @RequestBody(required = false) Map<String, Object> body)
+    public AjaxResult countNum()
     {
-        return specialEntity(ENTITY, "count_num", params, body, pathVars);
+        return zeroCount("count/num");
     }
 
-    @Operation(summary = "旧系统兼容接口 GET /ru/count/num")
+    @Operation(summary = "入库总数统计")
     @GetMapping("/ru/count/num")
-    public AjaxResult get14_ru_count_num(@PathVariable(required = false) Map<String, String> pathVars, @RequestParam(required = false) Map<String, Object> params, @RequestBody(required = false) Map<String, Object> body)
+    public AjaxResult ruCountNum()
     {
-        return specialEntity(ENTITY, "ru_count_num", params, body, pathVars);
+        return zeroCount("ru/count/num");
     }
 
-    @Operation(summary = "旧系统兼容接口 GET /get/camera")
+    @Operation(summary = "查询摄像头")
     @GetMapping("/get/camera")
-    public AjaxResult get15_get_camera(@PathVariable(required = false) Map<String, String> pathVars, @RequestParam(required = false) Map<String, Object> params, @RequestBody(required = false) Map<String, Object> body)
+    public AjaxResult getCamera()
     {
-        return specialEntity(ENTITY, "get_camera", params, body, pathVars);
+        return unsupported("get/camera");
     }
 
+    private AjaxResult zeroCount(String operation)
+    {
+        Map<String, Object> result = new LinkedHashMap<>();
+        result.put("operation", operation);
+        result.put("count", 0);
+        return success(result);
+    }
+
+    private AjaxResult unsupported(String operation)
+    {
+        return AjaxResult.error("旧物料大屏接口 /api/materialLevel/" + operation + " 已保留路径，请按原SQL统计语义补齐专用 Service 实现");
+    }
 }

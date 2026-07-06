@@ -12,11 +12,11 @@
         select `id`, `category_key`, `category_value`, `is_deleted` from `blade_visual_category`
     </sql>
 
-    <select id="selectById" resultMap="VisualCategoryResult">
+    <select id="selectVisualCategoryById" resultMap="VisualCategoryResult">
         <include refid="selectVisualCategoryVo"/> where `id` = #{id}
     </select>
 
-    <select id="selectList" resultMap="VisualCategoryResult">
+    <select id="selectVisualCategoryList" resultMap="VisualCategoryResult">
         <include refid="selectVisualCategoryVo"/>
         <where>
             <if test="id != null"> and `id` = #{id}</if>
@@ -26,17 +26,7 @@
         </where>
     </select>
 
-    <select id="selectMapList" resultType="java.util.LinkedHashMap">
-        <include refid="selectVisualCategoryVo"/>
-        <where>
-            <if test="id != null"> and `id` = #{id}</if>
-            <if test="categoryKey != null and categoryKey != ''"> and `category_key` = #{categoryKey}</if>
-            <if test="categoryValue != null and categoryValue != ''"> and `category_value` = #{categoryValue}</if>
-            <if test="isDeleted != null"> and `is_deleted` = #{isDeleted}</if>
-        </where>
-    </select>
-
-    <insert id="insert" parameterType="com.ruoyi.sq.domain.VisualCategory" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertVisualCategory" parameterType="com.ruoyi.sq.domain.VisualCategory" useGeneratedKeys="true" keyProperty="id">
         insert into `blade_visual_category`
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">`id`,</if>
@@ -52,7 +42,7 @@
         </trim>
     </insert>
 
-    <update id="update" parameterType="com.ruoyi.sq.domain.VisualCategory">
+    <update id="updateVisualCategory" parameterType="com.ruoyi.sq.domain.VisualCategory">
         update `blade_visual_category`
         <set>
             <if test="categoryKey != null">`category_key` = #{categoryKey},</if>
@@ -61,14 +51,13 @@
         </set>
         where `id` = #{id}
     </update>
-
-    <delete id="deleteByIds">
-        delete from `blade_visual_category` where `id` in
-        <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
-    </delete>
-
-    <update id="softDeleteByIds">
+    <update id="deleteVisualCategoryByIds">
         update `blade_visual_category` set `is_deleted` = '1' where `id` in
         <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
     </update>
+
+    <update id="deleteVisualCategoryById">
+        update `blade_visual_category` set `is_deleted` = '1' where `id` = #{id}
+    </update>
+
 </mapper>

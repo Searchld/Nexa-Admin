@@ -18,11 +18,11 @@
         select `id`, `location`, `ip`, `flag`, `mark`, `cameras`, `volume`, `is_warning`, `name`, `status` from `yn_siren`
     </sql>
 
-    <select id="selectById" resultMap="YnSirenResult">
+    <select id="selectYnSirenById" resultMap="YnSirenResult">
         <include refid="selectYnSirenVo"/> where `id` = #{id}
     </select>
 
-    <select id="selectList" resultMap="YnSirenResult">
+    <select id="selectYnSirenList" resultMap="YnSirenResult">
         <include refid="selectYnSirenVo"/>
         <where>
             <if test="id != null"> and `id` = #{id}</if>
@@ -38,23 +38,7 @@
         </where>
     </select>
 
-    <select id="selectMapList" resultType="java.util.LinkedHashMap">
-        <include refid="selectYnSirenVo"/>
-        <where>
-            <if test="id != null"> and `id` = #{id}</if>
-            <if test="location != null and location != ''"> and `location` = #{location}</if>
-            <if test="ip != null and ip != ''"> and `ip` = #{ip}</if>
-            <if test="flag != null and flag != ''"> and `flag` = #{flag}</if>
-            <if test="mark != null and mark != ''"> and `mark` = #{mark}</if>
-            <if test="cameras != null and cameras != ''"> and `cameras` = #{cameras}</if>
-            <if test="volume != null and volume != ''"> and `volume` = #{volume}</if>
-            <if test="isWarning != null and isWarning != ''"> and `is_warning` = #{isWarning}</if>
-            <if test="name != null and name != ''"> and `name` = #{name}</if>
-            <if test="status != null and status != ''"> and `status` = #{status}</if>
-        </where>
-    </select>
-
-    <insert id="insert" parameterType="com.ruoyi.sq.domain.YnSiren" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertYnSiren" parameterType="com.ruoyi.sq.domain.YnSiren" useGeneratedKeys="true" keyProperty="id">
         insert into `yn_siren`
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">`id`,</if>
@@ -82,7 +66,7 @@
         </trim>
     </insert>
 
-    <update id="update" parameterType="com.ruoyi.sq.domain.YnSiren">
+    <update id="updateYnSiren" parameterType="com.ruoyi.sq.domain.YnSiren">
         update `yn_siren`
         <set>
             <if test="location != null">`location` = #{location},</if>
@@ -97,14 +81,13 @@
         </set>
         where `id` = #{id}
     </update>
-
-    <delete id="deleteByIds">
-        delete from `yn_siren` where `id` in
-        <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
-    </delete>
-
-    <update id="softDeleteByIds">
+    <update id="deleteYnSirenByIds">
         update `yn_siren` set `is_deleted` = '1' where `id` in
         <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
     </update>
+
+    <update id="deleteYnSirenById">
+        update `yn_siren` set `is_deleted` = '1' where `id` = #{id}
+    </update>
+
 </mapper>
