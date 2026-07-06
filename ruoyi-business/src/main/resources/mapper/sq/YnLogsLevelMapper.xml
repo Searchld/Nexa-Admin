@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.sq.mapper.YnLogsLevelMapper">
+    <resultMap id="YnLogsLevelResult" type="com.ruoyi.sq.domain.YnLogsLevel">
+        <result property="id" column="id" />
+        <result property="times" column="times" />
+        <result property="dates" column="dates" />
+        <result property="lname" column="lname" />
+        <result property="cars" column="cars" />
+        <result property="heights" column="heights" />
+    </resultMap>
+
+    <sql id="selectYnLogsLevelVo">
+        select `id`, `times`, `dates`, `lname`, `cars`, `heights` from `yn_logs_level`
+    </sql>
+
+    <select id="selectById" resultMap="YnLogsLevelResult">
+        <include refid="selectYnLogsLevelVo"/> where `id` = #{id}
+    </select>
+
+    <select id="selectList" resultMap="YnLogsLevelResult">
+        <include refid="selectYnLogsLevelVo"/>
+        <where>
+            <if test="id != null"> and `id` = #{id}</if>
+            <if test="times != null"> and `times` = #{times}</if>
+            <if test="dates != null and dates != ''"> and `dates` = #{dates}</if>
+            <if test="lname != null and lname != ''"> and `lname` = #{lname}</if>
+            <if test="cars != null"> and `cars` = #{cars}</if>
+            <if test="heights != null"> and `heights` = #{heights}</if>
+        </where>
+    </select>
+
+    <select id="selectMapList" resultType="java.util.LinkedHashMap">
+        <include refid="selectYnLogsLevelVo"/>
+        <where>
+            <if test="id != null"> and `id` = #{id}</if>
+            <if test="times != null"> and `times` = #{times}</if>
+            <if test="dates != null and dates != ''"> and `dates` = #{dates}</if>
+            <if test="lname != null and lname != ''"> and `lname` = #{lname}</if>
+            <if test="cars != null"> and `cars` = #{cars}</if>
+            <if test="heights != null"> and `heights` = #{heights}</if>
+        </where>
+    </select>
+
+    <insert id="insert" parameterType="com.ruoyi.sq.domain.YnLogsLevel" useGeneratedKeys="true" keyProperty="id">
+        insert into `yn_logs_level`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">`id`,</if>
+            <if test="times != null">`times`,</if>
+            <if test="dates != null">`dates`,</if>
+            <if test="lname != null">`lname`,</if>
+            <if test="cars != null">`cars`,</if>
+            <if test="heights != null">`heights`,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="times != null">#{times},</if>
+            <if test="dates != null">#{dates},</if>
+            <if test="lname != null">#{lname},</if>
+            <if test="cars != null">#{cars},</if>
+            <if test="heights != null">#{heights},</if>
+        </trim>
+    </insert>
+
+    <update id="update" parameterType="com.ruoyi.sq.domain.YnLogsLevel">
+        update `yn_logs_level`
+        <set>
+            <if test="times != null">`times` = #{times},</if>
+            <if test="dates != null">`dates` = #{dates},</if>
+            <if test="lname != null">`lname` = #{lname},</if>
+            <if test="cars != null">`cars` = #{cars},</if>
+            <if test="heights != null">`heights` = #{heights},</if>
+        </set>
+        where `id` = #{id}
+    </update>
+
+    <delete id="deleteByIds">
+        delete from `yn_logs_level` where `id` in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
+    </delete>
+
+    <update id="softDeleteByIds">
+        update `yn_logs_level` set `is_deleted` = '1' where `id` in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
+    </update>
+</mapper>

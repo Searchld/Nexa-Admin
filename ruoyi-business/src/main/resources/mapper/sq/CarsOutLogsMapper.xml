@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.sq.mapper.CarsOutLogsMapper">
+    <resultMap id="CarsOutLogsResult" type="com.ruoyi.sq.domain.CarsOutLogs">
+        <result property="id" column="id" />
+        <result property="name" column="name" />
+        <result property="cars" column="cars" />
+        <result property="fulls" column="fulls" />
+        <result property="bigs" column="bigs" />
+        <result property="yiwu" column="yiwu" />
+        <result property="water" column="water" />
+        <result property="mud" column="mud" />
+        <result property="shitype" column="shitype" />
+        <result property="videopath" column="videopath" />
+        <result property="imgpath" column="imgpath" />
+        <result property="timecha" column="timecha" />
+        <result property="createdate" column="createdate" />
+        <result property="isDeleted" column="is_deleted" />
+        <result property="createUser" column="create_user" />
+        <result property="createDept" column="create_dept" />
+        <result property="createTime" column="create_time" />
+        <result property="updateUser" column="update_user" />
+        <result property="updateTime" column="update_time" />
+        <result property="status" column="status" />
+        <result property="ctype" column="ctype" />
+        <result property="company" column="company" />
+        <result property="shift" column="shift" />
+        <result property="groups" column="groups" />
+        <result property="persons" column="persons" />
+    </resultMap>
+
+    <sql id="selectCarsOutLogsVo">
+        select `id`, `name`, `cars`, `fulls`, `bigs`, `yiwu`, `water`, `mud`, `shitype`, `videopath`, `imgpath`, `timecha`, `createdate`, `is_deleted`, `create_user`, `create_dept`, `create_time`, `update_user`, `update_time`, `status`, `ctype`, `company`, `shift`, `groups`, `persons` from `a_cars_out_logs`
+    </sql>
+
+    <select id="selectById" resultMap="CarsOutLogsResult">
+        <include refid="selectCarsOutLogsVo"/> where `id` = #{id}
+    </select>
+
+    <select id="selectList" resultMap="CarsOutLogsResult">
+        <include refid="selectCarsOutLogsVo"/>
+        <where>
+            <if test="id != null"> and `id` = #{id}</if>
+            <if test="name != null and name != ''"> and `name` = #{name}</if>
+            <if test="cars != null and cars != ''"> and `cars` = #{cars}</if>
+            <if test="fulls != null and fulls != ''"> and `fulls` = #{fulls}</if>
+            <if test="bigs != null and bigs != ''"> and `bigs` = #{bigs}</if>
+            <if test="yiwu != null and yiwu != ''"> and `yiwu` = #{yiwu}</if>
+            <if test="water != null and water != ''"> and `water` = #{water}</if>
+            <if test="mud != null and mud != ''"> and `mud` = #{mud}</if>
+            <if test="shitype != null and shitype != ''"> and `shitype` = #{shitype}</if>
+            <if test="videopath != null and videopath != ''"> and `videopath` = #{videopath}</if>
+            <if test="imgpath != null and imgpath != ''"> and `imgpath` = #{imgpath}</if>
+            <if test="timecha != null and timecha != ''"> and `timecha` = #{timecha}</if>
+            <if test="createdate != null"> and `createdate` = #{createdate}</if>
+            <if test="isDeleted != null and isDeleted != ''"> and `is_deleted` = #{isDeleted}</if>
+            <if test="createUser != null and createUser != ''"> and `create_user` = #{createUser}</if>
+            <if test="createDept != null and createDept != ''"> and `create_dept` = #{createDept}</if>
+            <if test="createTime != null"> and `create_time` = #{createTime}</if>
+            <if test="updateUser != null and updateUser != ''"> and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null"> and `update_time` = #{updateTime}</if>
+            <if test="status != null and status != ''"> and `status` = #{status}</if>
+            <if test="ctype != null and ctype != ''"> and `ctype` = #{ctype}</if>
+            <if test="company != null and company != ''"> and `company` = #{company}</if>
+            <if test="shift != null and shift != ''"> and `shift` = #{shift}</if>
+            <if test="groups != null and groups != ''"> and `groups` = #{groups}</if>
+            <if test="persons != null and persons != ''"> and `persons` = #{persons}</if>
+        </where>
+    </select>
+
+    <select id="selectMapList" resultType="java.util.LinkedHashMap">
+        <include refid="selectCarsOutLogsVo"/>
+        <where>
+            <if test="id != null"> and `id` = #{id}</if>
+            <if test="name != null and name != ''"> and `name` = #{name}</if>
+            <if test="cars != null and cars != ''"> and `cars` = #{cars}</if>
+            <if test="fulls != null and fulls != ''"> and `fulls` = #{fulls}</if>
+            <if test="bigs != null and bigs != ''"> and `bigs` = #{bigs}</if>
+            <if test="yiwu != null and yiwu != ''"> and `yiwu` = #{yiwu}</if>
+            <if test="water != null and water != ''"> and `water` = #{water}</if>
+            <if test="mud != null and mud != ''"> and `mud` = #{mud}</if>
+            <if test="shitype != null and shitype != ''"> and `shitype` = #{shitype}</if>
+            <if test="videopath != null and videopath != ''"> and `videopath` = #{videopath}</if>
+            <if test="imgpath != null and imgpath != ''"> and `imgpath` = #{imgpath}</if>
+            <if test="timecha != null and timecha != ''"> and `timecha` = #{timecha}</if>
+            <if test="createdate != null"> and `createdate` = #{createdate}</if>
+            <if test="isDeleted != null and isDeleted != ''"> and `is_deleted` = #{isDeleted}</if>
+            <if test="createUser != null and createUser != ''"> and `create_user` = #{createUser}</if>
+            <if test="createDept != null and createDept != ''"> and `create_dept` = #{createDept}</if>
+            <if test="createTime != null"> and `create_time` = #{createTime}</if>
+            <if test="updateUser != null and updateUser != ''"> and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null"> and `update_time` = #{updateTime}</if>
+            <if test="status != null and status != ''"> and `status` = #{status}</if>
+            <if test="ctype != null and ctype != ''"> and `ctype` = #{ctype}</if>
+            <if test="company != null and company != ''"> and `company` = #{company}</if>
+            <if test="shift != null and shift != ''"> and `shift` = #{shift}</if>
+            <if test="groups != null and groups != ''"> and `groups` = #{groups}</if>
+            <if test="persons != null and persons != ''"> and `persons` = #{persons}</if>
+        </where>
+    </select>
+
+    <insert id="insert" parameterType="com.ruoyi.sq.domain.CarsOutLogs" useGeneratedKeys="true" keyProperty="id">
+        insert into `a_cars_out_logs`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">`id`,</if>
+            <if test="name != null">`name`,</if>
+            <if test="cars != null">`cars`,</if>
+            <if test="fulls != null">`fulls`,</if>
+            <if test="bigs != null">`bigs`,</if>
+            <if test="yiwu != null">`yiwu`,</if>
+            <if test="water != null">`water`,</if>
+            <if test="mud != null">`mud`,</if>
+            <if test="shitype != null">`shitype`,</if>
+            <if test="videopath != null">`videopath`,</if>
+            <if test="imgpath != null">`imgpath`,</if>
+            <if test="timecha != null">`timecha`,</if>
+            <if test="createdate != null">`createdate`,</if>
+            <if test="isDeleted != null">`is_deleted`,</if>
+            <if test="createUser != null">`create_user`,</if>
+            <if test="createDept != null">`create_dept`,</if>
+            <if test="createTime != null">`create_time`,</if>
+            <if test="updateUser != null">`update_user`,</if>
+            <if test="updateTime != null">`update_time`,</if>
+            <if test="status != null">`status`,</if>
+            <if test="ctype != null">`ctype`,</if>
+            <if test="company != null">`company`,</if>
+            <if test="shift != null">`shift`,</if>
+            <if test="groups != null">`groups`,</if>
+            <if test="persons != null">`persons`,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="name != null">#{name},</if>
+            <if test="cars != null">#{cars},</if>
+            <if test="fulls != null">#{fulls},</if>
+            <if test="bigs != null">#{bigs},</if>
+            <if test="yiwu != null">#{yiwu},</if>
+            <if test="water != null">#{water},</if>
+            <if test="mud != null">#{mud},</if>
+            <if test="shitype != null">#{shitype},</if>
+            <if test="videopath != null">#{videopath},</if>
+            <if test="imgpath != null">#{imgpath},</if>
+            <if test="timecha != null">#{timecha},</if>
+            <if test="createdate != null">#{createdate},</if>
+            <if test="isDeleted != null">#{isDeleted},</if>
+            <if test="createUser != null">#{createUser},</if>
+            <if test="createDept != null">#{createDept},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateUser != null">#{updateUser},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="status != null">#{status},</if>
+            <if test="ctype != null">#{ctype},</if>
+            <if test="company != null">#{company},</if>
+            <if test="shift != null">#{shift},</if>
+            <if test="groups != null">#{groups},</if>
+            <if test="persons != null">#{persons},</if>
+        </trim>
+    </insert>
+
+    <update id="update" parameterType="com.ruoyi.sq.domain.CarsOutLogs">
+        update `a_cars_out_logs`
+        <set>
+            <if test="name != null">`name` = #{name},</if>
+            <if test="cars != null">`cars` = #{cars},</if>
+            <if test="fulls != null">`fulls` = #{fulls},</if>
+            <if test="bigs != null">`bigs` = #{bigs},</if>
+            <if test="yiwu != null">`yiwu` = #{yiwu},</if>
+            <if test="water != null">`water` = #{water},</if>
+            <if test="mud != null">`mud` = #{mud},</if>
+            <if test="shitype != null">`shitype` = #{shitype},</if>
+            <if test="videopath != null">`videopath` = #{videopath},</if>
+            <if test="imgpath != null">`imgpath` = #{imgpath},</if>
+            <if test="timecha != null">`timecha` = #{timecha},</if>
+            <if test="createdate != null">`createdate` = #{createdate},</if>
+            <if test="isDeleted != null">`is_deleted` = #{isDeleted},</if>
+            <if test="createUser != null">`create_user` = #{createUser},</if>
+            <if test="createDept != null">`create_dept` = #{createDept},</if>
+            <if test="createTime != null">`create_time` = #{createTime},</if>
+            <if test="updateUser != null">`update_user` = #{updateUser},</if>
+            <if test="updateTime != null">`update_time` = #{updateTime},</if>
+            <if test="status != null">`status` = #{status},</if>
+            <if test="ctype != null">`ctype` = #{ctype},</if>
+            <if test="company != null">`company` = #{company},</if>
+            <if test="shift != null">`shift` = #{shift},</if>
+            <if test="groups != null">`groups` = #{groups},</if>
+            <if test="persons != null">`persons` = #{persons},</if>
+        </set>
+        where `id` = #{id}
+    </update>
+
+    <delete id="deleteByIds">
+        delete from `a_cars_out_logs` where `id` in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
+    </delete>
+
+    <update id="softDeleteByIds">
+        update `a_cars_out_logs` set `is_deleted` = '1' where `id` in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
+    </update>
+</mapper>

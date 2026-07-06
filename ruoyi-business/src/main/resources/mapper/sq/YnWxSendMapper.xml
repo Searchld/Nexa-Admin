@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.sq.mapper.YnWxSendMapper">
+    <resultMap id="YnWxSendResult" type="com.ruoyi.sq.domain.YnWxSend">
+        <result property="id" column="id" />
+        <result property="types" column="types" />
+        <result property="sendUser" column="send_user" />
+        <result property="isSend" column="is_send" />
+        <result property="level" column="level" />
+        <result property="createUser" column="create_user" />
+        <result property="createDept" column="create_dept" />
+        <result property="createTime" column="create_time" />
+        <result property="updateUser" column="update_user" />
+        <result property="updateTime" column="update_time" />
+        <result property="tname" column="tname" />
+        <result property="userName" column="user_name" />
+        <result property="deptId" column="dept_id" />
+    </resultMap>
+
+    <sql id="selectYnWxSendVo">
+        select `id`, `types`, `send_user`, `is_send`, `level`, `create_user`, `create_dept`, `create_time`, `update_user`, `update_time`, `tname`, `user_name`, `dept_id` from `yn_wx_send`
+    </sql>
+
+    <select id="selectById" resultMap="YnWxSendResult">
+        <include refid="selectYnWxSendVo"/> where `id` = #{id}
+    </select>
+
+    <select id="selectList" resultMap="YnWxSendResult">
+        <include refid="selectYnWxSendVo"/>
+        <where>
+            <if test="id != null"> and `id` = #{id}</if>
+            <if test="types != null"> and `types` = #{types}</if>
+            <if test="sendUser != null and sendUser != ''"> and `send_user` = #{sendUser}</if>
+            <if test="isSend != null and isSend != ''"> and `is_send` = #{isSend}</if>
+            <if test="level != null and level != ''"> and `level` = #{level}</if>
+            <if test="createUser != null and createUser != ''"> and `create_user` = #{createUser}</if>
+            <if test="createDept != null and createDept != ''"> and `create_dept` = #{createDept}</if>
+            <if test="createTime != null"> and `create_time` = #{createTime}</if>
+            <if test="updateUser != null and updateUser != ''"> and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null"> and `update_time` = #{updateTime}</if>
+            <if test="tname != null and tname != ''"> and `tname` = #{tname}</if>
+            <if test="userName != null and userName != ''"> and `user_name` = #{userName}</if>
+            <if test="deptId != null and deptId != ''"> and `dept_id` = #{deptId}</if>
+        </where>
+    </select>
+
+    <select id="selectMapList" resultType="java.util.LinkedHashMap">
+        <include refid="selectYnWxSendVo"/>
+        <where>
+            <if test="id != null"> and `id` = #{id}</if>
+            <if test="types != null"> and `types` = #{types}</if>
+            <if test="sendUser != null and sendUser != ''"> and `send_user` = #{sendUser}</if>
+            <if test="isSend != null and isSend != ''"> and `is_send` = #{isSend}</if>
+            <if test="level != null and level != ''"> and `level` = #{level}</if>
+            <if test="createUser != null and createUser != ''"> and `create_user` = #{createUser}</if>
+            <if test="createDept != null and createDept != ''"> and `create_dept` = #{createDept}</if>
+            <if test="createTime != null"> and `create_time` = #{createTime}</if>
+            <if test="updateUser != null and updateUser != ''"> and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null"> and `update_time` = #{updateTime}</if>
+            <if test="tname != null and tname != ''"> and `tname` = #{tname}</if>
+            <if test="userName != null and userName != ''"> and `user_name` = #{userName}</if>
+            <if test="deptId != null and deptId != ''"> and `dept_id` = #{deptId}</if>
+        </where>
+    </select>
+
+    <insert id="insert" parameterType="com.ruoyi.sq.domain.YnWxSend" useGeneratedKeys="true" keyProperty="id">
+        insert into `yn_wx_send`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">`id`,</if>
+            <if test="types != null">`types`,</if>
+            <if test="sendUser != null">`send_user`,</if>
+            <if test="isSend != null">`is_send`,</if>
+            <if test="level != null">`level`,</if>
+            <if test="createUser != null">`create_user`,</if>
+            <if test="createDept != null">`create_dept`,</if>
+            <if test="createTime != null">`create_time`,</if>
+            <if test="updateUser != null">`update_user`,</if>
+            <if test="updateTime != null">`update_time`,</if>
+            <if test="tname != null">`tname`,</if>
+            <if test="userName != null">`user_name`,</if>
+            <if test="deptId != null">`dept_id`,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="types != null">#{types},</if>
+            <if test="sendUser != null">#{sendUser},</if>
+            <if test="isSend != null">#{isSend},</if>
+            <if test="level != null">#{level},</if>
+            <if test="createUser != null">#{createUser},</if>
+            <if test="createDept != null">#{createDept},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateUser != null">#{updateUser},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="tname != null">#{tname},</if>
+            <if test="userName != null">#{userName},</if>
+            <if test="deptId != null">#{deptId},</if>
+        </trim>
+    </insert>
+
+    <update id="update" parameterType="com.ruoyi.sq.domain.YnWxSend">
+        update `yn_wx_send`
+        <set>
+            <if test="types != null">`types` = #{types},</if>
+            <if test="sendUser != null">`send_user` = #{sendUser},</if>
+            <if test="isSend != null">`is_send` = #{isSend},</if>
+            <if test="level != null">`level` = #{level},</if>
+            <if test="createUser != null">`create_user` = #{createUser},</if>
+            <if test="createDept != null">`create_dept` = #{createDept},</if>
+            <if test="createTime != null">`create_time` = #{createTime},</if>
+            <if test="updateUser != null">`update_user` = #{updateUser},</if>
+            <if test="updateTime != null">`update_time` = #{updateTime},</if>
+            <if test="tname != null">`tname` = #{tname},</if>
+            <if test="userName != null">`user_name` = #{userName},</if>
+            <if test="deptId != null">`dept_id` = #{deptId},</if>
+        </set>
+        where `id` = #{id}
+    </update>
+
+    <delete id="deleteByIds">
+        delete from `yn_wx_send` where `id` in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
+    </delete>
+
+    <update id="softDeleteByIds">
+        update `yn_wx_send` set `is_deleted` = '1' where `id` in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
+    </update>
+</mapper>

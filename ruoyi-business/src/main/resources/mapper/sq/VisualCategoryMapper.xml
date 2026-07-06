@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.sq.mapper.VisualCategoryMapper">
+    <resultMap id="VisualCategoryResult" type="com.ruoyi.sq.domain.VisualCategory">
+        <result property="id" column="id" />
+        <result property="categoryKey" column="category_key" />
+        <result property="categoryValue" column="category_value" />
+        <result property="isDeleted" column="is_deleted" />
+    </resultMap>
+
+    <sql id="selectVisualCategoryVo">
+        select `id`, `category_key`, `category_value`, `is_deleted` from `blade_visual_category`
+    </sql>
+
+    <select id="selectById" resultMap="VisualCategoryResult">
+        <include refid="selectVisualCategoryVo"/> where `id` = #{id}
+    </select>
+
+    <select id="selectList" resultMap="VisualCategoryResult">
+        <include refid="selectVisualCategoryVo"/>
+        <where>
+            <if test="id != null"> and `id` = #{id}</if>
+            <if test="categoryKey != null and categoryKey != ''"> and `category_key` = #{categoryKey}</if>
+            <if test="categoryValue != null and categoryValue != ''"> and `category_value` = #{categoryValue}</if>
+            <if test="isDeleted != null"> and `is_deleted` = #{isDeleted}</if>
+        </where>
+    </select>
+
+    <select id="selectMapList" resultType="java.util.LinkedHashMap">
+        <include refid="selectVisualCategoryVo"/>
+        <where>
+            <if test="id != null"> and `id` = #{id}</if>
+            <if test="categoryKey != null and categoryKey != ''"> and `category_key` = #{categoryKey}</if>
+            <if test="categoryValue != null and categoryValue != ''"> and `category_value` = #{categoryValue}</if>
+            <if test="isDeleted != null"> and `is_deleted` = #{isDeleted}</if>
+        </where>
+    </select>
+
+    <insert id="insert" parameterType="com.ruoyi.sq.domain.VisualCategory" useGeneratedKeys="true" keyProperty="id">
+        insert into `blade_visual_category`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">`id`,</if>
+            <if test="categoryKey != null">`category_key`,</if>
+            <if test="categoryValue != null">`category_value`,</if>
+            <if test="isDeleted != null">`is_deleted`,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="categoryKey != null">#{categoryKey},</if>
+            <if test="categoryValue != null">#{categoryValue},</if>
+            <if test="isDeleted != null">#{isDeleted},</if>
+        </trim>
+    </insert>
+
+    <update id="update" parameterType="com.ruoyi.sq.domain.VisualCategory">
+        update `blade_visual_category`
+        <set>
+            <if test="categoryKey != null">`category_key` = #{categoryKey},</if>
+            <if test="categoryValue != null">`category_value` = #{categoryValue},</if>
+            <if test="isDeleted != null">`is_deleted` = #{isDeleted},</if>
+        </set>
+        where `id` = #{id}
+    </update>
+
+    <delete id="deleteByIds">
+        delete from `blade_visual_category` where `id` in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
+    </delete>
+
+    <update id="softDeleteByIds">
+        update `blade_visual_category` set `is_deleted` = '1' where `id` in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
+    </update>
+</mapper>

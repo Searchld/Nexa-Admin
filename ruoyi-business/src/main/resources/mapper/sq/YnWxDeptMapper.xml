@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.sq.mapper.YnWxDeptMapper">
+    <resultMap id="YnWxDeptResult" type="com.ruoyi.sq.domain.YnWxDept">
+        <result property="id" column="dept_id" />
+        <result property="pid" column="pid" />
+        <result property="subCount" column="sub_count" />
+        <result property="name" column="name" />
+        <result property="deptSort" column="dept_sort" />
+        <result property="enabled" column="enabled" />
+        <result property="type" column="type" />
+    </resultMap>
+
+    <sql id="selectYnWxDeptVo">
+        select `dept_id`, `pid`, `sub_count`, `name`, `dept_sort`, `enabled`, `type` from `yn_wx_dept`
+    </sql>
+
+    <select id="selectById" resultMap="YnWxDeptResult">
+        <include refid="selectYnWxDeptVo"/> where `dept_id` = #{id}
+    </select>
+
+    <select id="selectList" resultMap="YnWxDeptResult">
+        <include refid="selectYnWxDeptVo"/>
+        <where>
+            <if test="id != null"> and `dept_id` = #{id}</if>
+            <if test="pid != null"> and `pid` = #{pid}</if>
+            <if test="subCount != null"> and `sub_count` = #{subCount}</if>
+            <if test="name != null and name != ''"> and `name` = #{name}</if>
+            <if test="deptSort != null"> and `dept_sort` = #{deptSort}</if>
+            <if test="enabled != null"> and `enabled` = #{enabled}</if>
+            <if test="type != null and type != ''"> and `type` = #{type}</if>
+        </where>
+    </select>
+
+    <select id="selectMapList" resultType="java.util.LinkedHashMap">
+        <include refid="selectYnWxDeptVo"/>
+        <where>
+            <if test="id != null"> and `dept_id` = #{id}</if>
+            <if test="pid != null"> and `pid` = #{pid}</if>
+            <if test="subCount != null"> and `sub_count` = #{subCount}</if>
+            <if test="name != null and name != ''"> and `name` = #{name}</if>
+            <if test="deptSort != null"> and `dept_sort` = #{deptSort}</if>
+            <if test="enabled != null"> and `enabled` = #{enabled}</if>
+            <if test="type != null and type != ''"> and `type` = #{type}</if>
+        </where>
+    </select>
+
+    <insert id="insert" parameterType="com.ruoyi.sq.domain.YnWxDept" useGeneratedKeys="true" keyProperty="id">
+        insert into `yn_wx_dept`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">`dept_id`,</if>
+            <if test="pid != null">`pid`,</if>
+            <if test="subCount != null">`sub_count`,</if>
+            <if test="name != null">`name`,</if>
+            <if test="deptSort != null">`dept_sort`,</if>
+            <if test="enabled != null">`enabled`,</if>
+            <if test="type != null">`type`,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="pid != null">#{pid},</if>
+            <if test="subCount != null">#{subCount},</if>
+            <if test="name != null">#{name},</if>
+            <if test="deptSort != null">#{deptSort},</if>
+            <if test="enabled != null">#{enabled},</if>
+            <if test="type != null">#{type},</if>
+        </trim>
+    </insert>
+
+    <update id="update" parameterType="com.ruoyi.sq.domain.YnWxDept">
+        update `yn_wx_dept`
+        <set>
+            <if test="pid != null">`pid` = #{pid},</if>
+            <if test="subCount != null">`sub_count` = #{subCount},</if>
+            <if test="name != null">`name` = #{name},</if>
+            <if test="deptSort != null">`dept_sort` = #{deptSort},</if>
+            <if test="enabled != null">`enabled` = #{enabled},</if>
+            <if test="type != null">`type` = #{type},</if>
+        </set>
+        where `dept_id` = #{id}
+    </update>
+
+    <delete id="deleteByIds">
+        delete from `yn_wx_dept` where `dept_id` in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
+    </delete>
+
+    <update id="softDeleteByIds">
+        update `yn_wx_dept` set `is_deleted` = '1' where `dept_id` in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
+    </update>
+</mapper>

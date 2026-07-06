@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.sq.mapper.AlertMapper">
+    <resultMap id="AlertResult" type="com.ruoyi.sq.domain.Alert">
+        <result property="id" column="id" />
+        <result property="ip" column="ip" />
+        <result property="name" column="name" />
+        <result property="img" column="img" />
+        <result property="state" column="state" />
+        <result property="createUser" column="create_user" />
+        <result property="createDept" column="create_dept" />
+        <result property="createTime" column="create_time" />
+        <result property="updateUser" column="update_user" />
+        <result property="updateTime" column="update_time" />
+        <result property="status" column="status" />
+        <result property="handleTime" column="handle_time" />
+        <result property="handle" column="handle" />
+        <result property="isDeleted" column="is_deleted" />
+    </resultMap>
+
+    <sql id="selectAlertVo">
+        select `id`, `ip`, `name`, `img`, `state`, `create_user`, `create_dept`, `create_time`, `update_user`, `update_time`, `status`, `handle_time`, `handle`, `is_deleted` from `a_alert`
+    </sql>
+
+    <select id="selectById" resultMap="AlertResult">
+        <include refid="selectAlertVo"/> where `id` = #{id}
+    </select>
+
+    <select id="selectList" resultMap="AlertResult">
+        <include refid="selectAlertVo"/>
+        <where>
+            <if test="id != null"> and `id` = #{id}</if>
+            <if test="ip != null and ip != ''"> and `ip` = #{ip}</if>
+            <if test="name != null and name != ''"> and `name` = #{name}</if>
+            <if test="img != null and img != ''"> and `img` = #{img}</if>
+            <if test="state != null and state != ''"> and `state` = #{state}</if>
+            <if test="createUser != null and createUser != ''"> and `create_user` = #{createUser}</if>
+            <if test="createDept != null and createDept != ''"> and `create_dept` = #{createDept}</if>
+            <if test="createTime != null"> and `create_time` = #{createTime}</if>
+            <if test="updateUser != null and updateUser != ''"> and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null"> and `update_time` = #{updateTime}</if>
+            <if test="status != null and status != ''"> and `status` = #{status}</if>
+            <if test="handleTime != null"> and `handle_time` = #{handleTime}</if>
+            <if test="handle != null and handle != ''"> and `handle` = #{handle}</if>
+            <if test="isDeleted != null and isDeleted != ''"> and `is_deleted` = #{isDeleted}</if>
+        </where>
+    </select>
+
+    <select id="selectMapList" resultType="java.util.LinkedHashMap">
+        <include refid="selectAlertVo"/>
+        <where>
+            <if test="id != null"> and `id` = #{id}</if>
+            <if test="ip != null and ip != ''"> and `ip` = #{ip}</if>
+            <if test="name != null and name != ''"> and `name` = #{name}</if>
+            <if test="img != null and img != ''"> and `img` = #{img}</if>
+            <if test="state != null and state != ''"> and `state` = #{state}</if>
+            <if test="createUser != null and createUser != ''"> and `create_user` = #{createUser}</if>
+            <if test="createDept != null and createDept != ''"> and `create_dept` = #{createDept}</if>
+            <if test="createTime != null"> and `create_time` = #{createTime}</if>
+            <if test="updateUser != null and updateUser != ''"> and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null"> and `update_time` = #{updateTime}</if>
+            <if test="status != null and status != ''"> and `status` = #{status}</if>
+            <if test="handleTime != null"> and `handle_time` = #{handleTime}</if>
+            <if test="handle != null and handle != ''"> and `handle` = #{handle}</if>
+            <if test="isDeleted != null and isDeleted != ''"> and `is_deleted` = #{isDeleted}</if>
+        </where>
+    </select>
+
+    <insert id="insert" parameterType="com.ruoyi.sq.domain.Alert" useGeneratedKeys="true" keyProperty="id">
+        insert into `a_alert`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">`id`,</if>
+            <if test="ip != null">`ip`,</if>
+            <if test="name != null">`name`,</if>
+            <if test="img != null">`img`,</if>
+            <if test="state != null">`state`,</if>
+            <if test="createUser != null">`create_user`,</if>
+            <if test="createDept != null">`create_dept`,</if>
+            <if test="createTime != null">`create_time`,</if>
+            <if test="updateUser != null">`update_user`,</if>
+            <if test="updateTime != null">`update_time`,</if>
+            <if test="status != null">`status`,</if>
+            <if test="handleTime != null">`handle_time`,</if>
+            <if test="handle != null">`handle`,</if>
+            <if test="isDeleted != null">`is_deleted`,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="ip != null">#{ip},</if>
+            <if test="name != null">#{name},</if>
+            <if test="img != null">#{img},</if>
+            <if test="state != null">#{state},</if>
+            <if test="createUser != null">#{createUser},</if>
+            <if test="createDept != null">#{createDept},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateUser != null">#{updateUser},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="status != null">#{status},</if>
+            <if test="handleTime != null">#{handleTime},</if>
+            <if test="handle != null">#{handle},</if>
+            <if test="isDeleted != null">#{isDeleted},</if>
+        </trim>
+    </insert>
+
+    <update id="update" parameterType="com.ruoyi.sq.domain.Alert">
+        update `a_alert`
+        <set>
+            <if test="ip != null">`ip` = #{ip},</if>
+            <if test="name != null">`name` = #{name},</if>
+            <if test="img != null">`img` = #{img},</if>
+            <if test="state != null">`state` = #{state},</if>
+            <if test="createUser != null">`create_user` = #{createUser},</if>
+            <if test="createDept != null">`create_dept` = #{createDept},</if>
+            <if test="createTime != null">`create_time` = #{createTime},</if>
+            <if test="updateUser != null">`update_user` = #{updateUser},</if>
+            <if test="updateTime != null">`update_time` = #{updateTime},</if>
+            <if test="status != null">`status` = #{status},</if>
+            <if test="handleTime != null">`handle_time` = #{handleTime},</if>
+            <if test="handle != null">`handle` = #{handle},</if>
+            <if test="isDeleted != null">`is_deleted` = #{isDeleted},</if>
+        </set>
+        where `id` = #{id}
+    </update>
+
+    <delete id="deleteByIds">
+        delete from `a_alert` where `id` in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
+    </delete>
+
+    <update id="softDeleteByIds">
+        update `a_alert` set `is_deleted` = '1' where `id` in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
+    </update>
+</mapper>
