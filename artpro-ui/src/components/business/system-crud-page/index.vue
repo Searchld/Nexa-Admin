@@ -18,7 +18,9 @@
         <template #left>
           <ElSpace wrap>
             <ElButton v-if="canAdd" type="primary" @click="openDialog()">新增</ElButton>
-            <ElButton v-if="exportUrl && hasAuth(`${permission}:export`)" @click="handleExport"
+            <ElButton
+              v-if="exportUrl && hasAuth(`${permission}:${exportPermission}`)"
+              @click="handleExport"
               >导出</ElButton
             >
             <slot name="toolbar" :refresh="refreshData" />
@@ -96,6 +98,8 @@
       addFn: (data: Entity) => Promise<unknown>
       updateFn: (data: Entity) => Promise<unknown>
       removeFn: (id: number | string) => Promise<unknown>
+      removePermission?: string
+      exportPermission?: string
       statusFn?: (data: Entity) => Promise<unknown>
       exportUrl?: string
       defaults?: Entity
@@ -109,7 +113,13 @@
       drawerSize?: string
       rowClick?: (row: Entity) => void
     }>(),
-    { defaults: () => ({}), drawerSize: '680px', rowClick: () => undefined }
+    {
+      defaults: () => ({}),
+      drawerSize: '680px',
+      rowClick: () => undefined,
+      removePermission: 'remove',
+      exportPermission: 'export'
+    }
   )
 
   const { hasAuth } = useAuth()
@@ -220,7 +230,7 @@
                 hasAuth(`${props.permission}:edit`)
                   ? h(ArtButtonTable, { type: 'edit', onClick: () => openDialog(row, 'edit') })
                   : null,
-                hasAuth(`${props.permission}:remove`)
+                hasAuth(`${props.permission}:${props.removePermission}`)
                   ? h(ArtButtonTable, { type: 'delete', onClick: () => handleRemove(row) })
                   : null,
                 props.actions?.length
