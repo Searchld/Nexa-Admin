@@ -90,7 +90,7 @@ public class SqCrudServiceImpl implements SqCrudService
         }
     }
 
-    private final ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper = new ObjectMapper();
     private final Map<String, EntityOps> registry = new HashMap<>();
     private final ACarsLogsHisMapper aCarsLogsHisMapper;
     private final AddStreamMapper addStreamMapper;
@@ -121,8 +121,7 @@ public class SqCrudServiceImpl implements SqCrudService
     private final YnWxSendMapper ynWxSendMapper;
     private final YnWxUserMapper ynWxUserMapper;
 
-    public SqCrudServiceImpl(ObjectMapper objectMapper,
-            ACarsLogsHisMapper aCarsLogsHisMapper,
+    public SqCrudServiceImpl(ACarsLogsHisMapper aCarsLogsHisMapper,
             AddStreamMapper addStreamMapper,
             AlertMapper alertMapper,
             AlertInfoMapper alertInfoMapper,
@@ -151,7 +150,6 @@ public class SqCrudServiceImpl implements SqCrudService
             YnWxSendMapper ynWxSendMapper,
             YnWxUserMapper ynWxUserMapper)
     {
-        this.objectMapper = objectMapper;
         this.aCarsLogsHisMapper = aCarsLogsHisMapper;
         this.addStreamMapper = addStreamMapper;
         this.alertMapper = alertMapper;
