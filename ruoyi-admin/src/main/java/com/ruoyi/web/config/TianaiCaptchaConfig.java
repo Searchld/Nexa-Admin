@@ -3,6 +3,7 @@ package com.ruoyi.web.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import cloud.tianai.captcha.common.constant.CaptchaTypeConstant;
+import cloud.tianai.captcha.resource.DefaultBuiltInResources;
 import cloud.tianai.captcha.resource.ResourceStore;
 import cloud.tianai.captcha.resource.common.model.dto.Resource;
 import cloud.tianai.captcha.resource.impl.LocalMemoryResourceStore;
@@ -19,6 +20,7 @@ public class TianaiCaptchaConfig
     public ResourceStore captchaResourceStore()
     {
         LocalMemoryResourceStore resourceStore = new LocalMemoryResourceStore();
+        new DefaultBuiltInResources(DefaultBuiltInResources.PATH_PREFIX).addDefaultTemplate(resourceStore);
         addBackgrounds(resourceStore, CaptchaTypeConstant.SLIDER);
         addBackgrounds(resourceStore, CaptchaTypeConstant.ROTATE);
         addBackgrounds(resourceStore, CaptchaTypeConstant.CONCAT);
