@@ -62,7 +62,7 @@
   import ArtButtonTable from '@/components/core/forms/art-button-table/index.vue'
   import ArtButtonMore from '@/components/core/forms/art-button-more/index.vue'
   import DictTag from '@/components/business/dict-tag/index.vue'
-  import { download } from '@/api/common'
+  import { download, fetchDictData } from '@/api/common'
   import { useAuth } from '@/hooks/core/useAuth'
   import { useTable } from '@/hooks/core/useTable'
   import type { ColumnOption } from '@/types/component'
@@ -83,6 +83,7 @@
     span?: number
     options?: Array<Record<string, any>>
     dict?: Array<Record<string, any>>
+    dictType?: string
     props?: Record<string, any>
     render?: any
   }
@@ -127,6 +128,7 @@
   const showSearchBar = ref(true)
   const mode = ref<'add' | 'edit' | 'view'>('add')
   const saving = ref(false)
+  const dictMap = reactive<Record<string, DictData[]>>({})
   const formRef = ref<{ validate: () => Promise<boolean> }>()
   const form = reactive<Entity>({})
   const filters = reactive<Entity>({})
@@ -149,7 +151,7 @@
         type: field.type || 'input',
         render: field.render,
         span: field.span ?? 12,
-        props: { clearable: true, ...field.props, options: normalizeOptions(field.options) }
+        props: { clearable: true, ...field.props, options: getSelectOptions(field) }
       }))
   )
   const drawerFormItems = computed(() =>
@@ -169,7 +171,7 @@
         key: field.prop,
         label: field.label,
         type: field.type || 'input',
-        props: { clearable: true, ...field.props, options: normalizeOptions(field.options) }
+        props: { clearable: true, ...field.props, options: getSelectOptions(field) }
       }))
   )
   const canAdd = computed(() => hasAuth(`${props.permission}:add`))
@@ -198,9 +200,9 @@
                       'onUpdate:modelValue': (status: string | number | boolean) =>
                         changeStatus(row, String(status))
                     })
-                : field.dict
+                : field.dict || field.dictType
                   ? (row: Entity) => {
-                      const options = field.dict as DictData[] | undefined
+                      const options = getDictOptions(field)
                       return options?.length
                         ? h(DictTag, {
                             options,
@@ -261,6 +263,8 @@
     handleCurrentChange
   } = table
 
+  onMounted(loadDicts)
+
   function search() {
     replaceSearchParams({ ...filters })
     getData()
@@ -276,6 +280,24 @@
       label: option.label ?? option.dictLabel,
       value: option.value ?? option.dictValue
     }))
+  }
+  function getDictOptions(field: CrudField) {
+    return (field.dict || (field.dictType ? dictMap[field.dictType] : undefined)) as
+      | DictData[]
+      | undefined
+  }
+  function getSelectOptions(field: CrudField) {
+    return normalizeOptions(field.options || getDictOptions(field))
+  }
+  async function loadDicts() {
+    const types = Array.from(
+      new Set(props.fields.map((field) => field.dictType).filter(Boolean) as string[])
+    )
+    await Promise.all(
+      types.map(async (type) => {
+        if (!dictMap[type]) dictMap[type] = await fetchDictData(type)
+      })
+    )
   }
   function reset() {
     Object.keys(filters).forEach((key) => delete filters[key])

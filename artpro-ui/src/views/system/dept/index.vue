@@ -137,11 +137,9 @@
     return `${action}部门`
   })
   const { columns, columnChecks } = useTableColumns(() => [
-    { prop: 'deptName', label: '部门名称', minWidth: 190 },
+    { prop: 'deptName', label: '部门名称', minWidth: 260, showOverflowTooltip: true },
     { prop: 'deptCode', label: '部门编码', minWidth: 130 },
     { prop: 'leader', label: '负责人', minWidth: 100 },
-    { prop: 'phone', label: '联系电话', minWidth: 130 },
-    { prop: 'email', label: '邮箱', minWidth: 160 },
     {
       prop: 'orderNum',
       label: '排序',

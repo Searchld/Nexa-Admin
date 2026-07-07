@@ -64,11 +64,27 @@ function extractRecords<T>(obj: Record<string, unknown>, fields: string[]): T[] 
   return []
 }
 
+function toFiniteNumber(value: unknown): number | undefined {
+  if (typeof value === 'number') {
+    return Number.isFinite(value) ? value : undefined
+  }
+
+  if (typeof value === 'string' && /^-?\d+(\.\d+)?$/.test(value.trim())) {
+    const numberValue = Number(value)
+    return Number.isFinite(numberValue) ? numberValue : undefined
+  }
+
+  return undefined
+}
+
 // 辅助函数：从对象中提取总数
 function extractTotal(obj: Record<string, unknown>, records: unknown[], fields: string[]): number {
   for (const field of fields) {
-    if (field in obj && typeof obj[field] === 'number') {
-      return obj[field] as number
+    if (field in obj) {
+      const total = toFiniteNumber(obj[field])
+      if (total !== undefined) {
+        return total
+      }
     }
   }
   return records.length
@@ -85,9 +101,12 @@ function extractPagination(
   const currentFields = tableConfig.currentFields
   for (const src of sources) {
     for (const field of currentFields) {
-      if (field in src && typeof src[field] === 'number') {
-        result.current = src[field] as number
-        break
+      if (field in src) {
+        const current = toFiniteNumber(src[field])
+        if (current !== undefined) {
+          result.current = current
+          break
+        }
       }
     }
     if (result.current !== undefined) break
@@ -96,9 +115,12 @@ function extractPagination(
   const sizeFields = tableConfig.sizeFields
   for (const src of sources) {
     for (const field of sizeFields) {
-      if (field in src && typeof src[field] === 'number') {
-        result.size = src[field] as number
-        break
+      if (field in src) {
+        const size = toFiniteNumber(src[field])
+        if (size !== undefined) {
+          result.size = size
+          break
+        }
       }
     }
     if (result.size !== undefined) break
@@ -188,6 +210,10 @@ export const updatePaginationFromResponse = <T>(
 
   if (response.current !== undefined) {
     pagination.current = response.current
+  }
+
+  if (response.size !== undefined) {
+    pagination.size = response.size
   }
 
   const maxPage = Math.max(1, Math.ceil(pagination.total / (pagination.size || 1)))
